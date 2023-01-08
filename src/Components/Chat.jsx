@@ -13,12 +13,12 @@ class Chat extends Component {
         <div>
           {/* username */}
           <div className="chat__name">
-            <span>First Last</span>
+            <span>{this.props.name}</span>
           </div>
 
           {/* chat prev */}
           <div className="chat__preview">
-            <span>lorem ipsum</span>
+            <span>{this.props.lastMsg}</span>
           </div>
         </div>
       </div>

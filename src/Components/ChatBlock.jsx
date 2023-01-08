@@ -9,8 +9,6 @@ class ChatBlock extends Component {
       <div className="chatBlock self">
         {/* profile picture if sender not self */}
         {/* textBubbles */}
-        <TextBubble></TextBubble>
-        <TextBubble></TextBubble>
       </div>
     );
   }

@@ -1,6 +1,6 @@
-import './App.css';
-import CurrentChat from './Components/CurrentChat';
-import Sidebar from './Components/Sidebar';
+import "./App.css";
+import CurrentChat from "./Components/CurrentChat";
+import Sidebar from "./Components/Sidebar";
 
 function App() {
   return (
@@ -9,7 +9,7 @@ function App() {
       <Sidebar></Sidebar>
 
       {/* current conversation */}
-      <CurrentChat></CurrentChat>
+      <CurrentChat name="Nigel F"></CurrentChat>
     </div>
   );
 }

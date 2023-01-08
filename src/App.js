@@ -1,6 +1,7 @@
 import "./App.css";
 import CurrentChat from "./Components/CurrentChat";
 import Sidebar from "./Components/Sidebar";
+import { Route, Routes } from "react-router-dom";
 
 function App() {
   return (
@@ -9,7 +10,16 @@ function App() {
       <Sidebar></Sidebar>
 
       {/* current conversation */}
-      <CurrentChat name="Nigel F"></CurrentChat>
+      <Routes>
+        <Route
+          path="/chats/nigel"
+          element={<CurrentChat name="Nigel"></CurrentChat>}
+        ></Route>
+        <Route
+          path="/chats/ryan"
+          element={<CurrentChat name="Ryan"></CurrentChat>}
+        ></Route>
+      </Routes>
     </div>
   );
 }

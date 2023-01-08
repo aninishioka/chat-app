@@ -8,8 +8,8 @@ class ChatList extends Component {
     return (
       <div className="chatList">
         {/* chats */}
-        <Chat name="Nigel F" lastMsg="hey"></Chat>
-        <Chat name="Ryan N" lastMsg="?"></Chat>
+        <Chat name="Nigel" lastMsg="hey"></Chat>
+        <Chat name="Ryan" lastMsg="?"></Chat>
       </div>
     );
   }

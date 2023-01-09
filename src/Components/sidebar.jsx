@@ -4,7 +4,18 @@ import "./CSS/Sidebar.css";
 import SearchBar from "./SearchBar";
 
 class Sidebar extends Component {
-  state = {};
+  constructor(props) {
+    super(props);
+    this.handleSearchTextChange = this.handleSearchTextChange.bind(this);
+  }
+  state = {
+    searchText: "",
+  };
+
+  handleSearchTextChange(searchText) {
+    this.setState({ searchText: searchText });
+  }
+
   render() {
     return (
       <div className="sidebar">
@@ -15,10 +26,13 @@ class Sidebar extends Component {
             <span className="material-symbols-outlined">edit_square</span>
           </button>
         </div>
-        {/* search. use datalist? */}
-        <SearchBar></SearchBar>
+        {/* search */}
+        <SearchBar
+          searchText={this.state.searchText}
+          onSearchTextChange={this.handleSearchTextChange}
+        ></SearchBar>
         {/* convo list */}
-        <ChatList></ChatList>
+        <ChatList searchText={this.state.searchText}></ChatList>
       </div>
     );
   }

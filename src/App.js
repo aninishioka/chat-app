@@ -11,14 +11,16 @@ function App() {
 
       {/* current conversation */}
       <Routes>
-        <Route
-          path="/chats/nigel"
-          element={<CurrentChat name="Nigel"></CurrentChat>}
-        ></Route>
-        <Route
-          path="/chats/ryan"
-          element={<CurrentChat name="Ryan"></CurrentChat>}
-        ></Route>
+        <Route path="/chats">
+          <Route
+            path="nigel"
+            element={<CurrentChat name="Nigel"></CurrentChat>}
+          ></Route>
+          <Route
+            path="ryan"
+            element={<CurrentChat name="Ryan"></CurrentChat>}
+          ></Route>
+        </Route>
       </Routes>
     </div>
   );

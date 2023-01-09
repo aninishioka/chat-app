@@ -23,3 +23,7 @@ button:focus {
 .pointer {
   cursor: pointer;
 }
+
+a {
+  text-decoration: none;
+}

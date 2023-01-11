@@ -1,6 +1,0 @@
-.chatList {
-  display: flex;
-  flex-direction: column;
-  min-height: 100%;
-  overflow: scroll;
-}

@@ -1,0 +1,13 @@
+.chatBlock {
+  max-width: 75%;
+  width: fit-content;
+  height: fit-content;
+}
+
+.other {
+  align-self: flex-start;
+}
+
+.self {
+  align-self: flex-end;
+}

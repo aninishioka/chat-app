@@ -1,0 +1,13 @@
+.searchBar {
+  height: 35px;
+  padding: 0 20px 0 20px;
+}
+
+.searchBar__input {
+  height: 100%;
+  width: 100%;
+}
+
+.searchBar__input:focus {
+  border: none;
+}

@@ -2,7 +2,7 @@ const express = require("express");
 const app = express();
 const port = 5000;
 
-app.get("/", (req, res) => {
+app.get("/chats", (req, res) => {
   res.json({
     chats: [
       { name: "Nigel", lastMsg: "hey" },

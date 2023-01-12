@@ -32,7 +32,10 @@ class Sidebar extends Component {
           onSearchTextChange={this.handleSearchTextChange}
         ></SearchBar>
         {/* convo list */}
-        <ChatList searchText={this.state.searchText}></ChatList>
+        <ChatList
+          searchText={this.state.searchText}
+          chats={this.props.chats}
+        ></ChatList>
       </div>
     );
   }

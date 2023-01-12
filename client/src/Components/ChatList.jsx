@@ -9,22 +9,23 @@ class ChatList extends Component {
   }
   state = {};
 
-  chats = [
-    { name: "Nigel", lastMsg: "hey" },
-    { name: "Ryan", lastMsg: "?" },
-  ];
-
   filterChatList() {
     const filteredList = [];
-    this.chats.forEach((chat) => {
-      if (
-        chat.name.toLowerCase().includes(this.props.searchText.toLowerCase())
-      ) {
-        filteredList.push(
-          <Chat name={chat.name} lastMsg={chat.lastMsg}></Chat>
-        );
-      }
-    });
+    if (typeof this.props.chats !== "undefined") {
+      this.props.chats.forEach((chat) => {
+        if (
+          chat.name.toLowerCase().includes(this.props.searchText.toLowerCase())
+        ) {
+          filteredList.push(
+            <Chat
+              key={chat.name}
+              name={chat.name}
+              lastMsg={chat.lastMsg}
+            ></Chat>
+          );
+        }
+      });
+    }
     return filteredList;
   }
 

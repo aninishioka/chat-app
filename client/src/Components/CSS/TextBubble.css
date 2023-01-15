@@ -6,11 +6,13 @@
   margin-bottom: 2px;
 }
 
+.self,
 .chatBlock > .self {
   background-color: #ffc107;
   color: white;
 }
 
+.other,
 .chatBlock > .other {
   background-color: var(--light-gray);
 }

@@ -13,7 +13,10 @@ function CurrentChat(props) {
       {/* header */}
       <div className="currentChat__header">{name}</div>
       {/* chat body */}
-      <div className="currentChat__body">{/* chat blocks */}</div>
+      <div className="currentChat__body">
+        {/* chat blocks */}
+        <TextBubble message="hi" sender={"self"}></TextBubble>
+      </div>
       {/* compose new message */}
       <ComposeMsg></ComposeMsg>
     </div>

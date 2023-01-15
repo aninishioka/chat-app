@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { useState } from "react";
 import { useParams } from "react-router-dom";
 import ChatBlock from "./ChatBlock";
 import ComposeMsg from "./ComposeMsg";
@@ -7,6 +7,11 @@ import TextBubble from "./TextBubble";
 
 function CurrentChat(props) {
   let { name } = useParams();
+  const [messages, setMessages] = useState([]);
+
+  const displayNewMessage = (msg) => {
+    setMessages([...messages, { msg: msg, sender: "self" }]);
+  };
 
   return (
     <div className="currentChat">
@@ -15,10 +20,17 @@ function CurrentChat(props) {
       {/* chat body */}
       <div className="currentChat__body">
         {/* chat blocks */}
-        <TextBubble message="hi" sender={"self"}></TextBubble>
+        {messages.map((message) => {
+          return (
+            <TextBubble
+              message={message.msg}
+              sender={message.sender}
+            ></TextBubble>
+          );
+        })}
       </div>
       {/* compose new message */}
-      <ComposeMsg></ComposeMsg>
+      <ComposeMsg displayNewMessage={displayNewMessage}></ComposeMsg>
     </div>
   );
 }

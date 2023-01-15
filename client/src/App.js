@@ -3,9 +3,11 @@ import CurrentChat from "./Components/CurrentChat";
 import Sidebar from "./Components/Sidebar";
 import { Route, Routes } from "react-router-dom";
 import { useEffect, useState } from "react";
+import { io } from "socket.io-client";
 
 function App() {
   const [data, setData] = useState([{}]);
+  const socket = io("http://localhost:5000");
 
   useEffect(() => {
     fetch("/chats")
@@ -15,6 +17,10 @@ function App() {
       })
       .then((data) => setData(data))
       .catch((err) => console.log(err));
+
+    socket.on("connect", () => {
+      console.log(`connected to ${socket.id}`);
+    });
   }, []);
 
   return (

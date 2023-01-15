@@ -16,3 +16,7 @@
 .chatBlock > .other {
   background-color: var(--light-gray);
 }
+
+.textBubble__message {
+  white-space: pre-wrap;
+}

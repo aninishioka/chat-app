@@ -7,7 +7,7 @@ class TextBubble extends Component {
       <div
         className={"textBubble rounded-pill align-middle " + this.props.sender}
       >
-        <span>{this.props.message}</span>
+        <span className="textBubble__message">{this.props.message}</span>
       </div>
     );
   }

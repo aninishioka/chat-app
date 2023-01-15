@@ -13,7 +13,7 @@ function ComposeMsg(props) {
     }
   };
   const displayNewMessage = () => {
-    const msg = document.getElementById("msg").value;
+    const msg = document.getElementById("msg").value.trimEnd();
     if (msg) {
       document.getElementById("msg").value = "";
       props.displayNewMessage(msg);

@@ -5,10 +5,17 @@ const port = 5000;
 app.get("/chats", (req, res) => {
   res.json({
     chats: [
-      { name: "Nigel", lastMsg: "hey" },
-      { name: "Ryan", lastMsg: "?" },
-      { name: "Grace", lastMsg: "lol" },
-      { name: "Nicole", lastMsg: "woo" },
+      {
+        name: "Nigel",
+        messages: [
+          ["Nigel", "hey"],
+          ["Anissa", "hi"],
+          ["Anissa", "what are you up to"],
+        ],
+      },
+      { name: "Ryan", messages: [["Anissa", "soup"]] },
+      { name: "Grace", messages: [["Grace", "woot"]] },
+      { name: "Nicole", messages: [["Anissa", "lol"]] },
     ],
   });
 });

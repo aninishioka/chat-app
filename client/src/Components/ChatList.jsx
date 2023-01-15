@@ -16,12 +16,12 @@ class ChatList extends Component {
         if (
           chat.name.toLowerCase().includes(this.props.searchText.toLowerCase())
         ) {
+          let lastMsg =
+            chat.messages.length > 0
+              ? chat.messages[chat.messages.length - 1][1]
+              : "";
           filteredList.push(
-            <Chat
-              key={chat.name}
-              name={chat.name}
-              lastMsg={chat.lastMsg}
-            ></Chat>
+            <Chat key={chat.name} name={chat.name} lastMsg={lastMsg}></Chat>
           );
         }
       });

@@ -7,7 +7,9 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node server",
-    "dev": "nodemon server"
+    "dev": "nodemon server",
+    "startDb": "brew services start mongodb-community@6.0",
+    "stopDb": "brew services stop mongodb-community@6.0"
   },
   "keywords": [],
   "author": "Anissa Nishioka",

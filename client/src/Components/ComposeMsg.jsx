@@ -6,8 +6,8 @@ function ComposeMsg(props) {
     displayNewMessage();
   };
   const handleKeyPress = (e) => {
-    if (e.shiftKey && e.keyCode == 13) return;
-    if (e.keyCode == 13) {
+    if (e.shiftKey && e.keyCode === 13) return;
+    if (e.keyCode === 13) {
       e.preventDefault();
       displayNewMessage();
     }

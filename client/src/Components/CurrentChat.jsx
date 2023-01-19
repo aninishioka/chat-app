@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import { useParams } from "react-router-dom";
-import ChatBlock from "./ChatBlock";
 import ComposeMsg from "./ComposeMsg";
 import "./CSS/CurrentChat.css";
 import TextBubble from "./TextBubble";

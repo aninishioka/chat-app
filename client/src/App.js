@@ -7,8 +7,7 @@ import { io } from "socket.io-client";
 
 function App() {
   const [data, setData] = useState([{}]);
-  /*const socket = io("http://localhost:5000", {
-  });*/
+  const socket = io("http://localhost:8080", {});
 
   useEffect(() => {
     fetch("/chats")
@@ -19,9 +18,9 @@ function App() {
       .then((data) => setData(data))
       .catch((err) => console.log(err));
 
-    /*socket.on("connect", () => {
+    socket.on("connect", () => {
       console.log(`connected to ${socket.id}`);
-    });*/
+    });
   }, []);
 
   return (

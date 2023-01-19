@@ -1,6 +1,7 @@
 import "./App.css";
 import CurrentChat from "./Components/CurrentChat";
 import Sidebar from "./Components/Sidebar";
+import NewChat from "./Components/NewChat";
 import { Route, Routes } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { io } from "socket.io-client";
@@ -19,7 +20,7 @@ function App() {
       .catch((err) => console.log(err));
 
     socket.on("connect", () => {
-      console.log(`connected to ${socket.id}`);
+      console.log(`connected to socket ${socket.id}`);
     });
   }, []);
 
@@ -32,6 +33,7 @@ function App() {
       <Routes>
         <Route path="/chats">
           <Route path=":name" element={<CurrentChat></CurrentChat>}></Route>
+          <Route path="new" element={<NewChat></NewChat>}></Route>
         </Route>
       </Routes>
     </div>

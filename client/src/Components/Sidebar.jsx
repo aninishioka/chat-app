@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import ChatList from "./ChatList";
 import "./CSS/Sidebar.css";
 import SearchBar from "./SearchBar";
+import { Link } from "react-router-dom";
 
 class Sidebar extends Component {
   constructor(props) {
@@ -23,7 +24,9 @@ class Sidebar extends Component {
         <div className="sidebar__header">
           <h2>Chats</h2>
           <button className="sidebar__newChatBtn btn">
-            <span className="material-symbols-outlined">edit_square</span>
+            <Link to="chats/new">
+              <span className="material-symbols-outlined">edit_square</span>
+            </Link>
           </button>
         </div>
         {/* search */}

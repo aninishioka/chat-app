@@ -14,7 +14,6 @@ const port = process.env.port || 8080;
 const io = socketio(server, {
   cors: {
     origin: "*",
-    methods: ["GET", "POST"],
   },
 });
 
@@ -23,7 +22,7 @@ app.use("/chats", chats);
 //io.on("connection", (socket) => {});
 
 mongoose.set("strictQuery", false);
-mongoose.connect("mongodb://127.0.0.1:27017/test");
+mongoose.connect(process.env.DATABASE_URL);
 
 server.listen(port, () => {
   console.log(`app listening on port ${port}`);

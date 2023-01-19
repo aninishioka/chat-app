@@ -1,0 +1,25 @@
+.userCard {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  height: 64px;
+  color: black;
+}
+
+.userCard:hover {
+  background-color: var(--light-gray);
+}
+
+.avatar__container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 64px;
+  height: 100%;
+}
+
+.avatar {
+  width: 36px;
+  height: 36px;
+  border: 1px solid gray;
+}

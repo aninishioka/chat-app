@@ -4,6 +4,7 @@ if (process.env.NODE_ENV !== "production") {
 
 const express = require("express");
 const chats = require("./Routes/chats");
+const users = require("./Routes/users");
 const socketio = require("socket.io");
 const http = require("http");
 const mongoose = require("mongoose");
@@ -18,8 +19,9 @@ const io = socketio(server, {
 });
 
 app.use("/chats", chats);
+app.use("/users", users);
 
-//io.on("connection", (socket) => {});
+io.on("connection", (socket) => {});
 
 mongoose.set("strictQuery", false);
 mongoose.connect(process.env.DATABASE_URL);

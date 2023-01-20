@@ -11,7 +11,10 @@ class ChatList extends Component {
 
   filterChatList() {
     const filteredList = [];
-    if (typeof this.props.chats !== "undefined") {
+    if (
+      typeof this.props.chats !== "undefined" &&
+      Array.isArray(this.props.chats)
+    ) {
       this.props.chats.forEach((chat) => {
         if (
           chat.name.toLowerCase().includes(this.props.searchText.toLowerCase())

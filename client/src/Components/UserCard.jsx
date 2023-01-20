@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 
 function UserCard(props) {
   return (
-    <Link to={"chats/" + props.name}>
+    <Link to={"../" + props.name}>
       <div className="userCard rounded pointer">
         {/* avatar */}
         <div className="avatar__container">

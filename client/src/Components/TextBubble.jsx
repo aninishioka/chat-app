@@ -1,14 +1,12 @@
-import React, { Component } from "react";
+import React from "react";
 import "./CSS/TextBubble.css";
 
-class TextBubble extends Component {
-  render() {
-    return (
-      <div className={"textBubble rounded align-middle " + this.props.sender}>
-        <span className="textBubble__message">{this.props.message}</span>
-      </div>
-    );
-  }
+function TextBubble(props) {
+  return (
+    <div className={"textBubble rounded align-middle " + props.sender}>
+      <span className="textBubble__message">{props.message}</span>
+    </div>
+  );
 }
 
 export default TextBubble;

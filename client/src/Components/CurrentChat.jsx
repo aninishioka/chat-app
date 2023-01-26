@@ -6,7 +6,8 @@ import TextBubble from "./TextBubble";
 
 function CurrentChat(props) {
   let { name } = useParams();
-  const [data, setData] = useState([]);
+  const [messages, setMessages] = useState([]);
+  const [chatId, setChatId] = useState({});
   const loc = useLocation();
   const { userId } = { ...loc.state };
 
@@ -23,7 +24,7 @@ function CurrentChat(props) {
         throw res;
       })
       .then((data) => {
-        setData(data);
+        setMessages(data.messages);
       })
       .catch((err) => {
         console.log(err);
@@ -31,12 +32,12 @@ function CurrentChat(props) {
   });
 
   const handleNewMessage = (msg) => {
-    setData([...data.messages, { msg: msg, sender: "self" }]);
+    setMessages([...messages, { msg: msg, sender: "self" }]);
   };
 
   const displayMessages = () => {
-    if (typeof data.messages !== "undefined" && Array.isArray(data.messages)) {
-      return data.messages.map((message) => {
+    if (typeof messages !== "undefined" && Array.isArray(messages)) {
+      return messages.map((message) => {
         return (
           <TextBubble
             message={message.msg}

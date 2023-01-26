@@ -11,7 +11,7 @@ function App() {
   const socket = io("http://localhost:8080", {});
 
   useEffect(() => {
-    fetch("/chats")
+    fetch("/chats/previews")
       .then((res) => {
         if (res.ok) return res.json();
         throw res;

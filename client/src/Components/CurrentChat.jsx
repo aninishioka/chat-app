@@ -1,15 +1,50 @@
-import React, { useState } from "react";
-import { useParams } from "react-router-dom";
+import React, { useState, useEffect } from "react";
+import { useLocation, useParams } from "react-router-dom";
 import ComposeMsg from "./ComposeMsg";
 import "./CSS/CurrentChat.css";
 import TextBubble from "./TextBubble";
 
 function CurrentChat(props) {
   let { name } = useParams();
-  const [messages, setMessages] = useState([]);
+  const [data, setData] = useState([]);
+  const loc = useLocation();
+  const { userId } = { ...loc.state };
 
-  const displayNewMessage = (msg) => {
-    setMessages([...messages, { msg: msg, sender: "self" }]);
+  useEffect(() => {
+    fetch(
+      "/chats?" +
+        new URLSearchParams({
+          userId: userId,
+        }),
+      {}
+    )
+      .then((res) => {
+        if (res.ok) return res.json();
+        throw res;
+      })
+      .then((data) => {
+        setData(data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  });
+
+  const handleNewMessage = (msg) => {
+    setData([...data.messages, { msg: msg, sender: "self" }]);
+  };
+
+  const displayMessages = () => {
+    if (typeof data.messages !== "undefined" && Array.isArray(data.messages)) {
+      return data.messages.map((message) => {
+        return (
+          <TextBubble
+            message={message.msg}
+            sender={message.sender}
+          ></TextBubble>
+        );
+      });
+    }
   };
 
   return (
@@ -19,17 +54,10 @@ function CurrentChat(props) {
       {/* chat body */}
       <div className="currentChat__body">
         {/* chat blocks */}
-        {messages.map((message) => {
-          return (
-            <TextBubble
-              message={message.msg}
-              sender={message.sender}
-            ></TextBubble>
-          );
-        })}
+        {displayMessages()}
       </div>
       {/* compose new message */}
-      <ComposeMsg displayNewMessage={displayNewMessage}></ComposeMsg>
+      <ComposeMsg displayNewMessage={handleNewMessage}></ComposeMsg>
     </div>
   );
 }

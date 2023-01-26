@@ -7,7 +7,7 @@ import UserCard from "./UserCard";
 function SearchDropdown(props) {
   const [data, setData] = useState({});
   useEffect(() => {
-    if (props.searchText === "") return;
+    if (props.searchText === null || props.searchText === "") return;
     fetch(
       "/users?" +
         new URLSearchParams({
@@ -34,7 +34,13 @@ function SearchDropdown(props) {
       props.searchText !== ""
     ) {
       return data.map((user) => {
-        return <UserCard name={user.name}></UserCard>;
+        return (
+          <UserCard
+            key={user._id}
+            name={user.name}
+            userId={user._id}
+          ></UserCard>
+        );
       });
     }
   };

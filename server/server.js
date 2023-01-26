@@ -18,6 +18,7 @@ const io = socketio(server, {
   },
 });
 
+app.use(express.json());
 app.use("/chats", chats);
 app.use("/users", users);
 

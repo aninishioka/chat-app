@@ -4,11 +4,12 @@ import Sidebar from "./Components/Sidebar";
 import NewChat from "./Components/NewChat";
 import { Route, Routes } from "react-router-dom";
 import { useEffect, useState } from "react";
-import { io } from "socket.io-client";
+//import { io } from "socket.io-client";
+import { socket, SocketContext } from "./Contexts/SocketContext";
 
 function App() {
   const [data, setData] = useState([{}]);
-  const socket = io("http://localhost:8080", {});
+  //const socket = io("http://localhost:8080", {});
 
   useEffect(() => {
     fetch("/chats/previews")
@@ -19,24 +20,26 @@ function App() {
       .then((data) => setData(data))
       .catch((err) => console.log(err));
 
-    socket.on("connect", () => {
+    /*socket.on("connect", () => {
       console.log(`connected to socket ${socket.id}`);
-    });
+    });*/
   }, []);
 
   return (
-    <div className="app">
-      {/* sidebar */}
-      <Sidebar chats={data.chats}></Sidebar>
+    <SocketContext.Provider value={socket}>
+      <div className="app">
+        {/* sidebar */}
+        <Sidebar chats={data.chats}></Sidebar>
 
-      {/* current conversation */}
-      <Routes>
-        <Route path="/chats">
-          <Route path=":name" element={<CurrentChat></CurrentChat>}></Route>
-          <Route path="new" element={<NewChat></NewChat>}></Route>
-        </Route>
-      </Routes>
-    </div>
+        {/* current conversation */}
+        <Routes>
+          <Route path="/chats">
+            <Route path=":name" element={<CurrentChat></CurrentChat>}></Route>
+            <Route path="new" element={<NewChat></NewChat>}></Route>
+          </Route>
+        </Routes>
+      </div>
+    </SocketContext.Provider>
   );
 }
 

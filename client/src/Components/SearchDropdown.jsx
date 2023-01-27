@@ -24,7 +24,7 @@ function SearchDropdown(props) {
       .catch((err) => {
         console.log(err);
       });
-  });
+  }, []);
 
   const createUserCards = () => {
     if (

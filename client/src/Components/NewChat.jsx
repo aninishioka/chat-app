@@ -11,6 +11,7 @@ function NewChat() {
   const handleSearchTextChange = (text) => {
     setSearchText(text);
   };
+
   return (
     <div className="newChat">
       {/* header */}

@@ -4,7 +4,7 @@ import ComposeMsg from "./ComposeMsg";
 import "./CSS/CurrentChat.css";
 import TextBubble from "./TextBubble";
 
-function CurrentChat(props) {
+function CurrentChat() {
   let { name } = useParams();
   const [messages, setMessages] = useState([]);
   const [chatId, setChatId] = useState({});
@@ -29,7 +29,7 @@ function CurrentChat(props) {
       .catch((err) => {
         console.log(err);
       });
-  });
+  }, []);
 
   const handleNewMessage = (msg) => {
     setMessages([...messages, { msg: msg, sender: "self" }]);

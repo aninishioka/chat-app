@@ -1,5 +1,5 @@
 .textBubble {
-  max-width: 100%;
+  max-width: 75%;
   width: fit-content;
   height: fit-content;
   padding: 4px 15px 4px 15px;
@@ -10,11 +10,13 @@
 .chatBlock > .self {
   background-color: #ffc107;
   color: white;
+  align-self: flex-end;
 }
 
 .other,
 .chatBlock > .other {
   background-color: var(--light-gray);
+  align-self: flex-start;
 }
 
 .textBubble__message {

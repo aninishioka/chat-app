@@ -3,6 +3,10 @@ import { useLocation, useParams } from "react-router-dom";
 import ComposeMsg from "./ComposeMsg";
 import "./CSS/CurrentChat.css";
 import TextBubble from "./TextBubble";
+import { SocketContext } from "../Contexts/SocketContext";
+import { useContext } from "react";
+import { v4 as uuidv4 } from "uuid";
+import { UserContext } from "../Contexts/UserContext";
 
 function CurrentChat() {
   let { name } = useParams();
@@ -10,6 +14,8 @@ function CurrentChat() {
   const [chatId, setChatId] = useState({});
   const loc = useLocation();
   const { userId } = { ...loc.state };
+  const socket = useContext(SocketContext);
+  const self = useContext(UserContext);
 
   useEffect(() => {
     fetch(
@@ -25,29 +31,34 @@ function CurrentChat() {
       })
       .then((data) => {
         setMessages(data.messages);
+        setChatId(data.chatId);
       })
       .catch((err) => {
         console.log(err);
       });
   }, []);
 
-  const handleNewMessage = (msg) => {
-    setMessages([...messages, { msg: msg, sender: "self" }]);
-  };
+  socket.on("receive-message", (data) => {
+    console.log(data);
+    handleNewMessage(data.message, data.sender);
+  });
 
+  const handleNewMessage = (msg, sender) => {
+    setMessages([...messages, { msg: msg, userId: sender, _id: uuidv4() }]);
+  };
   const displayMessages = () => {
     if (typeof messages !== "undefined" && Array.isArray(messages)) {
       return messages.map((message) => {
         return (
           <TextBubble
-            message={message.msg}
-            sender={message.sender}
+            key={message._id}
+            message={message.message}
+            senderIsSelf={message.userId === self}
           ></TextBubble>
         );
       });
     }
   };
-
   return (
     <div className="currentChat">
       {/* header */}
@@ -58,7 +69,11 @@ function CurrentChat() {
         {displayMessages()}
       </div>
       {/* compose new message */}
-      <ComposeMsg displayNewMessage={handleNewMessage}></ComposeMsg>
+      <ComposeMsg
+        handleNewMessage={handleNewMessage}
+        chatId={chatId}
+        other={userId}
+      ></ComposeMsg>
     </div>
   );
 }

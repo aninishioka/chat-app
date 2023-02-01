@@ -3,9 +3,7 @@ import { io } from "socket.io-client";
 
 const socket = io("http://localhost:8080", {});
 
-socket.on("connect", () => {
-  console.log(`connected to socket ${socket.id}`);
-});
+socket.on("connect", () => {});
 
 const SocketContext = createContext(socket);
 

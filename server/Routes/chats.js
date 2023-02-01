@@ -5,7 +5,7 @@ const Message = require("../Models/Message");
 const User = require("../Models/User");
 
 router.get("/previews", async (req, res) => {
-  res.json({
+  /* res.json({
     chats: [
       {
         name: "Nigel",
@@ -19,7 +19,7 @@ router.get("/previews", async (req, res) => {
       { name: "Grace", messages: [["Grace", "woot"]] },
       { name: "Nicole", messages: [["Anissa", "lol"]] },
     ],
-  });
+  }); */
   /*const searchOptions = {};
   try {
     const chatIds = await User.find({name: "Anissa"}, {chatIds : 1});
@@ -34,16 +34,23 @@ router.get("/previews", async (req, res) => {
 
 router.get("/", async (req, res) => {
   try {
-    const self = await User.find({ name: "Anissa" }, { chatIds: 1, _id: 1 });
-    const other = await User.findOne({ _id: req.query.userId }, { _id: 1 });
-    const chatId = await Chat.find(
+    const self = await User.findOne({ name: "Anissa" });
+    const other = await User.findOne({ _id: req.query.userId });
+    const chat = await Chat.findOne(
       {
         _id: { $in: self.chatIds },
-        participants: [self._id, other._id],
+        participants: { $elemMatch: { $in: [other._id] } },
       },
       { _id: 1 }
     );
-    const messages = await Message.find({ chatId: chatId }).sort({
+    let chatId = chat._id;
+    if (chatId === null) {
+      const chat = await Chat.create({ participants: [other._id, self._id] });
+      let chatId = chat._id;
+      await self.update({ $push: { chatIds: chatId } });
+      await other.update({ $push: { chatIds: chatId } });
+    }
+    const messages = await Message.find({ chatId: chatId }).limit(100).sort({
       timestamp: -1,
     });
     res.json({ chatId: chatId, messages: messages });

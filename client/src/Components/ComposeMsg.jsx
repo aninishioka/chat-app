@@ -1,7 +1,10 @@
 import React from "react";
 import "./CSS/ComposeMsg.css";
+import { SocketContext } from "../Contexts/SocketContext";
+import { useContext } from "react";
 
 function ComposeMsg(props) {
+  const socket = useContext(SocketContext);
   const handleClick = () => {
     displayNewMessage();
   };
@@ -9,15 +12,21 @@ function ComposeMsg(props) {
     if (e.shiftKey && e.keyCode === 13) return;
     if (e.keyCode === 13) {
       e.preventDefault();
-      displayNewMessage();
+      const msg = document.getElementById("msg").value.trimEnd();
+      if (msg) {
+        sendMessage(msg, props.chatId);
+        displayNewMessage(msg);
+      }
     }
   };
-  const displayNewMessage = () => {
-    const msg = document.getElementById("msg").value.trimEnd();
+  const displayNewMessage = (msg) => {
     if (msg) {
       document.getElementById("msg").value = "";
-      props.displayNewMessage(msg);
+      props.handleNewMessage(msg, props.senderIsSelf);
     }
+  };
+  const sendMessage = (msg, chatId) => {
+    socket.emit("send-message", msg, chatId);
   };
   return (
     <div id="composeMsg" className="input-group">

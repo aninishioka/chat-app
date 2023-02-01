@@ -5,7 +5,7 @@ import "./CSS/SearchDropdown.css";
 import UserCard from "./UserCard";
 
 function SearchDropdown(props) {
-  const [data, setData] = useState({});
+  const [contacts, setContacts] = useState({});
   useEffect(() => {
     if (props.searchText === null || props.searchText === "") return;
     fetch(
@@ -18,8 +18,8 @@ function SearchDropdown(props) {
         if (res.ok) return res.json();
         throw res;
       })
-      .then((data) => {
-        setData(data);
+      .then((contacts) => {
+        setContacts(contacts);
       })
       .catch((err) => {
         console.log(err);
@@ -28,17 +28,17 @@ function SearchDropdown(props) {
 
   const createUserCards = () => {
     if (
-      typeof data !== "undefined" &&
-      Array.isArray(data) &&
+      typeof contacts !== "undefined" &&
+      Array.isArray(contacts) &&
       props.searchText !== null &&
       props.searchText !== ""
     ) {
-      return data.map((user) => {
+      return contacts.map((contact) => {
         return (
           <UserCard
-            key={user._id}
-            name={user.name}
-            userId={user._id}
+            key={contact._id}
+            name={contact.name}
+            userId={contact._id}
           ></UserCard>
         );
       });

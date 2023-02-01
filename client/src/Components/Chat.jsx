@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 
 function Chat(props) {
   return (
-    <Link to={"chats/" + props.name}>
+    <Link to={"/chats/" + props.name} state={{ userId: props.userId }}>
       <div className="chat rounded pointer">
         <span className="link"></span>
         {/* avatar */}

@@ -9,8 +9,9 @@ const socketio = require("socket.io");
 const http = require("http");
 const mongoose = require("mongoose");
 const Message = require("./Models/Message");
+const Chat = require("./Models/Chat");
 const selfId = mongoose.Types.ObjectId("63ca28374d1ee7c2e07c22d6");
-/* const Chat = require("./Models/Chat");
+/* 
 const User = require("./Models/User");
  */
 
@@ -28,39 +29,24 @@ app.use("/chats", chats);
 app.use("/users", users);
 
 io.on("connection", (socket) => {
-  socket.on("send-message", async (msg, chatId) => {
+  socket.on("send-message", async (message, chatId) => {
+    //create new message
     const messageDoc = await Message.create({
-      message: msg,
+      message: message,
       chatId: mongoose.Types.ObjectId(chatId),
       userId: selfId,
     });
+    //update corresponding chat's most recent message
+    await Chat.updateOne(
+      { _id: mongoose.Types.ObjectId(chatId) },
+      { lastMessage: message, lastMessageTime: messageDoc.createdAt }
+    );
     socket.broadcast.emit("receive-message", {
-      message: msg,
+      message: message,
       id: messageDoc.id,
       sender: selfId,
     });
   });
-  /*   socket.on("send-message", async (msg, members, chatId) => {
-    let chatDoc = null;
-    if (chatId === null) {
-      const memberIds = members.map((member) => {
-        return mongoose.Types.ObjectId(member);
-      });
-      chatDoc = await Chat.create({
-        participants: [...memberIds, selfId],
-      });
-      await User.updateMany(
-        { _id: { $in: [...memberIds, selfId] } },
-        { $push: { chatIds: chatDoc._id } }
-      );
-    }
-    const msgDoc = await Message.create({
-      message: msg,
-      userId: selfId,
-      chatId: chatId || chatDoc._id,
-    });
-    socket.emit("send-chatId", msgDoc.chatId);
-  }); */
 });
 
 mongoose.set("strictQuery", false);

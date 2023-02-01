@@ -4,29 +4,16 @@ import CurrentChat from "./Components/CurrentChat";
 import Sidebar from "./Components/Sidebar";
 import NewChat from "./Components/NewChat";
 import { Route, Routes } from "react-router-dom";
-import { useEffect, useState } from "react";
 import { socket, SocketContext } from "./Contexts/SocketContext";
 import { self, UserContext } from "./Contexts/UserContext";
 
 function App() {
-  const [data, setData] = useState([{}]);
-
-  useEffect(() => {
-    fetch("/chats/previews")
-      .then((res) => {
-        if (res.ok) return res.json();
-        throw res;
-      })
-      .then((data) => setData(data))
-      .catch((err) => console.log(err));
-  }, []);
-
   return (
     <SocketContext.Provider value={socket}>
       <UserContext.Provider value={self}>
         <div className="app">
           {/* sidebar */}
-          <Sidebar chats={data.chats}></Sidebar>
+          <Sidebar></Sidebar>
 
           {/* current conversation */}
           <Routes>

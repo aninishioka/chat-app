@@ -1,21 +1,46 @@
 import React from "react";
 import "./CSS/ChatList.css";
 import Chat from "./Chat";
+import { useEffect, useState } from "react";
+import { useContext } from "react";
+import { UserContext } from "../Contexts/UserContext";
 
-function ChatList(props) {
+function ChatList() {
+  const [chats, setChats] = useState([]);
+  const self = useContext(UserContext);
+
+  useEffect(() => {
+    fetch("/chats/previews")
+      .then((res) => {
+        if (res.ok) return res.json();
+        throw res;
+      })
+      .then((chats) => setChats(chats))
+      .catch((err) => console.log(err));
+  }, []);
+
   const filterChatList = () => {
     const filteredList = [];
-    if (typeof props.chats !== "undefined" && Array.isArray(props.chats)) {
-      props.chats.forEach((chat) => {
-        if (chat.name.toLowerCase().includes(props.searchText.toLowerCase())) {
-          let lastMsg =
-            chat.messages.length > 0
-              ? chat.messages[chat.messages.length - 1][1]
-              : "";
+    if (typeof chats !== "undefined" && Array.isArray(chats)) {
+      chats.forEach((chat) => {
+        let other;
+        for (let user in chat.participants) {
+          if (chat.participants[user].userId !== self)
+            other = chat.participants[user];
+        }
+        filteredList.push(
+          <Chat
+            key={chat._id}
+            userId={other.userId}
+            name={other.name}
+            lastMsg={chat.lastMessage}
+          ></Chat>
+        );
+        /* if (chat.name.toLowerCase().includes(props.searchText.toLowerCase())) {
           filteredList.push(
             <Chat key={chat.name} name={chat.name} lastMsg={lastMsg}></Chat>
           );
-        }
+        } */
       });
     }
     return filteredList;

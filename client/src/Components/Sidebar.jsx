@@ -5,7 +5,7 @@ import SearchBar from "./SearchBar";
 import { Link } from "react-router-dom";
 import { useState } from "react";
 
-function Sidebar(props) {
+function Sidebar() {
   const [searchText, setSearchText] = useState("");
 
   const handleSearchTextChange = (searchText) => {
@@ -29,7 +29,7 @@ function Sidebar(props) {
         onSearchTextChange={handleSearchTextChange}
       ></SearchBar>
       {/* convo list */}
-      <ChatList searchText={searchText} chats={props.chats}></ChatList>
+      <ChatList searchText={searchText}></ChatList>
     </div>
   );
 }

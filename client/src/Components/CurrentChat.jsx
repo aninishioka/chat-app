@@ -39,12 +39,14 @@ function CurrentChat() {
   }, []);
 
   socket.on("receive-message", (data) => {
-    console.log(data);
     handleNewMessage(data.message, data.sender);
   });
 
-  const handleNewMessage = (msg, sender) => {
-    setMessages([...messages, { msg: msg, userId: sender, _id: uuidv4() }]);
+  const handleNewMessage = (message, sender) => {
+    setMessages([
+      ...messages,
+      { message: message, userId: sender, _id: uuidv4() },
+    ]);
   };
   const displayMessages = () => {
     if (typeof messages !== "undefined" && Array.isArray(messages)) {

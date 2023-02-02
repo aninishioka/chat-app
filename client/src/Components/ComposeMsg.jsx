@@ -28,7 +28,7 @@ function ComposeMsg(props) {
     }
   };
   const sendMessage = (message, chatId) => {
-    socket.emit("send-message", message, chatId);
+    socket.emit("send-message", message, chatId, props.other);
   };
   return (
     <div id="composeMsg" className="input-group">

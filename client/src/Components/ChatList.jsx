@@ -1,6 +1,6 @@
 import React from "react";
 import "./CSS/ChatList.css";
-import Chat from "./Chat";
+import ChatCard from "./ChatCard";
 import { useEffect, useState } from "react";
 import { useContext } from "react";
 import { UserContext } from "../Contexts/UserContext";
@@ -29,12 +29,12 @@ function ChatList() {
             other = chat.participants[user];
         }
         filteredList.push(
-          <Chat
+          <ChatCard
             key={chat._id}
             userId={other.userId}
             name={other.name}
             lastMsg={chat.lastMessage}
-          ></Chat>
+          ></ChatCard>
         );
         /* if (chat.name.toLowerCase().includes(props.searchText.toLowerCase())) {
           filteredList.push(

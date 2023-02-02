@@ -1,8 +1,8 @@
 import React from "react";
-import "./CSS/Chat.css";
+import "./CSS/ChatCard.css";
 import { Link } from "react-router-dom";
 
-function Chat(props) {
+function ChatCard(props) {
   return (
     <Link to={"/chats/" + props.name} state={{ userId: props.userId }}>
       <div className="chat rounded pointer">
@@ -27,4 +27,4 @@ function Chat(props) {
   );
 }
 
-export default Chat;
+export default ChatCard;

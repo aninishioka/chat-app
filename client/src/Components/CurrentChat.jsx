@@ -36,7 +36,7 @@ function CurrentChat() {
       .catch((err) => {
         console.log(err);
       });
-  }, []);
+  }, [loc]);
 
   socket.on("receive-message", (data) => {
     handleNewMessage(data.message, data.sender);

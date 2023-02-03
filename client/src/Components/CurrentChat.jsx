@@ -39,7 +39,9 @@ function CurrentChat() {
   }, [loc]);
 
   socket.on("receive-message", (data) => {
-    handleNewMessage(data.message, data.sender);
+    if (data.to === userId) {
+      handleNewMessage(data.message, data.sender);
+    }
   });
 
   const handleNewMessage = (message, sender) => {

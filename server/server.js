@@ -63,6 +63,7 @@ io.on("connection", (socket) => {
       message: message,
       id: messageDoc.id,
       sender: selfId,
+      to: userId,
     });
   });
 });

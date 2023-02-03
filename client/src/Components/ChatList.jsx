@@ -4,8 +4,9 @@ import ChatCard from "./ChatCard";
 import { useEffect, useState } from "react";
 import { useContext } from "react";
 import { UserContext } from "../Contexts/UserContext";
+import { SocketContext } from "../Contexts/SocketContext";
 
-function ChatList() {
+function ChatList(props) {
   const [chats, setChats] = useState([]);
   const self = useContext(UserContext);
 
@@ -15,7 +16,9 @@ function ChatList() {
         if (res.ok) return res.json();
         throw res;
       })
-      .then((chats) => setChats(chats))
+      .then((chats) => {
+        setChats(chats);
+      })
       .catch((err) => console.log(err));
   }, []);
 

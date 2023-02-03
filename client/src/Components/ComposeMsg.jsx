@@ -32,21 +32,23 @@ function ComposeMsg(props) {
   };
   return (
     <div id="composeMsg" className="input-group">
-      <textarea
-        className="composeMsg__input form-control rounded-pill"
-        aria-label="text input"
-        placeholder="Message"
-        rows="1"
-        id="msg"
-        onKeyDown={handleKeyPress}
-      ></textarea>
-      <button
-        className="composeMsg__sendButton btn"
-        type="submit"
-        onClick={handleClick}
-      >
-        <span className="material-symbols-outlined">arrow_circle_up</span>
-      </button>
+      <div className="composeMsg_input_container">
+        <textarea
+          className="composeMsg__input form-control rounded-pill"
+          aria-label="text input"
+          placeholder="Message"
+          rows="1"
+          id="msg"
+          onKeyDown={handleKeyPress}
+        ></textarea>
+        <button
+          className="composeMsg__sendButton btn"
+          type="submit"
+          onClick={handleClick}
+        >
+          <span className="material-symbols-outlined">arrow_circle_up</span>
+        </button>
+      </div>
     </div>
   );
 }

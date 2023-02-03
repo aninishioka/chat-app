@@ -1,16 +1,26 @@
 #composeMsg {
-    width: 90%;
-    padding: 5px;
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  padding: 5px;
+  background-color: white;
+}
+
+.composeMsg_input_container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 90%;
 }
 
 .composeMsg__input {
-    resize: none;
+  resize: none;
 }
 
 .composeMsg__sendButton {
-    width: 35px;
-    height: 35px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+  width: 35px;
+  height: 35px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }

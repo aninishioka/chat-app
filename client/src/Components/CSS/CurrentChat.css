@@ -4,10 +4,13 @@
   flex-direction: column;
   width: 100%;
   align-items: center;
+  transform: translateZ(0);
 }
 
 .currentChat__header,
 .newChat__header {
+  position: fixed;
+  top: 0;
   display: flex;
   justify-content: space-between;
   align-items: center;

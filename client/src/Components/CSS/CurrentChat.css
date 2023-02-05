@@ -2,7 +2,8 @@
 .newChat {
   display: flex;
   flex-direction: column;
-  width: 100%;
+  width: calc(100vw - var(--sidebar-width));
+  height: 100vh;
   align-items: center;
   transform: translateZ(0);
 }
@@ -19,13 +20,23 @@
   padding: 0 5% 0 5%;
   cursor: default;
   border-bottom: 1px solid var(--light-gray);
+  background: white;
 }
 
 .currentChat__body {
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  height: calc(100vh - 110px);
+  margin: 55px 0 60px 0;
+  padding: 10px 5px 0 5px;
+  overflow: auto;
+}
+
+.currentChat__body__innerContainer {
   display: flex;
   flex-direction: column;
-  justify-content: flex-end;
   width: 100%;
-  height: 100%;
-  padding: 5px;
+  min-height: 100%;
+  justify-content: flex-end;
 }

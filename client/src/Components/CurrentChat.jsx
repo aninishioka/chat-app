@@ -70,7 +70,9 @@ function CurrentChat() {
       {/* chat body */}
       <div className="currentChat__body">
         {/* chat blocks */}
-        {displayMessages()}
+        <div className="currentChat__body__innerContainer">
+          {displayMessages()}
+        </div>
       </div>
       {/* compose new message */}
       <ComposeMsg

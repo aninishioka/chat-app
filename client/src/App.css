@@ -1,13 +1,15 @@
 .app {
   display: flex;
   box-sizing: border-box;
-  min-height: 100vh;
+  height: 100vh;
+  overflow: hidden;
 }
 
 body {
   --light-gray: #e6ecf0;
   --dark-gray: #6c757d;
   --sidebar-width: 400px;
+  height: 100vh;
 }
 
 textarea:focus,

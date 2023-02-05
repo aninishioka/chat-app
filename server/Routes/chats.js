@@ -9,6 +9,7 @@ router.get("/previews", async (req, res) => {
     const self = await User.findOne({ name: "Anissa" });
     const chats = await Chat.find({
       participants: { $elemMatch: { userId: self._id } },
+      lastMessage: { $exists: true },
     });
     res.json(chats);
   } catch (err) {

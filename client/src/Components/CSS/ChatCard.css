@@ -1,10 +1,10 @@
 .chat {
   --margin: 5px;
-
   display: flex;
   align-items: center;
   margin: var(--margin);
   width: calc(var(--sidebar-width) - var(--margin) * 2);
+  max-width: calc(var(--sidebar-width) - var(--margin) * 2);
   height: 65px;
   color: black;
 }
@@ -32,5 +32,12 @@
 }
 
 .chat__preview {
+  max-width: 300px;
+  overflow: hidden;
+  text-overflow: ellipsis;
   color: gray;
+}
+
+.chat__preview__span {
+  white-space: nowrap;
 }

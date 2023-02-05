@@ -19,7 +19,7 @@ function ChatCard(props) {
 
           {/* chat prev */}
           <div className="chat__preview">
-            <span>{props.lastMsg}</span>
+            <span className="chat__preview__span">{props.lastMsg}</span>
           </div>
         </div>
       </div>

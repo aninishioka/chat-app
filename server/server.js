@@ -38,12 +38,16 @@ io.on("connection", (socket) => {
       { _id: mongoose.Types.ObjectId(chatId) },
       { lastMessage: message, lastMessageTime: messageDoc.createdAt }
     );
+    const chat = await Chat.findOne({ _id: mongoose.Types.ObjectId(chatId) });
+
     socket.broadcast.emit("receive-message", {
       message: message,
       id: messageDoc.id,
       sender: selfId,
       to: userId,
     });
+
+    socket.emit("new-message", chat);
   });
 });
 

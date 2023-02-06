@@ -10,7 +10,7 @@ router.get("/previews", async (req, res) => {
     const chats = await Chat.find({
       participants: { $elemMatch: { userId: self._id } },
       lastMessage: { $exists: true },
-    });
+    }).sort({ lastMessageTime: -1 });
     res.json(chats);
   } catch (err) {
     console.log(err);

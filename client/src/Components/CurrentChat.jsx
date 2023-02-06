@@ -38,11 +38,13 @@ function CurrentChat() {
       });
   }, [loc]);
 
-  socket.on("receive-message", (data) => {
-    if (data.to === userId) {
-      handleNewMessage(data.message, data.sender);
-    }
-  });
+  useEffect(() => {
+    socket.on("receive-message", (data) => {
+      if (data.to === userId) {
+        handleNewMessage(data.message, data.sender);
+      }
+    });
+  }, []);
 
   const handleNewMessage = (message, sender) => {
     setMessages([

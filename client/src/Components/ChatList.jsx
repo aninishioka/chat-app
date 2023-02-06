@@ -6,13 +6,15 @@ import { useContext } from "react";
 import { UserContext } from "../Contexts/UserContext";
 import { SocketContext } from "../Contexts/SocketContext";
 
-function ChatList(props) {
+function ChatList() {
   const [chats, setChats] = useState([]);
   const self = useContext(UserContext);
+  const socket = useContext(SocketContext);
 
   useEffect(() => {
     fetch("/chats/previews")
       .then((res) => {
+        console.log("fetching chats/previews");
         if (res.ok) return res.json();
         throw res;
       })
@@ -20,20 +22,37 @@ function ChatList(props) {
         setChats(chats);
       })
       .catch((err) => console.log(err));
+
+    socket.on("new-message", (chat) => {
+      handleNewMessage(chat);
+    });
   }, []);
+
+  const handleNewMessage = (newChat) => {
+    console.log(newChat);
+    setChats((chats) => {
+      const updatedChats = chats.filter((chat) => {
+        return chat._id !== newChat._id;
+      });
+      console.log(updatedChats);
+      return [newChat, ...updatedChats];
+    });
+  };
 
   const filterChatList = () => {
     const filteredList = [];
     if (typeof chats !== "undefined" && Array.isArray(chats)) {
       chats.forEach((chat) => {
-        let other;
+        let other = null;
         for (let user in chat.participants) {
           if (chat.participants[user].userId !== self)
             other = chat.participants[user];
         }
+        if (other === null) return;
         filteredList.push(
           <ChatCard
             key={chat._id}
+            chatId={chat._id}
             userId={other.userId}
             name={other.name}
             lastMsg={chat.lastMessage}

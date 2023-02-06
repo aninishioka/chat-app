@@ -14,7 +14,6 @@ function ChatList() {
   useEffect(() => {
     fetch("/chats/previews")
       .then((res) => {
-        console.log("fetching chats/previews");
         if (res.ok) return res.json();
         throw res;
       })
@@ -29,12 +28,10 @@ function ChatList() {
   }, []);
 
   const handleNewMessage = (newChat) => {
-    console.log(newChat);
     setChats((chats) => {
       const updatedChats = chats.filter((chat) => {
         return chat._id !== newChat._id;
       });
-      console.log(updatedChats);
       return [newChat, ...updatedChats];
     });
   };
@@ -56,6 +53,7 @@ function ChatList() {
             userId={other.userId}
             name={other.name}
             lastMsg={chat.lastMessage}
+            lastMsgBy={chat.lastMessageSender}
           ></ChatCard>
         );
         /* if (chat.name.toLowerCase().includes(props.searchText.toLowerCase())) {
@@ -67,6 +65,7 @@ function ChatList() {
     }
     return filteredList;
   };
+  console.log(chats);
   return <div className="chatList">{filterChatList()}</div>;
 }
 

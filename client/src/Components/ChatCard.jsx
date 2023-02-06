@@ -1,8 +1,11 @@
-import React from "react";
+import React, { useContext } from "react";
 import "./CSS/ChatCard.css";
 import { Link } from "react-router-dom";
+import { UserContext } from "../Contexts/UserContext";
 
 function ChatCard(props) {
+  const self = useContext(UserContext);
+
   return (
     <Link to={"/chats/" + props.name} state={{ userId: props.userId }}>
       <div className="chat rounded pointer">
@@ -19,7 +22,9 @@ function ChatCard(props) {
 
           {/* chat prev */}
           <div className="chat__preview">
-            <span className="chat__preview__span">{props.lastMsg}</span>
+            <span className="chat__preview__span">{`${
+              props.lastMsgBy === self ? "You" : props.name
+            }: ${props.lastMsg}`}</span>
           </div>
         </div>
       </div>

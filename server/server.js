@@ -36,7 +36,11 @@ io.on("connection", (socket) => {
     //update corresponding chat's most recent message
     await Chat.updateOne(
       { _id: mongoose.Types.ObjectId(chatId) },
-      { lastMessage: message, lastMessageTime: messageDoc.createdAt }
+      {
+        lastMessage: message,
+        lastMessageTime: messageDoc.createdAt,
+        lastMessageSender: selfId,
+      }
     );
     const chat = await Chat.findOne({ _id: mongoose.Types.ObjectId(chatId) });
 

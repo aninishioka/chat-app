@@ -1,0 +1,53 @@
+.signupPage {
+  display: flex;
+  width: 100vw;
+  height: 100vh;
+  justify-content: center;
+  align-items: center;
+}
+
+.form__input {
+  padding: 4px 15px 4px 15px;
+  margin-bottom: 8px;
+}
+
+input {
+  border: 1px solid rgb(213, 213, 213);
+}
+
+#username,
+#email,
+#confirm_email {
+  width: 350px;
+}
+
+#confirm_email {
+  margin-bottom: 20px;
+}
+
+#username {
+  margin-bottom: 20px;
+}
+
+#password,
+#confirm_password {
+  width: 170px;
+}
+
+#password {
+  margin-right: 10px;
+}
+
+#alert:first-letter {
+  text-transform: uppercase;
+}
+
+.error_message {
+  color: red;
+  font-size: small;
+}
+
+#submit {
+  padding: 2px 15px 2px 15px;
+  margin-top: 10px;
+}

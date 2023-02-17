@@ -1,7 +1,7 @@
 .newChat {
   display: flex;
   flex-direction: column;
-  width: 100%;
+  flex-grow: 1;
   align-items: center;
 }
 

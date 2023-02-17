@@ -65,7 +65,6 @@ function ChatList() {
     }
     return filteredList;
   };
-  console.log(chats);
   return <div className="chatList">{filterChatList()}</div>;
 }
 

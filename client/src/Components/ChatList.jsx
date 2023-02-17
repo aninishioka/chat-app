@@ -65,7 +65,7 @@ function ChatList() {
     }
     return filteredList;
   };
-  return <div className="chatList">{filterChatList()}</div>;
+  return <div className="chatList">{/* filterChatList() */}</div>;
 }
 
 export default ChatList;

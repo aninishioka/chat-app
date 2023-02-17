@@ -11,7 +11,7 @@ function SignupPage() {
   const passwordRef = useRef();
   const confirmPasswordRef = useRef();
   const alert = useRef();
-  const { signup, user } = useAuth();
+  /* const { signup, user } = useAuth();
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
@@ -73,7 +73,7 @@ function SignupPage() {
     const alert = document.getElementById("alert");
     if (error === "") alert.style.visibility = "hidden";
     else alert.style.visibility = "visible";
-  }, [error]);
+  }, [error]); */
 
   return (
     <div className="signupPage">
@@ -83,9 +83,9 @@ function SignupPage() {
         method="POST"
         enctype="multipart/form-data"
       >
-        <div id="alert" className="alert alert-danger" role="alert" ref={alert}>
+        {/* <div id="alert" className="alert alert-danger" role="alert" ref={alert}>
           {error}
-        </div>
+        </div> */}
         <input
           className="form__input rounded"
           id="email"
@@ -139,10 +139,10 @@ function SignupPage() {
         ></input>
         <br />
         <button
-          disabled={loading}
+          //disabled={loading}
           className="border-0 rounded-pill"
           id="submit"
-          onClick={handleSubmit}
+          //onClick={handleSubmit}
         >
           Sign up
         </button>

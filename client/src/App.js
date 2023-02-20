@@ -12,14 +12,9 @@ function App() {
       {/* sidebar */}
 
       <Routes>
-        <Route
-          path="/"
-          element={
-            <PrivateRoute>
-              <HomePage></HomePage>
-            </PrivateRoute>
-          }
-        ></Route>
+        <Route element={<PrivateRoute></PrivateRoute>}>
+          <Route path="/" element={<HomePage></HomePage>}></Route>
+        </Route>
         <Route path="/login" element={<LoginPage></LoginPage>}></Route>
         <Route path="/signup" element={<SignupPage></SignupPage>}></Route>
       </Routes>

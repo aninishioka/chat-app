@@ -2,7 +2,6 @@ import React, { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../Contexts/UserContext";
 import "./CSS/SignupPage.css";
-import PrivateRouter from "./PrivateRoute";
 
 function SignupPage() {
   const emailRef = useRef();
@@ -10,82 +9,44 @@ function SignupPage() {
   const usernameRef = useRef();
   const passwordRef = useRef();
   const confirmPasswordRef = useRef();
-  const alert = useRef();
-  /* const { signup, user } = useAuth();
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
+  const { signup } = useAuth();
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (infoIsValid()) {
-      try {
-        setLoading(true);
-        await signup(emailRef.current.value, passwordRef.current.value);
-        sendUserToDB(usernameRef.current.value, emailRef.current.value);
-        setError("");
-        navigate("../");
-      } catch {
-        setError("Could not create account");
-      }
-    }
+    setLoading(true);
 
+    if (emailRef.current.value !== confirmEmailRef.current.value) {
+      setError("Emails do not match.");
+    } else if (passwordRef.current.value !== confirmPasswordRef.current.value) {
+      setError("Passwords do not match.");
+    } else {
+      signup(
+        usernameRef.current.value,
+        emailRef.current.value,
+        passwordRef.current.value
+      )
+        .then(() => {
+          setError("");
+          navigate("../");
+        })
+        .catch((err) => {
+          setError("Could not create account. Please try again later.");
+        });
+    }
     setLoading(false);
   };
 
-  const infoIsValid = () => {
-    return (
-      passwordRef.current.value === confirmPasswordRef.current.value &&
-      emailRef.current.value === confirmEmailRef.current.value
-    );
-  };
-
-  const sendUserToDB = (username, email) => {
-    user.getIdToken().then((token) => {
-      fetch("/users/new", {
-        method: "POST",
-        headers: {
-          AuthToken: token,
-        },
-        body: {
-          username: username,
-          email: email,
-        },
-      });
-    });
-  };
-
-  const fieldsMatch = (className) => {
-    const field = document.getElementById(className);
-    const confirmField = document.getElementById(`confirm_${className}`);
-
-    if (field.value !== confirmField.value) {
-      confirmField.setCustomValidity(`${className}s don't match`);
-      setError(`${className}s don't match. Could not create account`);
-      confirmField.value = "";
-      return false;
-    } else {
-      return true;
-    }
-  };
-
-  useEffect(() => {
-    const alert = document.getElementById("alert");
-    if (error === "") alert.style.visibility = "hidden";
-    else alert.style.visibility = "visible";
-  }, [error]); */
-
   return (
     <div className="signupPage">
-      <form
-        className="signupPage__form"
-        action="/users/new"
-        method="POST"
-        enctype="multipart/form-data"
-      >
-        {/* <div id="alert" className="alert alert-danger" role="alert" ref={alert}>
-          {error}
-        </div> */}
+      <form className="signupPage__form">
+        {error && (
+          <div id="alert" className="alert alert-danger" role="alert">
+            {error}
+          </div>
+        )}
         <input
           className="form__input rounded"
           id="email"
@@ -111,8 +72,6 @@ function SignupPage() {
           name="username"
           type="text"
           placeholder="Username"
-          //pattern="[A-Za-z0-9\-_\.]"
-          title="Only letters, numbers, certain special characters allowed"
           ref={usernameRef}
           required
         ></input>
@@ -123,8 +82,6 @@ function SignupPage() {
           type="password"
           placeholder="Password"
           minLength="8"
-          //pattern="[^\s]"
-          title="No white space allowed."
           ref={passwordRef}
           required
         ></input>
@@ -133,16 +90,15 @@ function SignupPage() {
           id="confirm_password"
           type="password"
           placeholder="Confirm Password"
-          title="No white space allowed."
           ref={confirmPasswordRef}
           required
         ></input>
         <br />
         <button
-          //disabled={loading}
+          disabled={loading}
           className="border-0 rounded-pill"
           id="submit"
-          //onClick={handleSubmit}
+          onClick={handleSubmit}
         >
           Sign up
         </button>

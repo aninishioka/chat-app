@@ -5,6 +5,8 @@ if (process.env.NODE_ENV !== "production") {
 const express = require("express");
 const chats = require("./Routes/chats");
 const users = require("./Routes/users");
+const index = require("./Routes/index");
+const auth = require("./middleware/auth");
 const socketio = require("socket.io");
 const http = require("http");
 const mongoose = require("mongoose");
@@ -22,6 +24,8 @@ const io = socketio(server, {
 });
 
 app.use(express.json());
+app.use(auth);
+app.use("/", index);
 app.use("/chats", chats);
 app.use("/users", users);
 

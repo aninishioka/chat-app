@@ -5,12 +5,11 @@ admin.initializeApp({
 });
 
 module.exports = function (req, res, next) {
-  console.log("validating token");
   admin
     .auth()
-    .verifyIdToken(req.header.AuthToken)
+    .verifyIdToken(req.header("AuthToken"))
     .then((decodedToken) => {
-      req.decodedToken = decodedToken;
+      req.uid = decodedToken.uid;
       next();
     })
     .catch((err) => {

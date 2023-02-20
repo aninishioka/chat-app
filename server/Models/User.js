@@ -2,7 +2,8 @@ const mongoose = require("mongoose");
 const Participant = require("./Participant");
 
 const userSchema = new mongoose.Schema({
-  name: { type: String, required: true },
+  firebaseUid: { type: String, required: true },
+  username: { type: String, required: true },
   chatIds: [], //should this be bound?
   participantId: mongoose.Schema.Types.ObjectId,
   //avatar
@@ -13,7 +14,7 @@ const userSchema = new mongoose.Schema({
 userSchema.pre("save", async function (next) {
   const participant = await Participant.create({
     userId: this._id,
-    name: this.name,
+    username: this.username,
   });
   this.participantId = participant._id;
   next();

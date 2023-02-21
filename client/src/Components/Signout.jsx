@@ -11,14 +11,14 @@ function Signout() {
 
   const handleClick = async () => {
     setLoading(true);
-    try {
-      setError("");
-      await logout();
-      navigate("./login");
-    } catch (err) {
-      setError("Could not log out.");
-    }
-
+    logout()
+      .then(() => {
+        setError("");
+        navigate("./login");
+      })
+      .catch((err) => {
+        setError("Could not log out.");
+      });
     setLoading(false);
   };
 

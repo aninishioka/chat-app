@@ -2,13 +2,17 @@ const express = require("express");
 const router = express.Router();
 const Chat = require("../Models/Chat");
 const Message = require("../Models/Message");
+const Participant = require("../Models/Participant");
 const User = require("../Models/User");
 
-router.get("/previews", async (req, res) => {
+router.post("/previews", async (req, res) => {
   try {
-    const self = await User.findOne({ name: "Anissa" });
+    const self = await Participant.findOne({
+      firebaseUid: req.body.firebaseUid,
+    });
+    console.log(self);
     const chats = await Chat.find({
-      participants: { $elemMatch: { userId: self._id } },
+      participants: { $elemMatch: { participantId: self._id } },
       lastMessage: { $exists: true },
     }).sort({ lastMessageTime: -1 });
     res.json(chats);

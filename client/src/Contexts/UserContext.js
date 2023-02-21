@@ -51,33 +51,34 @@ export function UserProvider({ children }) {
   }
 
   function login(email, password) {
-    signInWithEmailAndPassword(auth, email, password)
-      .then((userCredential) => {})
-      .catch((err) => {
-        console.log(err);
-      });
+    return signInWithEmailAndPassword(auth, email, password);
   }
 
   function logout() {
-    signOut(auth)
-      .then(() => {})
-      .catch((err) => {
-        console.log(err);
-      });
+    return signOut(auth);
+  }
+
+  async function getToken() {
+    if (curUser) {
+      return await curUser.getIdToken();
+    }
   }
 
   useEffect(() => {
+    console.log("auth state changed");
     const unsubscribe = onAuthStateChanged(auth, (user) => {
       setCurUser(user);
       if (user) {
+        console.log("logged in as " + user);
       } else {
+        console.log("logged out");
       }
     });
     setLoading(false);
     return unsubscribe;
-  }, [curUser]);
+  }, []);
 
-  const value = { signup, login, logout, curUser };
+  const value = { signup, login, logout, curUser, getToken };
 
   return (
     <UserContext.Provider value={value}>

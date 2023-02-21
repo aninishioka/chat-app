@@ -3,16 +3,26 @@ import "./CSS/ChatList.css";
 import ChatCard from "./ChatCard";
 import { useEffect, useState } from "react";
 import { useContext } from "react";
-import { UserContext } from "../Contexts/UserContext";
+import { useAuth, UserContext } from "../Contexts/UserContext";
 import { SocketContext } from "../Contexts/SocketContext";
 
 function ChatList() {
   const [chats, setChats] = useState([]);
   const self = useContext(UserContext);
+  const { getToken, curUser } = useAuth();
   const socket = useContext(SocketContext);
 
   useEffect(() => {
-    fetch("/chats/previews")
+    console.log(getToken());
+    fetch("/chats/previews", {
+      method: "POST",
+      header: {
+        AuthToken: curUser.getIdToken(),
+      },
+      body: JSON.stringify({
+        firebaseUid: curUser.uid,
+      }),
+    })
       .then((res) => {
         if (res.ok) return res.json();
         throw res;

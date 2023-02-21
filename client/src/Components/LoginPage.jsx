@@ -15,31 +15,33 @@ function LoginPage() {
     if (e.keyCode === 13) {
       e.preventDefault();
       if (emailRef.current.value && passwordRef.current.value) {
-        handleSubmit();
+        handleSubmit(e);
       }
     }
   };
 
-  const handleSubmit = async () => {
+  const handleSubmit = async (e) => {
+    e.preventDefault();
     setLoading(true);
-    try {
-      setError("");
-      await login(emailRef.current.value, passwordRef.current.value);
-      navigate("../");
-    } catch {
-      setError("Could not log in.");
-    }
+    login(emailRef.current.value, passwordRef.current.value)
+      .then(() => {
+        setError("");
+        navigate("../");
+      })
+      .catch((err) => {
+        setError("Could not log in");
+      });
     setLoading(false);
   };
 
   return (
     <div className="loginPage">
-      {error && (
-        <div id="alert" className="alert alert-danger" role="alert">
-          {error}
-        </div>
-      )}
       <form className="loginPage__form">
+        {error && (
+          <div id="alert" className="alert alert-danger" role="alert">
+            {error}
+          </div>
+        )}
         <input
           className="form__input rounded border border-primary-subtle"
           type="email"

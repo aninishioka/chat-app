@@ -9,11 +9,9 @@ import { Route, Routes } from "react-router-dom";
 function App() {
   return (
     <div className="app">
-      {/* sidebar */}
-
       <Routes>
         <Route element={<PrivateRoute></PrivateRoute>}>
-          <Route path="/" element={<HomePage></HomePage>}></Route>
+          <Route path="/*" element={<HomePage></HomePage>}></Route>
         </Route>
         <Route path="/login" element={<LoginPage></LoginPage>}></Route>
         <Route path="/signup" element={<SignupPage></SignupPage>}></Route>

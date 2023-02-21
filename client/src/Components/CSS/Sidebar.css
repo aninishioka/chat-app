@@ -5,6 +5,7 @@
   max-width: var(--sidebar-width);
   align-items: center;
   border-right: 1px solid var(--light-gray);
+  transform: translateZ(0);
 }
 
 .sidebar__header {

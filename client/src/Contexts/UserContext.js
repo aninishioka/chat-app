@@ -70,10 +70,10 @@ export function UserProvider({ children }) {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
       if (user) {
         setCurUser(user);
-        setLoading(false);
       } else {
       }
     });
+    setLoading(false);
     return unsubscribe;
   }, []);
 

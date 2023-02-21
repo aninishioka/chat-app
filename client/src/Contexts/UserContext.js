@@ -6,6 +6,8 @@ import {
   signInWithEmailAndPassword,
   signOut,
   onAuthStateChanged,
+  setPersistence,
+  browserSessionPersistence,
 } from "firebase/auth";
 
 const UserContext = createContext();
@@ -65,16 +67,11 @@ export function UserProvider({ children }) {
   }
 
   useEffect(() => {
-    console.log("auth state changed");
     const unsubscribe = onAuthStateChanged(auth, (user) => {
       setCurUser(user);
-      if (user) {
-        console.log("logged in as " + user);
-      } else {
-        console.log("logged out");
-      }
+      setLoading(false);
     });
-    setLoading(false);
+
     return unsubscribe;
   }, []);
 

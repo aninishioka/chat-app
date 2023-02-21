@@ -68,14 +68,14 @@ export function UserProvider({ children }) {
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
+      setCurUser(user);
       if (user) {
-        setCurUser(user);
       } else {
       }
     });
     setLoading(false);
     return unsubscribe;
-  }, []);
+  }, [curUser]);
 
   const value = { signup, login, logout, curUser };
 

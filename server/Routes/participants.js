@@ -4,7 +4,6 @@ const Participant = require("../Models/Participant");
 
 router.post("/", async (req, res) => {
   const searchOptions = {};
-  console.log(req.body.searchText);
   if (req.body.searchText !== null && req.body.searchText !== "")
     searchOptions.username = new RegExp(req.body.searchText, "i");
   try {

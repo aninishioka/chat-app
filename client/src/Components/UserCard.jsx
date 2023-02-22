@@ -31,7 +31,7 @@ function UserCard(props) {
         if (data.chatId !== null) {
           navigate("../" + data.chatId);
         } else {
-          props.createNewChat(props.userId);
+          props.createNewChat(props.userId, props.username);
         }
       })
       .catch((err) => {

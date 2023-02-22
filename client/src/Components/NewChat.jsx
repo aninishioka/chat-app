@@ -14,8 +14,12 @@ function NewChat() {
     setSearchText(text);
   };
 
-  const createNewChat = (participant) => {
-    setParticipant(participant);
+  const createNewChat = (participantId, username) => {
+    setParticipant({ id: participantId, username: username });
+  };
+
+  const handleClickClose = () => {
+    setParticipant(null);
   };
 
   const handleNewMessage = () => {};
@@ -24,21 +28,31 @@ function NewChat() {
     <div className="newChat">
       {/* header */}
       <div className="newChat__header">
-        <span>To: </span>
-        <div className="newChat__searchContainer">
-          {/*<input
-            className="newChat__userSearch"
-            autoFocus
-            onChange={handleSearchTextChange}
-          ></input>*/}
-          <SearchBar onSearchTextChange={handleSearchTextChange}></SearchBar>
-          {!participant && (
+        <div>
+          <span>To: </span>
+        </div>
+        {!participant && (
+          <div className="newChat__searchContainer">
+            <SearchBar onSearchTextChange={handleSearchTextChange}></SearchBar>
             <SearchDropdown
               searchText={searchText}
               createNewChat={createNewChat}
             ></SearchDropdown>
-          )}
-        </div>
+          </div>
+        )}
+        {participant && (
+          <div>
+            <span>{participant.username}</span>
+            <button
+              type="button"
+              className="close btn"
+              aria-label="Close"
+              onClick={handleClickClose}
+            >
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+        )}
       </div>
       {/* chat body */}
       <div className="newChat__body"></div>
@@ -46,7 +60,7 @@ function NewChat() {
         <ComposeMsg
           //handleNewMessage={handleNewMessage}
           chatId={null}
-          other={participant._id}
+          other={participant.id}
         ></ComposeMsg>
       )}
     </div>

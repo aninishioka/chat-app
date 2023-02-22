@@ -36,46 +36,44 @@ function LoginPage() {
 
   return (
     <div className="loginPage">
-      <form className="loginPage__form">
-        {error && (
-          <div id="alert" className="alert alert-danger" role="alert">
-            {error}
-          </div>
-        )}
-        <input
-          className="form__input rounded border border-primary-subtle"
-          type="email"
-          id="login__email"
-          placeholder="Email"
-          ref={emailRef}
-          onKeyDown={handleKeyPress}
-        ></input>
-        <br />
-        <input
-          className="form__input rounded border border-primary-subtle"
-          type="password"
-          id="login__password"
-          placeholder="Password"
-          ref={passwordRef}
-          onKeyDown={handleKeyPress}
-        ></input>
-        <br />
-        <div className="formButtons">
+      <div className="card">
+        <div className="card-body">
+          {error && (
+            <div id="alert" className="alert alert-danger" role="alert">
+              {error}
+            </div>
+          )}
+          <input
+            className="form-control"
+            type="email"
+            id="login__email"
+            placeholder="Email"
+            ref={emailRef}
+            onKeyDown={handleKeyPress}
+          ></input>
+          <br />
+          <input
+            className="form-control"
+            type="password"
+            id="login__password"
+            placeholder="Password"
+            ref={passwordRef}
+            onKeyDown={handleKeyPress}
+          ></input>
+          <br />
           <button
             disabled={loading}
-            className="border-0 rounded-pill"
+            className="btn btn-primary"
             id="login__submit"
             onClick={handleSubmit}
           >
             Log in
           </button>
-          <Link to="/signup">
-            <button className="border-0" id="toSignup">
-              Sign up
-            </button>
-          </Link>
         </div>
-      </form>
+      </div>
+      <div className="w-100 text-center mt-3">
+        Don't have an account? <Link to="/signup">Sign up</Link>
+      </div>
     </div>
   );
 }

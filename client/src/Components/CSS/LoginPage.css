@@ -1,32 +1,8 @@
 .loginPage {
   display: flex;
+  flex-direction: column;
   height: 100vh;
   width: 100vw;
   justify-content: center;
   align-items: center;
-}
-
-.form__input {
-  width: 350px;
-  padding: 4px 15px 4px 15px;
-  margin-bottom: 8px;
-}
-
-.formButtons {
-  display: flex;
-  width: 100%;
-  justify-content: space-around;
-  margin-top: 15px;
-}
-
-#login__submit {
-  padding: 2px 15px 2px 15px;
-}
-
-#toSignup {
-  background: none;
-}
-
-#toSignup:hover {
-  color: gray;
 }

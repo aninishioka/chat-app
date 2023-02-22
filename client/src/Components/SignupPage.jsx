@@ -1,5 +1,5 @@
 import React, { useRef, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import { useAuth } from "../Contexts/UserContext";
 import "./CSS/SignupPage.css";
 
@@ -50,68 +50,72 @@ function SignupPage() {
 
   return (
     <div className="signupPage">
-      <form className="signupPage__form">
-        {error && (
-          <div id="alert" className="alert alert-danger" role="alert">
-            {error}
-          </div>
-        )}
-        <input
-          className="form__input rounded"
-          id="email"
-          name="email"
-          type="email"
-          placeholder="Email address"
-          ref={emailRef}
-          required
-        ></input>
-        <br />
-        <input
-          className="form__input rounded"
-          id="confirm_email"
-          type="email"
-          placeholder="Confirm email address"
-          ref={confirmEmailRef}
-          required
-        ></input>
-        <br />
-        <input
-          className="form__input rounded"
-          id="username"
-          name="username"
-          type="text"
-          placeholder="Username"
-          ref={usernameRef}
-          required
-        ></input>
-        <br />
-        <input
-          className="form__input rounded"
-          id="password"
-          type="password"
-          placeholder="Password"
-          minLength="8"
-          ref={passwordRef}
-          required
-        ></input>
-        <input
-          className="form__input rounded"
-          id="confirm_password"
-          type="password"
-          placeholder="Confirm Password"
-          ref={confirmPasswordRef}
-          required
-        ></input>
-        <br />
-        <button
-          disabled={loading}
-          className="border-0 rounded-pill"
-          id="submit"
-          onClick={handleSubmit}
-        >
-          Sign up
-        </button>
-      </form>
+      <div className="card">
+        <div className="card-body">
+          {error && (
+            <div id="alert" className="alert alert-danger" role="alert">
+              {error}
+            </div>
+          )}
+          <input
+            className="form-control mb-1"
+            id="email"
+            name="email"
+            type="email"
+            placeholder="Email address"
+            ref={emailRef}
+            required
+          ></input>
+          <input
+            className="form-control"
+            id="confirm_email"
+            type="email"
+            placeholder="Confirm email address"
+            ref={confirmEmailRef}
+            required
+          ></input>
+          <br />
+          <input
+            className="form-control"
+            id="username"
+            name="username"
+            type="text"
+            placeholder="Username"
+            ref={usernameRef}
+            required
+          ></input>
+          <br />
+          <input
+            className="form-control mb-1"
+            id="password"
+            type="password"
+            placeholder="Password"
+            minLength="8"
+            ref={passwordRef}
+            required
+          ></input>
+          <input
+            className="form-control"
+            id="confirm_password"
+            type="password"
+            placeholder="Confirm Password"
+            ref={confirmPasswordRef}
+            required
+          ></input>
+          <br />
+          <button
+            disabled={loading}
+            className="btn btn-primary"
+            id="submit"
+            onClick={handleSubmit}
+          >
+            Sign up
+          </button>
+        </div>
+      </div>
+      <div className="w-100 text-center mt-3">
+        Already have an account? <Link to="/login">Log in</Link>
+      </div>
     </div>
   );
 }

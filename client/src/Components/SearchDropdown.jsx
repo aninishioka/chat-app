@@ -10,7 +10,6 @@ function SearchDropdown(props) {
   const userContext = useRef(getAuth());
 
   useEffect(() => {
-    if (props.searchText === null || props.searchText === "") return;
     if (!userContext.current.currentUser) return;
     userContext.current.currentUser
       .getIdToken()
@@ -36,7 +35,7 @@ function SearchDropdown(props) {
       .catch((err) => {
         console.log(err);
       });
-  }, []);
+  }, [props.searchText]);
 
   const createUserCards = () => {
     if (

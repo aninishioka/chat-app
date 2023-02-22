@@ -1,30 +1,38 @@
 import React, { useState, useEffect } from "react";
-import { useLocation, useParams } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 import ComposeMsg from "./ComposeMsg";
 import "./CSS/CurrentChat.css";
 import TextBubble from "./TextBubble";
 import { SocketContext } from "../Contexts/SocketContext";
 import { useContext } from "react";
 import { v4 as uuidv4 } from "uuid";
-import { UserContext } from "../Contexts/UserContext";
+import { useAuth } from "../Contexts/UserContext";
 
 function CurrentChat() {
-  let { name } = useParams();
   const [messages, setMessages] = useState([]);
   const [chatId, setChatId] = useState({});
   const loc = useLocation();
-  const { userId } = { ...loc.state };
+  const { userId, username } = { ...loc.state };
+  console.log(username);
   const socket = useContext(SocketContext);
-  const self = useContext(UserContext);
+  const { curUser } = useAuth();
 
   useEffect(() => {
-    fetch(
-      "/chats?" +
-        new URLSearchParams({
-          userId: userId,
-        }),
-      {}
-    )
+    curUser
+      .getIdToken()
+      .then((token) => {
+        return fetch("/messages", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            AuthToken: token,
+          },
+          body: JSON.stringify({
+            selfFbUid: curUser.uid,
+            otherId: userId,
+          }),
+        });
+      })
       .then((res) => {
         if (res.ok) return res.json();
         throw res;
@@ -59,7 +67,7 @@ function CurrentChat() {
           <TextBubble
             key={message._id}
             message={message.message}
-            senderIsSelf={message.userId === self}
+            //senderIsSelf={message.userId === self}
           ></TextBubble>
         );
       });
@@ -68,7 +76,7 @@ function CurrentChat() {
   return (
     <div className="currentChat">
       {/* header */}
-      <div className="currentChat__header">{name}</div>
+      <div className="currentChat__header">{username}</div>
       {/* chat body */}
       <div className="currentChat__body">
         {/* chat blocks */}

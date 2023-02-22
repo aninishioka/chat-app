@@ -11,7 +11,7 @@ function SignupPage() {
   const confirmPasswordRef = useRef();
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
-  const { signup } = useAuth();
+  const { signup, curUser } = useAuth();
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
@@ -23,17 +23,26 @@ function SignupPage() {
     } else if (passwordRef.current.value !== confirmPasswordRef.current.value) {
       setError("Passwords do not match.");
     } else {
-      signup(
-        usernameRef.current.value,
-        emailRef.current.value,
-        passwordRef.current.value
-      )
-        .then(() => {
+      signup(emailRef.current.value, passwordRef.current.value)
+        .then(async (userCredential) => {
+          const token = await userCredential.user.getIdToken();
+          await fetch("/new", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              AuthToken: token,
+            },
+            body: JSON.stringify({
+              username: usernameRef.current.value,
+              email: emailRef.current.value,
+              firebaseUid: userCredential.user.uid,
+            }),
+          });
           setError("");
           navigate("../");
         })
         .catch((err) => {
-          setError("Could not create account. Please try again later.");
+          setError("Could not create account.");
         });
     }
     setLoading(false);

@@ -4,7 +4,10 @@ import { Link } from "react-router-dom";
 
 function UserCard(props) {
   return (
-    <Link to={"../" + props.name} state={{ userId: props.userId }}>
+    <Link
+      to={"../" + props.userId}
+      state={{ userId: props.userId, username: props.username }}
+    >
       <div className="userCard rounded pointer">
         {/* avatar */}
         <div className="avatar__container">
@@ -12,7 +15,7 @@ function UserCard(props) {
         </div>
         {/* username */}
         <div className="user__name">
-          <span>{props.name}</span>
+          <span>{props.username}</span>
         </div>
       </div>
     </Link>

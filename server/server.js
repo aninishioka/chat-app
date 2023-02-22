@@ -5,8 +5,10 @@ if (process.env.NODE_ENV !== "production") {
 const express = require("express");
 const chats = require("./Routes/chats");
 const users = require("./Routes/users");
+const messages = require("./Routes/messages");
 const index = require("./Routes/index");
 const auth = require("./middleware/auth");
+const participants = require("./Routes/participants");
 const socketio = require("socket.io");
 const http = require("http");
 const mongoose = require("mongoose");
@@ -28,6 +30,8 @@ app.use(auth);
 app.use("/", index);
 app.use("/chats", chats);
 app.use("/users", users);
+app.use("/participants", participants);
+app.use("/messages", messages);
 
 io.on("connection", (socket) => {
   socket.on("send-message", async (message, chatId, userId) => {

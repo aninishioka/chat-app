@@ -9,20 +9,23 @@ import { SocketContext } from "../Contexts/SocketContext";
 function ChatList() {
   const [chats, setChats] = useState([]);
   const self = useContext(UserContext);
-  const { getToken, curUser } = useAuth();
+  const { curUser } = useAuth();
   const socket = useContext(SocketContext);
 
   useEffect(() => {
-    console.log(getToken());
-    fetch("/chats/previews", {
-      method: "POST",
-      header: {
-        AuthToken: curUser.getIdToken(),
-      },
-      body: JSON.stringify({
-        firebaseUid: curUser.uid,
-      }),
-    })
+    curUser
+      .getIdToken()
+      .then((token) => {
+        return fetch("/chats/previews", {
+          method: "POST",
+          headers: {
+            AuthToken: token,
+          },
+          body: JSON.stringify({
+            firebaseUid: curUser.uid,
+          }),
+        });
+      })
       .then((res) => {
         if (res.ok) return res.json();
         throw res;
@@ -30,7 +33,9 @@ function ChatList() {
       .then((chats) => {
         setChats(chats);
       })
-      .catch((err) => console.log(err));
+      .catch((err) => {
+        console.log(err);
+      });
 
     socket.on("new-message", (chat) => {
       handleNewMessage(chat);
@@ -52,7 +57,7 @@ function ChatList() {
       chats.forEach((chat) => {
         let other = null;
         for (let user in chat.participants) {
-          if (chat.participants[user].userId !== self)
+          if (chat.participants[user].userId !== curUser.uid)
             other = chat.participants[user];
         }
         if (other === null) return;
@@ -60,8 +65,8 @@ function ChatList() {
           <ChatCard
             key={chat._id}
             chatId={chat._id}
-            userId={other.userId}
-            name={other.name}
+            userId={other.participantId}
+            name={other.username}
             lastMsg={chat.lastMessage}
             lastMsgBy={chat.lastMessageSender}
           ></ChatCard>
@@ -75,7 +80,7 @@ function ChatList() {
     }
     return filteredList;
   };
-  return <div className="chatList">{/* filterChatList() */}</div>;
+  return <div className="chatList">{filterChatList()}</div>;
 }
 
 export default ChatList;

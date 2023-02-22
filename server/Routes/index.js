@@ -15,6 +15,7 @@ router
       email: req.body.email,
       firebaseUid: req.body.firebaseUid,
     });
+    res.sendStatus(200);
   });
 
 module.exports = router;

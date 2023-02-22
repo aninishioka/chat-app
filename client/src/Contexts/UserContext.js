@@ -6,8 +6,6 @@ import {
   signInWithEmailAndPassword,
   signOut,
   onAuthStateChanged,
-  setPersistence,
-  browserSessionPersistence,
 } from "firebase/auth";
 
 const UserContext = createContext();
@@ -29,27 +27,8 @@ export function UserProvider({ children }) {
   const [curUser, setCurUser] = useState();
   const [loading, setLoading] = useState(true);
 
-  async function signup(username, email, password) {
-    createUserWithEmailAndPassword(auth, email, password)
-      .then(async (userCredential) => {
-        const res = await fetch("/new", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            AuthToken: await userCredential.user.getIdToken(),
-          },
-          body: JSON.stringify({
-            username: username,
-            email: email,
-            firebaseUid: userCredential.user.uid,
-          }),
-        }).catch((err) => {
-          console.log(err);
-        });
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+  function signup(email, password) {
+    return createUserWithEmailAndPassword(auth, email, password);
   }
 
   function login(email, password) {
@@ -60,22 +39,18 @@ export function UserProvider({ children }) {
     return signOut(auth);
   }
 
-  async function getToken() {
-    if (curUser) {
-      return await curUser.getIdToken();
-    }
-  }
-
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
       setCurUser(user);
       setLoading(false);
+      if (user) {
+      }
     });
 
     return unsubscribe;
   }, []);
 
-  const value = { signup, login, logout, curUser, getToken };
+  const value = { signup, login, logout, curUser };
 
   return (
     <UserContext.Provider value={value}>

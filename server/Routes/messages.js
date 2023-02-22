@@ -7,6 +7,22 @@ const Participant = require("../Models/Participant");
 const User = require("../Models/User");
 
 router.post("/", async (req, res) => {
+  let chat = await Chat.findOne({ _id: req.body.chatId });
+
+  //fetch messages
+  let messages = [];
+  let participants = null;
+  if (chat !== null) {
+    chatId = chat.participants;
+    messages = await Message.find({ chatId: chat._id }).limit(100).sort({
+      timestamp: -1,
+    });
+  }
+
+  res.json({ participants: participants, messages: messages });
+});
+
+router.post("/aasdfadsf", async (req, res) => {
   try {
     const self = await User.findOne({ firebaseUid: req.body.selfFbUid });
     const otherParticipant = await Participant.findOne({

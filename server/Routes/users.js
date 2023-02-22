@@ -1,15 +1,10 @@
 const express = require("express");
 const router = new express.Router();
-const Participant = require("../Models/Participant");
+const User = require("../Models/User");
 
 router.post("/", async (req, res) => {
-  const searchOptions = {};
-  if (req.body.searchText !== null && req.body.searchText !== "")
-    searchOptions.username = new RegExp(req.body.searchText, "i");
-  try {
-    const users = await Participant.find(searchOptions);
-    res.json(users);
-  } catch {}
+  const user = await User.findOne({ firebaseUid: req.body.firebaseUid });
+  res.json(user);
 });
 
 module.exports = router;

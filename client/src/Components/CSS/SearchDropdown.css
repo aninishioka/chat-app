@@ -1,5 +1,6 @@
 .dropdown {
   position: absolute;
+  padding: 5px;
   top: 45px;
   width: 330px;
   height: 400px;

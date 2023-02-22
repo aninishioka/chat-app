@@ -21,6 +21,28 @@ router.post("/previews", async (req, res) => {
   }
 });
 
-router.post("/", async (req, res) => {});
+router.post("/", async (req, res) => {
+  const self = await User.findOne({ firebaseUid: req.body.selfFbUid });
+  const otherParticipant = await Participant.findOne({
+    _id: mongoose.Types.ObjectId(req.body.otherId),
+  });
+
+  //check if there is an existing chat
+  let chat = await Chat.findOne(
+    {
+      _id: { $in: self.chatIds },
+      participants: { $elemMatch: { userId: otherParticipant._id } },
+    },
+    { _id: 1 }
+  );
+
+  //if chat exists, send back chatId. if not, send null
+  let chatId = null;
+  if (chat !== null) {
+    chatId = chat._id;
+  }
+
+  res.json({ chatId: chatId });
+});
 
 module.exports = router;

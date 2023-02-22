@@ -14,7 +14,7 @@ function HomePage() {
       {/* current conversation */}
       <Routes>
         <Route path="/chats">
-          <Route path=":name" element={<CurrentChat></CurrentChat>}></Route>
+          <Route path=":chatId" element={<CurrentChat></CurrentChat>}></Route>
           <Route path="new" element={<NewChat></NewChat>}></Route>
         </Route>
       </Routes>

@@ -25,6 +25,7 @@ export function useAuth() {
 
 export function UserProvider({ children }) {
   const [curUser, setCurUser] = useState();
+  const [mongoUser, setMongoUser] = useState();
   const [loading, setLoading] = useState(true);
 
   function signup(email, password) {
@@ -40,17 +41,41 @@ export function UserProvider({ children }) {
   }
 
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, (user) => {
+    const unsubscribe = onAuthStateChanged(auth, async (user) => {
       setCurUser(user);
       setLoading(false);
       if (user) {
+        user
+          .getIdToken()
+          .then((token) => {
+            return fetch("/users", {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+                AuthToken: token,
+              },
+              body: JSON.stringify({
+                firebaseUid: user.uid,
+              }),
+            });
+          })
+          .then((res) => {
+            if (res.ok) return res;
+            throw res;
+          })
+          .then((data) => {
+            setMongoUser(data);
+          })
+          .catch((err) => {
+            console.log(err);
+          });
       }
     });
 
     return unsubscribe;
   }, []);
 
-  const value = { signup, login, logout, curUser };
+  const value = { signup, login, logout, curUser, mongoUser };
 
   return (
     <UserContext.Provider value={value}>

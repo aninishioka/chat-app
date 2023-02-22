@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useLocation } from "react-router-dom";
+import { useLocation, useParams } from "react-router-dom";
 import ComposeMsg from "./ComposeMsg";
 import "./CSS/CurrentChat.css";
 import TextBubble from "./TextBubble";
@@ -10,12 +10,11 @@ import { useAuth } from "../Contexts/UserContext";
 
 function CurrentChat() {
   const [messages, setMessages] = useState([]);
-  const [chatId, setChatId] = useState({});
+  const [participant, setParticipant] = useState();
+  const { chatId } = useParams();
   const loc = useLocation();
-  const { userId, username } = { ...loc.state };
-  console.log(username);
   const socket = useContext(SocketContext);
-  const { curUser } = useAuth();
+  const { curUser, mongoUser } = useAuth();
 
   useEffect(() => {
     curUser
@@ -28,8 +27,7 @@ function CurrentChat() {
             AuthToken: token,
           },
           body: JSON.stringify({
-            selfFbUid: curUser.uid,
-            otherId: userId,
+            chatId: chatId,
           }),
         });
       })
@@ -39,7 +37,11 @@ function CurrentChat() {
       })
       .then((data) => {
         setMessages(data.messages);
-        setChatId(data.chatId);
+        for (let user in data.participants) {
+          if (data.participants[user].participantId !== mongoUser.participantId)
+            setParticipant(data.participants[user]);
+        }
+        setParticipant(data.participant);
       })
       .catch((err) => {
         console.log(err);
@@ -48,7 +50,7 @@ function CurrentChat() {
 
   useEffect(() => {
     socket.on("receive-message", (data) => {
-      if (data.to === userId) {
+      if (data.to === participant._id) {
         handleNewMessage(data.message, data.sender);
       }
     });
@@ -67,7 +69,7 @@ function CurrentChat() {
           <TextBubble
             key={message._id}
             message={message.message}
-            //senderIsSelf={message.userId === self}
+            senderIsSelf={message.userId !== participant}
           ></TextBubble>
         );
       });
@@ -76,7 +78,7 @@ function CurrentChat() {
   return (
     <div className="currentChat">
       {/* header */}
-      <div className="currentChat__header">{username}</div>
+      <div className="currentChat__header">{participant.username}</div>
       {/* chat body */}
       <div className="currentChat__body">
         {/* chat blocks */}
@@ -88,7 +90,7 @@ function CurrentChat() {
       <ComposeMsg
         handleNewMessage={handleNewMessage}
         chatId={chatId}
-        other={userId}
+        other={participant._id}
       ></ComposeMsg>
     </div>
   );

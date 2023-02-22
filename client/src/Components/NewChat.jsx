@@ -4,13 +4,21 @@ import "./CSS/CurrentChat.css";
 import "./CSS/NewChat.css";
 import SearchBar from "./SearchBar";
 import SearchDropdown from "./SearchDropdown";
+import ComposeMsg from "./ComposeMsg";
 
 function NewChat() {
   const [searchText, setSearchText] = useState({});
+  const [participant, setParticipant] = useState();
 
   const handleSearchTextChange = (text) => {
     setSearchText(text);
   };
+
+  const createNewChat = (participant) => {
+    setParticipant(participant);
+  };
+
+  const handleNewMessage = () => {};
 
   return (
     <div className="newChat">
@@ -24,11 +32,23 @@ function NewChat() {
             onChange={handleSearchTextChange}
           ></input>*/}
           <SearchBar onSearchTextChange={handleSearchTextChange}></SearchBar>
-          <SearchDropdown searchText={searchText}></SearchDropdown>
+          {!participant && (
+            <SearchDropdown
+              searchText={searchText}
+              createNewChat={createNewChat}
+            ></SearchDropdown>
+          )}
         </div>
       </div>
       {/* chat body */}
       <div className="newChat__body"></div>
+      {participant && (
+        <ComposeMsg
+          //handleNewMessage={handleNewMessage}
+          chatId={null}
+          other={participant._id}
+        ></ComposeMsg>
+      )}
     </div>
   );
 }

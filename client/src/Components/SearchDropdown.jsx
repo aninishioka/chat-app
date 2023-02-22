@@ -51,6 +51,7 @@ function SearchDropdown(props) {
             key={contact._id}
             username={contact.username}
             userId={contact._id}
+            createNewChat={props.createNewChat}
           ></UserCard>
         );
       });

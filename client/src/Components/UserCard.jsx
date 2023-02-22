@@ -30,6 +30,8 @@ function UserCard(props) {
       .then((data) => {
         if (data.chatId !== null) {
           navigate("../" + data.chatId);
+        } else {
+          props.createNewChat(props.userId);
         }
       })
       .catch((err) => {

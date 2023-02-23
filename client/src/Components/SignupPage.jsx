@@ -5,7 +5,6 @@ import "./CSS/SignupPage.css";
 
 function SignupPage() {
   const emailRef = useRef();
-  const confirmEmailRef = useRef();
   const usernameRef = useRef();
   const passwordRef = useRef();
   const confirmPasswordRef = useRef();
@@ -18,9 +17,7 @@ function SignupPage() {
     e.preventDefault();
     setLoading(true);
 
-    if (emailRef.current.value !== confirmEmailRef.current.value) {
-      setError("Emails do not match.");
-    } else if (passwordRef.current.value !== confirmPasswordRef.current.value) {
+    if (passwordRef.current.value !== confirmPasswordRef.current.value) {
       setError("Passwords do not match.");
     } else {
       signup(emailRef.current.value, passwordRef.current.value)
@@ -50,15 +47,16 @@ function SignupPage() {
 
   return (
     <div className="signupPage">
-      <div className="card">
+      <div className="card" style={{ width: 300 }}>
         <div className="card-body">
+          <h2 className="card-title text-center mb-4"> Sign up</h2>
           {error && (
             <div id="alert" className="alert alert-danger" role="alert">
               {error}
             </div>
           )}
           <input
-            className="form-control mb-1"
+            className="form-control mb-4"
             id="email"
             name="email"
             type="email"
@@ -67,16 +65,7 @@ function SignupPage() {
             required
           ></input>
           <input
-            className="form-control"
-            id="confirm_email"
-            type="email"
-            placeholder="Confirm email address"
-            ref={confirmEmailRef}
-            required
-          ></input>
-          <br />
-          <input
-            className="form-control"
+            className="form-control mb-4"
             id="username"
             name="username"
             type="text"
@@ -84,9 +73,8 @@ function SignupPage() {
             ref={usernameRef}
             required
           ></input>
-          <br />
           <input
-            className="form-control mb-1"
+            className="form-control mb-2"
             id="password"
             type="password"
             placeholder="Password"
@@ -105,7 +93,7 @@ function SignupPage() {
           <br />
           <button
             disabled={loading}
-            className="btn btn-primary"
+            className="btn btn-primary w-100"
             id="submit"
             onClick={handleSubmit}
           >

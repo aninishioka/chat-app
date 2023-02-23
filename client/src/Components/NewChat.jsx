@@ -9,6 +9,7 @@ import ComposeMsg from "./ComposeMsg";
 function NewChat() {
   const [searchText, setSearchText] = useState({});
   const [participant, setParticipant] = useState();
+  const [searchBarFocused, setSearchBarFocused] = useState(false);
 
   const handleSearchTextChange = (text) => {
     setSearchText(text);
@@ -22,7 +23,9 @@ function NewChat() {
     setParticipant(null);
   };
 
-  const handleNewMessage = () => {};
+  const handleSearchBarFocus = (isFocused) => {
+    setSearchBarFocused(isFocused);
+  };
 
   return (
     <div className="newChat">
@@ -33,7 +36,10 @@ function NewChat() {
         </div>
         {!participant && (
           <div className="newChat__searchContainer">
-            <SearchBar onSearchTextChange={handleSearchTextChange}></SearchBar>
+            <SearchBar
+              onSearchTextChange={handleSearchTextChange}
+              handleFocusChange={handleSearchBarFocus}
+            ></SearchBar>
             <SearchDropdown
               searchText={searchText}
               createNewChat={createNewChat}

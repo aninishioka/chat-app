@@ -36,8 +36,9 @@ function LoginPage() {
 
   return (
     <div className="loginPage">
-      <div className="card">
+      <div className="card" style={{ width: 300 }}>
         <div className="card-body">
+          <h2 className="card-title text-center mb-4">Log In</h2>
           {error && (
             <div id="alert" className="alert alert-danger" role="alert">
               {error}
@@ -63,7 +64,7 @@ function LoginPage() {
           <br />
           <button
             disabled={loading}
-            className="btn btn-primary"
+            className="btn btn-primary w-100"
             id="login__submit"
             onClick={handleSubmit}
           >

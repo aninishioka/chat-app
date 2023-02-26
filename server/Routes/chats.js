@@ -8,11 +8,8 @@ const User = require("../Models/User");
 
 router.post("/previews", async (req, res) => {
   try {
-    const self = await Participant.findOne({
-      firebaseUid: req.body.firebaseUid,
-    });
     const chats = await Chat.find({
-      participants: { $elemMatch: { participantId: self._id } },
+      participants: { $elemMatch: { firebaseUid: req.body.firebaseUid } },
       lastMessage: { $exists: true },
     }).sort({ lastMessageTime: -1 });
     res.json(chats);

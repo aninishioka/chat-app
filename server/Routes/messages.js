@@ -10,7 +10,6 @@ router.post("/", async (req, res) => {
   let chat = await Chat.findOne({
     _id: mongoose.Types.ObjectId(req.body.chatId),
   });
-  console.log(chat);
 
   //fetch messages
   let messages = [];
@@ -21,9 +20,6 @@ router.post("/", async (req, res) => {
       timestamp: -1,
     });
   }
-
-  console.log(participants);
-  console.log(messages);
 
   res.json({ participants: participants, messages: messages });
 });

@@ -19,6 +19,7 @@ function ChatList() {
         return fetch("/chats/previews", {
           method: "POST",
           headers: {
+            "Content-Type": "application/json",
             AuthToken: token,
           },
           body: JSON.stringify({
@@ -57,7 +58,7 @@ function ChatList() {
       chats.forEach((chat) => {
         let other = null;
         for (let user in chat.participants) {
-          if (chat.participants[user].userId !== curUser.uid)
+          if (chat.participants[user].firebaseUid !== curUser.uid)
             other = chat.participants[user];
         }
         if (other === null) return;

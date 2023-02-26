@@ -1,11 +1,9 @@
 import React, { useState } from "react";
-import { useAuth } from "../Contexts/UserContext";
 import SearchBar from "./SearchBar";
 import SearchDropdown from "./SearchDropdown";
 import "./CSS/NewChatHeader.css";
 
 function NewChatHeader(props) {
-  const { curUser } = useAuth();
   const [searchText, setSearchText] = useState("");
   const [chatName, setChatName] = useState("");
 

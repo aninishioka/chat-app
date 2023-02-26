@@ -3,7 +3,7 @@ import "./CSS/ChatList.css";
 import ChatCard from "./ChatCard";
 import { useEffect, useState } from "react";
 import { useContext } from "react";
-import { useAuth, UserContext } from "../Contexts/UserContext";
+import { useAuth } from "../Contexts/UserContext";
 import { SocketContext } from "../Contexts/SocketContext";
 
 function ChatList() {

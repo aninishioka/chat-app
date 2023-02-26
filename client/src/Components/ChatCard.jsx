@@ -1,7 +1,7 @@
-import React, { useContext } from "react";
+import React from "react";
 import "./CSS/ChatCard.css";
 import { Link } from "react-router-dom";
-import { useAuth, UserContext } from "../Contexts/UserContext";
+import { useAuth } from "../Contexts/UserContext";
 
 function ChatCard(props) {
   const { curUser } = useAuth();

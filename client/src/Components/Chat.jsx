@@ -72,7 +72,6 @@ function Chat() {
   function displayMessages() {
     if (Array.isArray(messages)) {
       return messages.map((message) => {
-        console.log(message.author);
         return (
           <TextBubble
             key={message._id}

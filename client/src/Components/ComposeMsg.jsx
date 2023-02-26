@@ -2,11 +2,10 @@ import React from "react";
 import "./CSS/ComposeMsg.css";
 import { SocketContext } from "../Contexts/SocketContext";
 import { useContext } from "react";
-import { useAuth, UserContext } from "../Contexts/UserContext";
+import { useAuth } from "../Contexts/UserContext";
 
 function ComposeMsg(props) {
   const socket = useContext(SocketContext);
-  const self = useContext(UserContext);
   const { curUser } = useAuth();
 
   const handleClick = () => {

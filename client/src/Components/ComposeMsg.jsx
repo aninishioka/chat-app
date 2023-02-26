@@ -9,7 +9,8 @@ function ComposeMsg(props) {
   const { curUser } = useAuth();
 
   const handleClick = () => {
-    displayNewMessage();
+    const message = document.getElementById("msg").value.trimEnd();
+    displayNewMessage(message);
   };
   const handleKeyPress = (e) => {
     if (e.shiftKey && e.keyCode === 13) return;

@@ -61,11 +61,11 @@ io.on("connection", (socket) => {
     );
     const chat = await Chat.findOne({ _id: mongoose.Types.ObjectId(chatId) });
 
-    /* socket.broadcast.emit("receive-message", {
+    socket.broadcast.emit("receive-message", {
       message: message,
-      id: messageDoc.id,
-      author: username,
-    }); */
+      chatId: chat._id,
+      author: { firebaseUid: firebaseUid, username: participant.username },
+    });
 
     socket.emit("new-message", chat);
   });

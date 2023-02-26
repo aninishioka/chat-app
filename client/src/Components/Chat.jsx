@@ -20,10 +20,14 @@ function Chat() {
 
   useEffect(() => {
     socket.on("receive-message", (data) => {
-      if (data.to !== curUser) {
+      if (data.chatId == id) {
         handleNewMessage(data.message, data.author);
       }
     });
+
+    return () => {
+      socket.off("receive-message");
+    };
   }, []);
 
   useEffect(() => {
@@ -84,8 +88,8 @@ function Chat() {
   }
 
   function handleNewMessage(message, author) {
-    setMessages([
-      ...messages,
+    setMessages((curMessages) => [
+      ...curMessages,
       { message: message, author: author, _id: uuidv4() },
     ]);
   }

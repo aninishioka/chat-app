@@ -59,15 +59,15 @@ io.on("connection", (socket) => {
         },
       }
     );
-    //const chat = await Chat.findOne({ _id: mongoose.Types.ObjectId(chatId) });
+    const chat = await Chat.findOne({ _id: mongoose.Types.ObjectId(chatId) });
 
     /* socket.broadcast.emit("receive-message", {
       message: message,
       id: messageDoc.id,
       author: username,
-    });
+    }); */
 
-    socket.emit("new-message", chat); */
+    socket.emit("new-message", chat);
   });
 });
 

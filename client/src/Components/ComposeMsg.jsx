@@ -24,7 +24,7 @@ function ComposeMsg(props) {
   };
   const displayNewMessage = (message) => {
     document.getElementById("msg").value = "";
-    props.handleNewMessage(message, curUser.uid);
+    props.handleNewMessage(message, { firebaseUid: curUser.uid });
   };
   const sendMessage = (message, chatId) => {
     socket.emit("send-message", message, chatId, curUser.uid);

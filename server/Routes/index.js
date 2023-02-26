@@ -7,7 +7,7 @@ router
   .get("/", async (req, res) => {
     const user = await User.findOne({ firebaseUid: req.body("firebaseUid") });
     const participant = await Participant.findOne({ userId: user._id });
-    res.json({ partipant: participant });
+    res.json({ participant: participant });
   })
   .post("/new", async (req, res) => {
     await User.create({

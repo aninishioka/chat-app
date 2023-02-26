@@ -7,17 +7,23 @@ const Participant = require("../Models/Participant");
 const User = require("../Models/User");
 
 router.post("/", async (req, res) => {
-  let chat = await Chat.findOne({ _id: req.body.chatId });
+  let chat = await Chat.findOne({
+    _id: mongoose.Types.ObjectId(req.body.chatId),
+  });
+  console.log(chat);
 
   //fetch messages
   let messages = [];
   let participants = null;
   if (chat !== null) {
-    chatId = chat.participants;
+    participants = chat.participants;
     messages = await Message.find({ chatId: chat._id }).limit(100).sort({
       timestamp: -1,
     });
   }
+
+  console.log(participants);
+  console.log(messages);
 
   res.json({ participants: participants, messages: messages });
 });

@@ -5,11 +5,15 @@ import "./CSS/NewChat.css";
 import SearchBar from "./SearchBar";
 import SearchDropdown from "./SearchDropdown";
 import ComposeMsg from "./ComposeMsg";
+import { useAuth } from "../Contexts/UserContext";
+import { useNavigate } from "react-router-dom";
 
 function NewChat() {
   const [searchText, setSearchText] = useState({});
   const [participant, setParticipant] = useState();
   const [searchBarFocused, setSearchBarFocused] = useState(false);
+  const { curUser } = useAuth();
+  const navigate = useNavigate();
 
   const handleSearchTextChange = (text) => {
     setSearchText(text);
@@ -25,6 +29,35 @@ function NewChat() {
 
   const handleSearchBarFocus = (isFocused) => {
     setSearchBarFocused(isFocused);
+  };
+
+  const handleNewMessage = async () => {
+    curUser
+      .getIdToken()
+      .then((token) => {
+        return fetch("/chats/new", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            AuthToken: token,
+          },
+          body: JSON.stringify({
+            selfFbUid: curUser.uid,
+            otherId: participant.id,
+          }),
+        });
+      })
+      .then((res) => {
+        if (res.ok) return res;
+        throw res;
+      })
+      .then((data) => {
+        return data.chatId;
+        //navigate("../" + data.chatId, { state: { message: message } });
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   };
 
   return (
@@ -64,7 +97,7 @@ function NewChat() {
       <div className="newChat__body"></div>
       {participant && (
         <ComposeMsg
-          //handleNewMessage={handleNewMessage}
+          handleNewMessage={handleNewMessage}
           chatId={null}
           other={participant.id}
         ></ComposeMsg>

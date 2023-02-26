@@ -22,12 +22,6 @@
   align-items: center;
 }
 
-.newChat__userSearch {
-  width: 500px;
-  margin-left: 5px;
-  border: none;
-}
-
 .newChat__body {
   display: flex;
   flex-direction: column;

@@ -50,7 +50,7 @@ function CurrentChat() {
 
   useEffect(() => {
     socket.on("receive-message", (data) => {
-      if (data.to === participant._id) {
+      if (data.to !== participant._id) {
         handleNewMessage(data.message, data.sender);
       }
     });
@@ -76,23 +76,25 @@ function CurrentChat() {
     }
   };
   return (
-    <div className="currentChat">
-      {/* header */}
-      <div className="currentChat__header">{participant.username}</div>
-      {/* chat body */}
-      <div className="currentChat__body">
-        {/* chat blocks */}
-        <div className="currentChat__body__innerContainer">
-          {displayMessages()}
+    participant && (
+      <div className="currentChat">
+        {/* header */}
+        <div className="currentChat__header">{participant.username}</div>
+        {/* chat body */}
+        <div className="currentChat__body">
+          {/* chat blocks */}
+          <div className="currentChat__body__innerContainer">
+            {displayMessages()}
+          </div>
         </div>
+        {/* compose new message */}
+        <ComposeMsg
+          handleNewMessage={handleNewMessage}
+          chatId={chatId}
+          other={participant._id}
+        ></ComposeMsg>
       </div>
-      {/* compose new message */}
-      <ComposeMsg
-        handleNewMessage={handleNewMessage}
-        chatId={chatId}
-        other={participant._id}
-      ></ComposeMsg>
-    </div>
+    )
   );
 }
 

@@ -22,10 +22,8 @@ function ComposeMsg(props) {
     }
   };
   const displayNewMessage = (message) => {
-    if (message) {
-      document.getElementById("msg").value = "";
-      props.handleNewMessage(message, self);
-    }
+    document.getElementById("msg").value = "";
+    props.handleNewMessage(message, self);
   };
   const sendMessage = (message, chatId) => {
     socket.emit("send-message", message, chatId, props.other);

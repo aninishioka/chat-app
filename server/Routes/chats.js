@@ -45,4 +45,31 @@ router.post("/", async (req, res) => {
   res.json({ chatId: chatId });
 });
 
+router.post("/new", async (req, res) => {
+  const currentUser = await User.findOne({ firebaseUid: req.body.selfFbUid });
+  const currentParticipant = await Participant.findOne({
+    userId: currentUser._id,
+  });
+  const otherUser = await User.findOne({
+    participantId: mongoose.Types.ObjectId(req.body.otherId),
+  });
+  const otherParticipant = await Participant.findOne({
+    _id: mongoose.Types.ObjectId(req.body.otherId),
+  });
+
+  const chat = await Chat.create({
+    participants: [
+      { userId: otherParticipant._id, username: otherParticipant.username },
+      { userId: currentParticipant._id, username: currentParticipant.username },
+    ],
+  });
+
+  await User.updateMany(
+    { _id: { $in: [currentUser._id, otherUser._id] } },
+    { $push: { chatIds: chat._id } }
+  );
+
+  res.json({ chatId: chat._id });
+});
+
 module.exports = router;

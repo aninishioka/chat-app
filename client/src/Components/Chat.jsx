@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from "react";
-import { useLocation, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import { SocketContext } from "../Contexts/SocketContext";
 import { useAuth } from "../Contexts/UserContext";
 import { v4 as uuidv4 } from "uuid";
@@ -13,9 +13,8 @@ function Chat() {
   const [chatId, setChatId] = useState();
   const [isNew, setIsNew] = useState(true);
   const [messages, setMessages] = useState([]);
-  const { loc } = useLocation();
+  const [chatName, setChatName] = useState("");
   const { id } = useParams();
-  console.log(id);
   const { curUser } = useAuth();
   const socket = useContext(SocketContext);
 
@@ -52,15 +51,22 @@ function Chat() {
         })
         .then((data) => {
           setMessages(data.messages);
+          console.log(data);
+          for (let user in data.participants) {
+            if (data.participants[user].firebaseUid !== curUser.uid)
+              setChatName(data.participants[user]);
+          }
         })
         .catch((err) => {
           console.log(err);
         });
+    } else {
+      setIsNew(true);
     }
-  }, [loc]);
+  }, [id]);
 
   function displayHeader() {
-    if (!isNew) return <ChatHeader></ChatHeader>;
+    if (!isNew) return <ChatHeader chatName={chatName}></ChatHeader>;
     else return <NewChatHeader></NewChatHeader>;
   }
 

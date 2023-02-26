@@ -15,6 +15,7 @@ userSchema.pre("save", async function (next) {
   const participant = await Participant.create({
     userId: this._id,
     username: this.username,
+    firebaseUid: this.firebaseUid,
   });
   this.participantId = participant._id;
   next();

@@ -2,11 +2,13 @@ import React from "react";
 import "./CSS/ComposeMsg.css";
 import { SocketContext } from "../Contexts/SocketContext";
 import { useContext } from "react";
-import { UserContext } from "../Contexts/UserContext";
+import { useAuth, UserContext } from "../Contexts/UserContext";
 
 function ComposeMsg(props) {
   const socket = useContext(SocketContext);
   const self = useContext(UserContext);
+  const { curUser } = useAuth();
+
   const handleClick = () => {
     displayNewMessage();
   };
@@ -23,10 +25,10 @@ function ComposeMsg(props) {
   };
   const displayNewMessage = (message) => {
     document.getElementById("msg").value = "";
-    props.handleNewMessage(message, self);
+    props.handleNewMessage(message, curUser.uid);
   };
   const sendMessage = (message, chatId) => {
-    socket.emit("send-message", message, chatId, props.other);
+    socket.emit("send-message", message, chatId, curUser.uid);
   };
   return (
     <div id="composeMsg" className="input-group">

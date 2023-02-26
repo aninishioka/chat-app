@@ -21,7 +21,7 @@ function Chat() {
   useEffect(() => {
     socket.on("receive-message", (data) => {
       if (data.to !== curUser) {
-        handleNewMessage(data.message, data.sender);
+        handleNewMessage(data.message, data.author);
       }
     });
   }, []);
@@ -76,17 +76,17 @@ function Chat() {
           <TextBubble
             key={message._id}
             message={message.message}
-            senderIsSelf={message.userId === curUser}
+            senderIsSelf={message.author === curUser.uid}
           ></TextBubble>
         );
       });
     }
   }
 
-  function handleNewMessage(message, sender) {
+  function handleNewMessage(message, author) {
     setMessages([
       ...messages,
-      { message: message, userId: sender, _id: uuidv4() },
+      { message: message, author: author, _id: uuidv4() },
     ]);
   }
 

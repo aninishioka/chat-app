@@ -15,7 +15,7 @@ const mongoose = require("mongoose");
 const Message = require("./Models/Message");
 const Chat = require("./Models/Chat");
 const User = require("./Models/User");
-const selfId = mongoose.Types.ObjectId("63ca28374d1ee7c2e07c22d6");
+const Participant = require("./Models/Participant");
 const app = express();
 const server = http.createServer(app);
 const port = process.env.port || 8080;
@@ -34,32 +34,40 @@ app.use("/participants", participants);
 app.use("/messages", messages);
 
 io.on("connection", (socket) => {
-  socket.on("send-message", async (message, chatId, userId) => {
+  socket.on("send-message", async (message, chatId, firebaseUid) => {
+    const participant = await Participant.findOne(
+      { firebaseUid: firebaseUid },
+      { username: 1 }
+    );
+
     //create new message
     const messageDoc = await Message.create({
       message: message,
       chatId: mongoose.Types.ObjectId(chatId),
-      userId: selfId,
+      author: { firebaseUid: firebaseUid, username: participant.username },
     });
+
     //update corresponding chat's most recent message
     await Chat.updateOne(
       { _id: mongoose.Types.ObjectId(chatId) },
       {
         lastMessage: message,
         lastMessageTime: messageDoc.createdAt,
-        lastMessageSender: selfId,
+        lastMessageAuthor: {
+          firebaseUid: firebaseUid,
+          username: participant.username,
+        },
       }
     );
-    const chat = await Chat.findOne({ _id: mongoose.Types.ObjectId(chatId) });
+    //const chat = await Chat.findOne({ _id: mongoose.Types.ObjectId(chatId) });
 
-    socket.broadcast.emit("receive-message", {
+    /* socket.broadcast.emit("receive-message", {
       message: message,
       id: messageDoc.id,
-      sender: selfId,
-      to: userId,
+      author: username,
     });
 
-    socket.emit("new-message", chat);
+    socket.emit("new-message", chat); */
   });
 });
 

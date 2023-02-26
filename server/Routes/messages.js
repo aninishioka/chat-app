@@ -20,7 +20,6 @@ router.post("/", async (req, res) => {
       timestamp: -1,
     });
   }
-
   res.json({ participants: participants, messages: messages });
 });
 

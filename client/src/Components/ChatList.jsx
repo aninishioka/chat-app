@@ -8,7 +8,6 @@ import { SocketContext } from "../Contexts/SocketContext";
 
 function ChatList() {
   const [chats, setChats] = useState([]);
-  const self = useContext(UserContext);
   const { curUser } = useAuth();
   const socket = useContext(SocketContext);
 

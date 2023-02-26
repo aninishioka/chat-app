@@ -41,20 +41,19 @@ function Chat() {
               AuthToken: token,
             },
             body: JSON.stringify({
-              chatId: chatId,
+              chatId: id,
             }),
           });
         })
         .then((res) => {
-          if (res.ok) return res;
+          if (res.ok) return res.json();
           else throw res;
         })
         .then((data) => {
           setMessages(data.messages);
-          console.log(data);
           for (let user in data.participants) {
             if (data.participants[user].firebaseUid !== curUser.uid)
-              setChatName(data.participants[user]);
+              setChatName(data.participants[user].username);
           }
         })
         .catch((err) => {

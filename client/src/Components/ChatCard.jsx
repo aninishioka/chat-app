@@ -7,7 +7,7 @@ function ChatCard(props) {
   const { curUser } = useAuth();
 
   return (
-    <Link to={"/chats/" + props.username} state={{ userId: props.userId }}>
+    <Link to={"/chats/" + props.chatId} state={{ userId: props.userId }}>
       <div className="chat rounded pointer">
         <span className="link"></span>
         {/* avatar */}
@@ -17,7 +17,7 @@ function ChatCard(props) {
         <div>
           {/* username */}
           <div className="chat__name">
-            <span>{props.name}</span>
+            <span>{props.username}</span>
           </div>
 
           {/* chat prev */}

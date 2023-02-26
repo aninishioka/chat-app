@@ -94,15 +94,17 @@ function Chat() {
   return (
     <div className="chat-container">
       <div className="chat-header-container">{displayHeader()}</div>
-      <>
-        <div className="chat-body">
-          <div className="messages">{displayMessages()}</div>
-        </div>
-        <ComposeMsg
-          handleNewMessage={handleNewMessage}
-          chatId={chatId}
-        ></ComposeMsg>
-      </>
+      {!isNew && (
+        <>
+          <div className="chat-body">
+            <div className="messages">{displayMessages()}</div>
+          </div>
+          <ComposeMsg
+            handleNewMessage={handleNewMessage}
+            chatId={chatId}
+          ></ComposeMsg>
+        </>
+      )}
     </div>
   );
 }

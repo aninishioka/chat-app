@@ -65,10 +65,10 @@ function ChatList() {
           <ChatCard
             key={chat._id}
             chatId={chat._id}
-            userId={other.participantId}
-            name={other.username}
+            userId={other.firebaseUid}
+            username={other.username}
             lastMsg={chat.lastMessage}
-            lastMsgBy={chat.lastMessageSender}
+            lastMsgBy={chat.lastMessageAuthor.firebaseUid}
           ></ChatCard>
         );
         /* if (chat.name.toLowerCase().includes(props.searchText.toLowerCase())) {

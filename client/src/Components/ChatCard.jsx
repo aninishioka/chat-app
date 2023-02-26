@@ -1,13 +1,13 @@
 import React, { useContext } from "react";
 import "./CSS/ChatCard.css";
 import { Link } from "react-router-dom";
-import { UserContext } from "../Contexts/UserContext";
+import { useAuth, UserContext } from "../Contexts/UserContext";
 
 function ChatCard(props) {
-  const self = useContext(UserContext);
+  const { curUser } = useAuth();
 
   return (
-    <Link to={"/chats/" + props.name} state={{ userId: props.userId }}>
+    <Link to={"/chats/" + props.username} state={{ userId: props.userId }}>
       <div className="chat rounded pointer">
         <span className="link"></span>
         {/* avatar */}
@@ -23,7 +23,7 @@ function ChatCard(props) {
           {/* chat prev */}
           <div className="chat__preview">
             <span className="chat__preview__span">{`${
-              props.lastMsgBy === self ? "You" : props.name
+              props.lastMsgBy === curUser.uid ? "You" : props.username
             }: ${props.lastMsg}`}</span>
           </div>
         </div>

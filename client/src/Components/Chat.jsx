@@ -72,11 +72,12 @@ function Chat() {
   function displayMessages() {
     if (Array.isArray(messages)) {
       return messages.map((message) => {
+        console.log(message.author);
         return (
           <TextBubble
             key={message._id}
             message={message.message}
-            senderIsSelf={message.author === curUser.uid}
+            senderIsSelf={message.author.firebaseUid === curUser.uid}
           ></TextBubble>
         );
       });

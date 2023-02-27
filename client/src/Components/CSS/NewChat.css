@@ -5,7 +5,7 @@
   align-items: center;
 }
 
-.newChat__header {
+.new-chat-header {
   display: flex;
   justify-content: flex-start;
   align-items: center;
@@ -16,13 +16,13 @@
   border-bottom: 1px solid var(--light-gray);
 }
 
-.newChat__searchContainer {
+.new-chat-search-container {
   height: 100%;
   display: flex;
   align-items: center;
 }
 
-.newChat__body {
+.new-chat-body {
   display: flex;
   flex-direction: column;
   justify-content: flex-end;

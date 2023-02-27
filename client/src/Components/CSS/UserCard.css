@@ -2,7 +2,7 @@
   background: white;
 }
 
-.userCard {
+.user-card {
   display: flex;
   align-items: center;
   width: 100%;
@@ -10,11 +10,11 @@
   color: black;
 }
 
-.userCard:hover {
+.user-card:hover {
   background-color: var(--light-gray);
 }
 
-.avatar__container {
+.avatar-container {
   display: flex;
   align-items: center;
   justify-content: center;

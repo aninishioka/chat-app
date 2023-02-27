@@ -1,4 +1,4 @@
-#composeMsg {
+#compose-msg {
   justify-content: center;
   position: fixed;
   bottom: 0;
@@ -8,18 +8,18 @@
   background-color: white;
 }
 
-.composeMsg_input_container {
+.compose-msg-input-container {
   display: flex;
   align-items: center;
   justify-content: center;
   width: 90%;
 }
 
-.composeMsg__input {
+.composeMsg-input {
   resize: none;
 }
 
-.composeMsg__sendButton {
+.compose-msg-send-button {
   width: 35px;
   height: 35px;
   display: flex;

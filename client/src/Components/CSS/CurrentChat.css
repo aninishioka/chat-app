@@ -1,5 +1,5 @@
-.currentChat,
-.newChat {
+.current-chat,
+.new-chat {
   display: flex;
   flex-direction: column;
   /* width: calc(100vw - var(--sidebar-width)); */
@@ -9,8 +9,8 @@
   transform: translateZ(0);
 }
 
-.currentChat__header,
-.newChat__header {
+.current-chat-header,
+.new-chat-header {
   position: fixed;
   top: 0;
   display: flex;
@@ -24,7 +24,7 @@
   background: white;
 }
 
-.currentChat__body {
+.current-chat-body {
   width: 100%;
   height: calc(100vh - 110px);
   margin: 55px 0 60px 0;
@@ -32,7 +32,7 @@
   overflow: auto;
 }
 
-.currentChat__body__innerContainer {
+.current-chat__body__inner-container {
   display: flex;
   flex-direction: column;
   width: 100%;

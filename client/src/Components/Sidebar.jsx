@@ -16,9 +16,9 @@ function Sidebar() {
   return (
     <div className="sidebar">
       {/* header */}
-      <div className="sidebar__header">
+      <div className="sidebar-header">
         <h2>Chats</h2>
-        <button className="sidebar__newChatBtn btn">
+        <button className="btn">
           <Link to="chats/new">
             <span className="material-symbols-outlined">edit_square</span>
           </Link>

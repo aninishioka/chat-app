@@ -31,10 +31,10 @@ function ComposeMsg(props) {
     socket.emit("send-message", message, chatId, curUser.uid);
   };
   return (
-    <div id="composeMsg" className="input-group">
-      <div className="composeMsg_input_container">
+    <div id="compose-msg" className="input-group">
+      <div className="compose-msg-input-container">
         <textarea
-          className="composeMsg__input form-control rounded-pill"
+          className="composeMsg-input form-control rounded-pill"
           aria-label="text input"
           placeholder="Message"
           rows="1"
@@ -42,7 +42,7 @@ function ComposeMsg(props) {
           onKeyDown={handleKeyPress}
         ></textarea>
         <button
-          className="composeMsg__sendButton btn"
+          className="compose-msg-send-button btn"
           type="submit"
           onClick={handleClick}
         >

@@ -77,13 +77,13 @@ function CurrentChat() {
   };
   return (
     participant && (
-      <div className="currentChat">
+      <div className="current-chat">
         {/* header */}
-        <div className="currentChat__header">{participant.username}</div>
+        <div className="current-chat-header">{participant.username}</div>
         {/* chat body */}
-        <div className="currentChat__body">
+        <div className="current-chat-body">
           {/* chat blocks */}
-          <div className="currentChat__body__innerContainer">
+          <div className="current-chat-body-inner-container">
             {displayMessages()}
           </div>
         </div>

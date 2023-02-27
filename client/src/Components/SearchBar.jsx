@@ -18,7 +18,7 @@ function SearchBar(props) {
     <>
       <label></label>
       <input
-        className="form-control searchBar__input" //"searchBar__input form-control rounded-pill border-0 bg-light"
+        className="form-control search-bar-input" //"searchBar__input form-control rounded-pill border-0 bg-light"
         id="search"
         type="search"
         aria-label="Search"

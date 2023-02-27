@@ -46,7 +46,7 @@ function SignupPage() {
   };
 
   return (
-    <div className="signupPage">
+    <div className="signup-page">
       <div className="card" style={{ width: 300 }}>
         <div className="card-body">
           <h2 className="card-title text-center mb-4"> Sign up</h2>

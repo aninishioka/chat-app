@@ -1,4 +1,4 @@
-.textBubble {
+.text-bubble {
   max-width: 75%;
   width: fit-content;
   height: fit-content;
@@ -6,19 +6,17 @@
   margin-bottom: 2px;
 }
 
-.self,
-.chatBlock > .self {
+.self {
   background-color: #ffc107;
   color: white;
   align-self: flex-end;
 }
 
-.other,
-.chatBlock > .other {
+.other {
   background-color: var(--light-gray);
   align-self: flex-start;
 }
 
-.textBubble__message {
+.text-bubble-message {
   white-space: pre-wrap;
 }

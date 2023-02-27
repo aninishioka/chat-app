@@ -1,4 +1,4 @@
-.chat {
+.chat-card {
   --margin: 5px;
   display: flex;
   align-items: center;
@@ -9,11 +9,11 @@
   color: black;
 }
 
-.chat:hover {
+.chat-card:hover {
   background-color: var(--light-gray);
 }
 
-.avatar__container {
+.avatar-container {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -27,17 +27,17 @@
   border: 1px solid gray;
 }
 
-.chat__name {
+.chat-name {
   font-weight: 500;
 }
 
-.chat__preview {
+.chat-preview {
   max-width: 300px;
   overflow: hidden;
   text-overflow: ellipsis;
   color: gray;
 }
 
-.chat__preview__span {
+.chat-preview-span {
   white-space: nowrap;
 }

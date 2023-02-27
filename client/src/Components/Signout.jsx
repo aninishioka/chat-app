@@ -23,7 +23,7 @@ function Signout() {
   };
 
   return (
-    <div className="signout__button__container">
+    <div className="signout-button-container">
       {error && (
         <div id="alert" className="alert alert-danger" role="alert">
           {error}

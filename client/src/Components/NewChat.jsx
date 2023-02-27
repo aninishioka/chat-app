@@ -61,14 +61,14 @@ function NewChat() {
   };
 
   return (
-    <div className="newChat">
+    <div className="new-chat">
       {/* header */}
-      <div className="newChat__header">
+      <div className="new-chat-header">
         <div>
           <span>To: </span>
         </div>
         {!participant && (
-          <div className="newChat__searchContainer">
+          <div className="new-chat-search-container">
             <SearchBar
               onSearchTextChange={handleSearchTextChange}
               handleFocusChange={handleSearchBarFocus}
@@ -94,7 +94,7 @@ function NewChat() {
         )}
       </div>
       {/* chat body */}
-      <div className="newChat__body"></div>
+      <div className="new-chat-body"></div>
       {participant && (
         <ComposeMsg
           handleNewMessage={handleNewMessage}

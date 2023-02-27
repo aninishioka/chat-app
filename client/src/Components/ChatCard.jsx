@@ -8,21 +8,21 @@ function ChatCard(props) {
 
   return (
     <Link to={"/chats/" + props.chatId} state={{ userId: props.userId }}>
-      <div className="chat rounded pointer">
+      <div className="chat-card rounded pointer">
         <span className="link"></span>
         {/* avatar */}
-        <div className="avatar__container">
+        <div className="avatar-container">
           <div className="avatar rounded-circle"></div>
         </div>
         <div>
           {/* username */}
-          <div className="chat__name">
+          <div className="chat-name">
             <span>{props.username}</span>
           </div>
 
           {/* chat prev */}
-          <div className="chat__preview">
-            <span className="chat__preview__span">{`${
+          <div className="chat-preview">
+            <span className="chat-preview-span">{`${
               props.lastMsgBy === curUser.uid ? "You" : props.username
             }: ${props.lastMsg}`}</span>
           </div>

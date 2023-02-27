@@ -80,7 +80,7 @@ function ChatList() {
     }
     return filteredList;
   };
-  return <div className="chatList">{filterChatList()}</div>;
+  return <div className="chat-list">{filterChatList()}</div>;
 }
 
 export default ChatList;

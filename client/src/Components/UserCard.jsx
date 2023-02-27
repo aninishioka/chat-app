@@ -47,13 +47,13 @@ function UserCard(props) {
       /* to={"../" + props.userId}
       state={{ userId: props.userId, username: props.username }} */
     >
-      <div className="userCard rounded pointer">
+      <div className="user-card rounded pointer">
         {/* avatar */}
-        <div className="avatar__container">
+        <div className="avatar-container">
           <div className="avatar rounded-circle"></div>
         </div>
         {/* username */}
-        <div className="user__name">
+        <div className="username">
           <span>{props.username}</span>
         </div>
       </div>

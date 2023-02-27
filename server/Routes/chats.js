@@ -2,7 +2,6 @@ const express = require("express");
 const mongoose = require("mongoose");
 const router = express.Router();
 const Chat = require("../Models/Chat");
-const Message = require("../Models/Message");
 const Participant = require("../Models/Participant");
 const User = require("../Models/User");
 

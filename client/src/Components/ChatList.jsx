@@ -40,6 +40,10 @@ function ChatList() {
     socket.on("new-message", (chat) => {
       handleNewMessage(chat);
     });
+
+    return () => {
+      socket.off("new-message");
+    };
   }, []);
 
   const handleNewMessage = (newChat) => {

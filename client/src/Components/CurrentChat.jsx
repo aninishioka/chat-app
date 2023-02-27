@@ -54,6 +54,10 @@ function CurrentChat() {
         handleNewMessage(data.message, data.sender);
       }
     });
+
+    return () => {
+      socket.off("receive-message");
+    };
   }, []);
 
   const handleNewMessage = (message, sender) => {

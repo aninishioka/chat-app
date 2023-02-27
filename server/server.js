@@ -34,6 +34,20 @@ app.use("/participants", participants);
 app.use("/messages", messages);
 
 io.on("connection", (socket) => {
+  socket.on("logged-in", async (firebaseUid) => {
+    await Participant.updateOne(
+      { firebaseUid: firebaseUid },
+      { socketId: socket.id }
+    );
+  });
+
+  socket.on("logged-out", async (firebaseUid) => {
+    await Participant.updateOne(
+      { firebaseUid: firebaseUid },
+      { socketId: null }
+    );
+  });
+
   socket.on("send-message", async (message, chatId, firebaseUid) => {
     const participant = await Participant.findOne(
       { firebaseUid: firebaseUid },
@@ -61,10 +75,32 @@ io.on("connection", (socket) => {
     );
     const chat = await Chat.findOne({ _id: mongoose.Types.ObjectId(chatId) });
 
-    socket.broadcast.emit("receive-message", {
-      message: message,
-      chatId: chat._id,
-      author: { firebaseUid: firebaseUid, username: participant.username },
+    const sockets = [];
+    chat.participants.forEach(async (participant) => {
+      Participant.findOne(
+        { firebaseUid: participant.firebaseUid },
+        { socketId: 1 }
+      )
+        .then((participantDoc) => {
+          if (
+            participant.firebaseUid !== firebaseUid &&
+            participantDoc.socketId
+          ) {
+            sockets.push(participantDoc.socketId);
+          }
+        })
+        .then(() => {
+          sockets.forEach((userSocket) => {
+            socket.to(userSocket).emit("receive-message", {
+              message: message,
+              chatId: chat._id,
+              author: {
+                firebaseUid: firebaseUid,
+                username: participant.username,
+              },
+            });
+          });
+        });
     });
 
     socket.emit("new-message", chat);

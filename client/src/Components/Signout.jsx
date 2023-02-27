@@ -1,5 +1,6 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { SocketContext } from "../Contexts/SocketContext";
 import { useAuth } from "../Contexts/UserContext";
 import "./CSS/Signout.css";
 
@@ -8,6 +9,8 @@ function Signout() {
   const [error, setError] = useState("");
   const { logout } = useAuth();
   const navigate = useNavigate();
+  const { curUser } = useAuth();
+  const socket = useContext(SocketContext);
 
   const handleClick = async () => {
     setLoading(true);
@@ -15,6 +18,7 @@ function Signout() {
       .then(() => {
         setError("");
         navigate("./login");
+        socket.emit("logged-out", curUser.uid);
       })
       .catch((err) => {
         setError("Could not log out.");

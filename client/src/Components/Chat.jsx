@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import { useParams } from "react-router-dom";
 import { SocketContext } from "../Contexts/SocketContext";
 import { useAuth } from "../Contexts/UserContext";
@@ -17,10 +17,11 @@ function Chat() {
   const { id } = useParams();
   const { curUser } = useAuth();
   const socket = useContext(SocketContext);
+  const messagesEndRef = useRef();
 
   useEffect(() => {
     socket.on("receive-message", (data) => {
-      if (data.chatId == id) {
+      if (data.chatId === id) {
         handleNewMessage(data.message, data.author);
       }
     });
@@ -66,7 +67,17 @@ function Chat() {
     } else {
       setIsNew(true);
     }
+    scrollToBottom();
   }, [id]);
+
+  useEffect(() => {
+    scrollToBottom();
+  }, [messages]);
+
+  function scrollToBottom() {
+    if (!messagesEndRef.current) return;
+    messagesEndRef.current.scrollIntoView(false);
+  }
 
   function displayHeader() {
     if (!isNew) return <ChatHeader chatName={chatName}></ChatHeader>;
@@ -100,7 +111,13 @@ function Chat() {
       {!isNew && (
         <>
           <div className="chat-body">
-            <div className="messages">{displayMessages()}</div>
+            <div className="messages">
+              {displayMessages()}
+              <div
+                style={{ float: "left", clear: "both" }}
+                ref={messagesEndRef}
+              ></div>
+            </div>
           </div>
           <ComposeMsg
             handleNewMessage={handleNewMessage}

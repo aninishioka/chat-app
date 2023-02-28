@@ -1,6 +1,5 @@
-import React, { useContext, useRef, useState } from "react";
+import React, { useRef, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { SocketContext } from "../Contexts/SocketContext";
 import { useAuth } from "../Contexts/UserContext";
 import "./CSS/LoginPage.css";
 
@@ -11,8 +10,6 @@ function LoginPage() {
   const passwordRef = useRef();
   const { login } = useAuth();
   const navigate = useNavigate();
-  const socket = useContext(SocketContext);
-  const { curUser } = useAuth();
 
   const handleKeyPress = (e) => {
     if (e.keyCode === 13) {

@@ -6,43 +6,84 @@ const Participant = require("../Models/Participant");
 const User = require("../Models/User");
 
 router.post("/previews", async (req, res) => {
-  try {
-    const chats = await Chat.find({
-      participants: { $elemMatch: { firebaseUid: req.body.firebaseUid } },
-      lastMessage: { $exists: true },
-    }).sort({ lastMessageTime: -1 });
-    res.json(chats);
-  } catch (err) {
-    console.log(err);
-  }
+  Chat.find({
+    participants: { $elemMatch: { firebaseUid: req.body.firebaseUid } },
+    lastMessage: { $exists: true },
+  })
+    .sort({ lastMessageTime: -1 })
+    .then((chats) => {
+      res.json(chats);
+    })
+    .catch((err) => {
+      console.log(err);
+    });
 });
 
 router.post("/", async (req, res) => {
-  const self = await User.findOne({ firebaseUid: req.body.selfFbUid });
-  const otherParticipant = await Participant.findOne({
-    _id: mongoose.Types.ObjectId(req.body.otherId),
+  const user = User.findOne({ firebaseUid: req.body.selfFbUid });
+  const participant = Participant.findOne({
+    firebaseUid: req.body.otherFbUid,
   });
 
-  //check if there is an existing chat
-  let chat = await Chat.findOne(
-    {
-      _id: { $in: self.chatIds },
-      participants: { $elemMatch: { userId: otherParticipant._id } },
-    },
-    { _id: 1 }
-  );
-
-  //if chat exists, send back chatId. if not, send null
-  let chatId = null;
-  if (chat !== null) {
-    chatId = chat._id;
-  }
-
-  res.json({ chatId: chatId });
+  Promise.all([user, participant])
+    .then(async ([user, participant]) => {
+      return Chat.findOne(
+        {
+          _id: { $in: user.chatIds },
+          participants: { $elemMatch: { userId: participant._id } },
+        },
+        { _id: 1 }
+      );
+    })
+    .then((chat) => {
+      if (chat) {
+        res.json({ chatId: chat._id });
+      }
+    })
+    .catch((err) => {
+      console.log(err);
+    });
 });
 
 router.post("/new", async (req, res) => {
-  const currentUser = await User.findOne({ firebaseUid: req.body.selfFbUid });
+  const currentParticipant = Participant.findOne({
+    firebaseUid: req.body.selfFbUid,
+  });
+
+  const otherParticipant = Participant.findOne({
+    firebaseUid: req.body.otherFbUid,
+  });
+
+  Promise.all([currentParticipant, otherParticipant])
+    .then(async ([currentParticipant, otherParticipant]) => {
+      let chat = null;
+      try {
+        chat = await Chat.create({
+          participants: [
+            {
+              userId: otherParticipant._id,
+              username: otherParticipant.username,
+            },
+            {
+              userId: currentParticipant._id,
+              username: currentParticipant.username,
+            },
+          ],
+        });
+        await User.updateMany(
+          { firebaseUid: { $in: [req.body.selfFbUid, req.body.otherFbUid] } },
+          { $push: { chatIds: chat._id } }
+        );
+      } catch (err) {
+        throw err;
+      }
+      if (chat) res.json({ chatId: chat._id });
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+
+  /* const currentUser = await User.findOne({ firebaseUid: req.body.selfFbUid });
   const currentParticipant = await Participant.findOne({
     userId: currentUser._id,
   });
@@ -65,7 +106,7 @@ router.post("/new", async (req, res) => {
     { $push: { chatIds: chat._id } }
   );
 
-  res.json({ chatId: chat._id });
+  res.json({ chatId: chat._id }); */
 });
 
 module.exports = router;

@@ -19,7 +19,7 @@ function UserCard(props) {
           },
           body: JSON.stringify({
             selfFbUid: curUser.uid,
-            otherId: props.userId,
+            otherFbUid: props.userUid,
           }),
         });
       })
@@ -31,7 +31,7 @@ function UserCard(props) {
         if (data.chatId !== null) {
           navigate("../" + data.chatId);
         } else {
-          props.createNewChat(props.userId, props.username);
+          props.createNewChat(props.userUid, props.username);
         }
       })
       .catch((err) => {
@@ -44,8 +44,8 @@ function UserCard(props) {
       id="card"
       className="border border-0"
       onClick={handleButtonClick}
-      /* to={"../" + props.userId}
-      state={{ userId: props.userId, username: props.username }} */
+      /* to={"../" + props.userUid}
+      state={{ userUid: props.userUid, username: props.username }} */
     >
       <div className="user-card rounded pointer">
         {/* avatar */}

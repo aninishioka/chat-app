@@ -19,8 +19,8 @@ function NewChat() {
     setSearchText(text);
   };
 
-  const createNewChat = (participantId, username) => {
-    setParticipant({ id: participantId, username: username });
+  const createNewChat = (participantUid, username) => {
+    setParticipant({ uid: participantUid, username: username });
   };
 
   const handleClickClose = () => {
@@ -43,7 +43,7 @@ function NewChat() {
           },
           body: JSON.stringify({
             selfFbUid: curUser.uid,
-            otherId: participant.id,
+            otherFbUid: participant.uid,
           }),
         });
       })
@@ -99,7 +99,7 @@ function NewChat() {
         <ComposeMsg
           handleNewMessage={handleNewMessage}
           chatId={null}
-          other={participant.id}
+          other={participant.uid}
         ></ComposeMsg>
       )}
     </div>

@@ -49,7 +49,7 @@ function SearchDropdown(props) {
           <UserCard
             key={contact._id}
             username={contact.username}
-            userId={contact._id}
+            userUid={contact.firebaseUid}
             createNewChat={props.createNewChat}
           ></UserCard>
         );

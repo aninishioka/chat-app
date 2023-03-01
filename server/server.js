@@ -37,17 +37,25 @@ app.use("/messages", messages);
 
 io.on("connection", (socket) => {
   socket.on("logged-in", async (firebaseUid) => {
-    await Participant.updateOne(
-      { firebaseUid: firebaseUid },
-      { socketId: socket.id }
-    );
+    try {
+      await Participant.updateOne(
+        { firebaseUid: firebaseUid },
+        { socketId: socket.id }
+      );
+    } catch (err) {
+      console.log(err);
+    }
   });
 
   socket.on("logged-out", async (firebaseUid) => {
-    await Participant.updateOne(
-      { firebaseUid: firebaseUid },
-      { socketId: null }
-    );
+    try {
+      await Participant.updateOne(
+        { firebaseUid: firebaseUid },
+        { socketId: null }
+      );
+    } catch (err) {
+      console.log(err);
+    }
   });
 
   socket.on("send-message", async (message, chatId, firebaseUid) => {

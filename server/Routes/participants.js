@@ -9,7 +9,9 @@ router.post("/", async (req, res) => {
   try {
     const users = await Participant.find(searchOptions);
     res.json(users);
-  } catch {}
+  } catch (err) {
+    console.log(err);
+  }
 });
 
 module.exports = router;

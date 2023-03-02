@@ -4,3 +4,9 @@
   align-items: center;
   margin: 5px;
 }
+
+.participant {
+  display: flex;
+  align-items: center;
+  margin-left: 10px;
+}

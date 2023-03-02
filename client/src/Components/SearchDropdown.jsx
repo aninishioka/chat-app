@@ -50,7 +50,7 @@ function SearchDropdown(props) {
             key={contact._id}
             username={contact.username}
             userUid={contact.firebaseUid}
-            createNewChat={props.createNewChat}
+            setChatName={props.setChatName}
           ></UserCard>
         );
       });

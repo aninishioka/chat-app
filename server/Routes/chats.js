@@ -36,9 +36,7 @@ router.post("/", async (req, res) => {
       );
     })
     .then((chat) => {
-      if (chat) {
-        res.json({ chatId: chat._id });
-      }
+      res.json({ chatId: chat ? chat._id : null });
     })
     .catch((err) => {
       console.log(err);

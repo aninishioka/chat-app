@@ -81,7 +81,7 @@ function Chat() {
 
   function displayHeader() {
     if (!isNew) return <ChatHeader chatName={chatName}></ChatHeader>;
-    else return <NewChatHeader></NewChatHeader>;
+    else return <NewChatHeader setChatName={setChatName}></NewChatHeader>;
   }
 
   function displayMessages() {
@@ -109,21 +109,21 @@ function Chat() {
     <div className="chat-container">
       <div className="chat-header-container">{displayHeader()}</div>
       {!isNew && (
-        <>
-          <div className="chat-body">
-            <div className="messages">
-              {displayMessages()}
-              <div
-                style={{ float: "left", clear: "both" }}
-                ref={messagesEndRef}
-              ></div>
-            </div>
+        <div className="chat-body">
+          <div className="messages">
+            {displayMessages()}
+            <div
+              style={{ float: "left", clear: "both" }}
+              ref={messagesEndRef}
+            ></div>
           </div>
-          <ComposeMsg
-            handleNewMessage={handleNewMessage}
-            chatId={chatId}
-          ></ComposeMsg>
-        </>
+        </div>
+      )}
+      {chatName && (
+        <ComposeMsg
+          handleNewMessage={handleNewMessage}
+          chatId={chatId}
+        ></ComposeMsg>
       )}
     </div>
   );

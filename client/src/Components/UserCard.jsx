@@ -7,7 +7,7 @@ function UserCard(props) {
   const { curUser } = useAuth();
   const navigate = useNavigate();
 
-  const handleButtonClick = async () => {
+  const handleClick = async () => {
     curUser
       .getIdToken()
       .then((token) => {
@@ -31,7 +31,7 @@ function UserCard(props) {
         if (data.chatId !== null) {
           navigate("../" + data.chatId);
         } else {
-          props.createNewChat(props.userUid, props.username);
+          props.setChatName(props.username);
         }
       })
       .catch((err) => {
@@ -43,7 +43,7 @@ function UserCard(props) {
     <button
       id="card"
       className="border border-0"
-      onClick={handleButtonClick}
+      onClick={handleClick}
       /* to={"../" + props.userUid}
       state={{ userUid: props.userUid, username: props.username }} */
     >

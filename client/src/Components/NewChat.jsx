@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useState } from "react";
 import "./CSS/CurrentChat.css";
 import "./CSS/NewChat.css";
@@ -14,6 +14,10 @@ function NewChat() {
   const [searchBarFocused, setSearchBarFocused] = useState(false);
   const { curUser } = useAuth();
   const navigate = useNavigate();
+
+  useEffect(() => {
+    console.log(participant);
+  }, [participant]);
 
   const handleSearchTextChange = (text) => {
     setSearchText(text);

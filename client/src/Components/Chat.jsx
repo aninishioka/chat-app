@@ -14,6 +14,7 @@ function Chat() {
   const [isNew, setIsNew] = useState(true);
   const [messages, setMessages] = useState([]);
   const [chatName, setChatName] = useState("");
+  const [participant, setParticipant] = useState();
   const { id } = useParams();
   const { curUser } = useAuth();
   const socket = useContext(SocketContext);
@@ -81,7 +82,13 @@ function Chat() {
 
   function displayHeader() {
     if (!isNew) return <ChatHeader chatName={chatName}></ChatHeader>;
-    else return <NewChatHeader setChatName={setChatName}></NewChatHeader>;
+    else
+      return (
+        <NewChatHeader
+          setChatName={setChatName}
+          setParticipant={setParticipant}
+        ></NewChatHeader>
+      );
   }
 
   function displayMessages() {
@@ -105,6 +112,22 @@ function Chat() {
     ]);
   }
 
+  function createNewChat() {
+    curUser.getIdToken().then((token) => {
+      return fetch("/messages/new", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          AuthToken: token,
+        },
+        body: JSON.stringify({
+          selfFbUid: curUser.uid,
+          otherFbUid: participant,
+        }),
+      });
+    });
+  }
+
   return (
     <div className="chat-container">
       <div className="chat-header-container">{displayHeader()}</div>
@@ -123,6 +146,7 @@ function Chat() {
         <ComposeMsg
           handleNewMessage={handleNewMessage}
           chatId={chatId}
+          createNewChat={createNewChat}
         ></ComposeMsg>
       )}
     </div>

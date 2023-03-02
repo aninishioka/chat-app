@@ -38,6 +38,7 @@ function NewChatHeader(props) {
           <SearchDropdown
             searchText={searchText}
             setChatName={setNewChat}
+            setParticipant={props.setParticipant}
           ></SearchDropdown>
         </div>
       )}

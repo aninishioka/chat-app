@@ -28,6 +28,9 @@ function ComposeMsg(props) {
     props.handleNewMessage(message, { firebaseUid: curUser.uid });
   };
   const sendMessage = (message, chatId) => {
+    if (!chatId) {
+      props.createNewChat();
+    }
     socket.emit("send-message", message, chatId, curUser.uid);
   };
   return (

@@ -30,7 +30,9 @@ router.post("/", async (req, res) => {
       return Chat.findOne(
         {
           _id: { $in: user.chatIds },
-          participants: { $elemMatch: { userId: participant._id } },
+          participants: {
+            $elemMatch: { firebaseUid: participant.firebaseUid },
+          },
         },
         { _id: 1 }
       );

@@ -51,6 +51,7 @@ function SearchDropdown(props) {
             username={contact.username}
             userUid={contact.firebaseUid}
             setChatName={props.setChatName}
+            setParticipant={props.setParticipant}
           ></UserCard>
         );
       });

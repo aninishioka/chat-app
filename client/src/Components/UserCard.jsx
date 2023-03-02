@@ -32,6 +32,7 @@ function UserCard(props) {
           navigate("../" + data.chatId);
         } else {
           props.setChatName(props.username);
+          props.setParticipant(props.userUid);
         }
       })
       .catch((err) => {

@@ -1,18 +1,17 @@
 const express = require("express");
-const mongoose = require("mongoose");
 const router = express.Router();
 const Chat = require("../Models/Chat");
 const Message = require("../Models/Message");
 
 router.post("/", async (req, res) => {
   Chat.findOne({
-    _id: mongoose.Types.ObjectId(req.body.chatId),
+    _id: req.body.chatId,
   })
     .then(async (chat) => {
       try {
         let messages = [];
         let participants = null;
-        if (chat !== null) {
+        if (chat) {
           participants = chat.participants;
           messages = await Message.find({ chatId: chat._id }).limit(100).sort({
             timestamp: -1,

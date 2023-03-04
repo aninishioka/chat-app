@@ -6,6 +6,11 @@ const Participant = require("../Models/Participant");
 const User = require("../Models/User");
 
 router.post("/previews", async (req, res) => {
+  let chats = await Chat.find({
+    participants: { $elemMatch: { firebaseUid: req.body.firebaseUid } },
+    lastMessage: { $exists: true },
+  }).sort({ lastMessageTime: -1 });
+
   Chat.find({
     participants: { $elemMatch: { firebaseUid: req.body.firebaseUid } },
     lastMessage: { $exists: true },
@@ -61,11 +66,11 @@ router.post("/new", async (req, res) => {
         chat = await Chat.create({
           participants: [
             {
-              userId: otherParticipant._id,
+              firebaseUid: otherParticipant.firebaseUid,
               username: otherParticipant.username,
             },
             {
-              userId: currentParticipant._id,
+              firebaseUid: currentParticipant.firebaseUid,
               username: currentParticipant.username,
             },
           ],

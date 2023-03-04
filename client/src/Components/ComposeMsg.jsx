@@ -1,16 +1,14 @@
 import React from "react";
 import "./CSS/ComposeMsg.css";
-import { SocketContext } from "../Contexts/SocketContext";
-import { useContext } from "react";
 import { useAuth } from "../Contexts/UserContext";
 
 function ComposeMsg(props) {
-  const socket = useContext(SocketContext);
   const { curUser } = useAuth();
 
   const handleClick = () => {
     const message = document.getElementById("msg").value.trimEnd();
     displayNewMessage(message);
+    sendMessage(message);
   };
   const handleKeyPress = (e) => {
     if (e.shiftKey && e.keyCode === 13) return;
@@ -25,13 +23,10 @@ function ComposeMsg(props) {
   };
   const displayNewMessage = (message) => {
     document.getElementById("msg").value = "";
-    props.handleNewMessage(message, { firebaseUid: curUser.uid });
+    props.displayNewMessage(message, { firebaseUid: curUser.uid });
   };
-  const sendMessage = (message, chatId) => {
-    if (!chatId) {
-      props.createNewChat();
-    }
-    socket.emit("send-message", message, chatId, curUser.uid);
+  const sendMessage = (message) => {
+    props.sendMessage(message);
   };
   return (
     <div id="compose-msg" className="input-group">

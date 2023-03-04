@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useRef, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { SocketContext } from "../Contexts/SocketContext";
 import { useAuth } from "../Contexts/UserContext";
 import { v4 as uuidv4 } from "uuid";
@@ -10,7 +10,7 @@ import TextBubble from "./TextBubble";
 import "./CSS/Chat.css";
 
 function Chat() {
-  const [chatId, setChatId] = useState();
+  const [chatId, setChatId] = useState(null);
   const [isNew, setIsNew] = useState(true);
   const [messages, setMessages] = useState([]);
   const [chatName, setChatName] = useState("");
@@ -19,11 +19,12 @@ function Chat() {
   const { curUser } = useAuth();
   const socket = useContext(SocketContext);
   const messagesEndRef = useRef();
+  const navigate = useNavigate();
 
   useEffect(() => {
     socket.on("receive-message", (data) => {
       if (data.chatId === id) {
-        handleNewMessage(data.message, data.author);
+        displayNewMessage(data.message, data.author);
       }
     });
 
@@ -33,8 +34,8 @@ function Chat() {
   }, []);
 
   useEffect(() => {
+    setChatId(id);
     if (id) {
-      setChatId(id);
       setIsNew(false);
 
       curUser
@@ -105,27 +106,41 @@ function Chat() {
     }
   }
 
-  function handleNewMessage(message, author) {
+  function displayNewMessage(message, author) {
     setMessages((curMessages) => [
       ...curMessages,
       { message: message, author: author, _id: uuidv4() },
     ]);
   }
 
-  function createNewChat() {
-    curUser.getIdToken().then((token) => {
-      return fetch("/messages/new", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          AuthToken: token,
-        },
-        body: JSON.stringify({
-          selfFbUid: curUser.uid,
-          otherFbUid: participant,
-        }),
-      });
-    });
+  function sendMessage(message) {
+    if (isNew) {
+      curUser
+        .getIdToken()
+        .then((token) => {
+          return fetch("/chats/new", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              AuthToken: token,
+            },
+            body: JSON.stringify({
+              selfFbUid: curUser.uid,
+              otherFbUid: participant,
+            }),
+          });
+        })
+        .then((res) => {
+          if (res.ok) return res.json();
+          throw res;
+        })
+        .then((data) => {
+          socket.emit("send-message", message, data.chatId, curUser.uid);
+          navigate("../" + data.chatID);
+        });
+    } else {
+      socket.emit("send-message", message, chatId, curUser.uid);
+    }
   }
 
   return (
@@ -144,9 +159,9 @@ function Chat() {
       )}
       {chatName && (
         <ComposeMsg
-          handleNewMessage={handleNewMessage}
+          displayNewMessage={displayNewMessage}
           chatId={chatId}
-          createNewChat={createNewChat}
+          sendMessage={sendMessage}
         ></ComposeMsg>
       )}
     </div>

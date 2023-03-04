@@ -18,6 +18,7 @@ function NewChatHeader(props) {
 
   const handleClickClose = () => {
     setChatName(null);
+    props.setChatName(null);
   };
 
   const handleSearchBarFocus = () => {};

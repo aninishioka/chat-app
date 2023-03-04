@@ -92,6 +92,7 @@ io.on("connection", (socket) => {
         { socketId: 1 }
       )
         .then((participantDoc) => {
+          if (!participantDoc) return;
           if (
             participant.firebaseUid !== firebaseUid &&
             participantDoc.socketId

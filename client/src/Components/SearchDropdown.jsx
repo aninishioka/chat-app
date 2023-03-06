@@ -18,6 +18,7 @@ function SearchDropdown(props) {
           "/participants?" +
             new URLSearchParams({
               searchText: props.searchText,
+              uid: userContext.current.currentUser.uid,
             }),
           {
             method: "GET",

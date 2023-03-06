@@ -2,16 +2,17 @@ const express = require("express");
 const router = new express.Router();
 const Participant = require("../Models/Participant");
 
-router.post("/", async (req, res) => {
+router.post("/", (req, res) => {
   const searchOptions = {};
   if (req.body.searchText !== null && req.body.searchText !== "")
     searchOptions.username = new RegExp(req.body.searchText, "i");
-  try {
-    const users = await Participant.find(searchOptions);
-    res.json(users);
-  } catch (err) {
-    console.log(err);
-  }
+  Participant.find(searchOptions)
+    .then((participants) => {
+      res.json(participants);
+    })
+    .catch((err) => {
+      console.log(err);
+    });
 });
 
 module.exports = router;

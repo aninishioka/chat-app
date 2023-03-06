@@ -3,7 +3,7 @@ const router = express.Router();
 const Chat = require("../Models/Chat");
 const Message = require("../Models/Message");
 
-router.post("/", async (req, res) => {
+router.post("/", (req, res) => {
   Chat.findOne({
     _id: req.body.chatId,
   })

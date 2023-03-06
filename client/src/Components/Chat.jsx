@@ -41,16 +41,19 @@ function Chat() {
       curUser
         .getIdToken()
         .then((token) => {
-          return fetch("/messages", {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-              AuthToken: token,
-            },
-            body: JSON.stringify({
-              chatId: id,
-            }),
-          });
+          return fetch(
+            "/messages?" +
+              new URLSearchParams({
+                chatId: id,
+              }),
+            {
+              method: "GET",
+              headers: {
+                "Content-Type": "application/json",
+                AuthToken: token,
+              },
+            }
+          );
         })
         .then((res) => {
           if (res.ok) return res.json();
@@ -136,7 +139,7 @@ function Chat() {
         })
         .then((data) => {
           socket.emit("send-message", message, data.chatId, curUser.uid);
-          navigate("../" + data.chatID);
+          navigate("../" + data.chatId);
         });
     } else {
       socket.emit("send-message", message, chatId, curUser.uid);

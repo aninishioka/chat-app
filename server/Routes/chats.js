@@ -5,9 +5,9 @@ const Chat = require("../Models/Chat");
 const Participant = require("../Models/Participant");
 const User = require("../Models/User");
 
-router.post("/previews", async (req, res) => {
+router.get("/previews", async (req, res) => {
   Chat.find({
-    participants: { $elemMatch: { firebaseUid: req.body.firebaseUid } },
+    participants: { $elemMatch: { firebaseUid: req.query.firebaseUid } },
     lastMessage: { $exists: true },
   })
     .sort({ lastMessageTime: -1 })
@@ -19,14 +19,14 @@ router.post("/previews", async (req, res) => {
     });
 });
 
-router.post("/", (req, res) => {
-  User.findOne({ firebaseUid: req.body.selfFbUid })
+router.get("/", (req, res) => {
+  User.findOne({ firebaseUid: req.query.selfFbUid })
     .then((user) => {
       return Chat.findOne(
         {
           _id: { $in: user.chatIds },
           participants: {
-            $elemMatch: { firebaseUid: req.body.otherFbUid },
+            $elemMatch: { firebaseUid: req.query.otherFbUid },
           },
         },
         { _id: 1 }

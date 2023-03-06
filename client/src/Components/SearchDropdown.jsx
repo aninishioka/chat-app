@@ -14,16 +14,19 @@ function SearchDropdown(props) {
     userContext.current.currentUser
       .getIdToken()
       .then((token) => {
-        return fetch("/participants", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            AuthToken: token,
-          },
-          body: JSON.stringify({
-            searchText: props.searchText,
-          }),
-        });
+        return fetch(
+          "/participants?" +
+            new URLSearchParams({
+              searchText: props.searchText,
+            }),
+          {
+            method: "GET",
+            headers: {
+              "Content-Type": "application/json",
+              AuthToken: token,
+            },
+          }
+        );
       })
       .then((res) => {
         if (res.ok) return res.json();

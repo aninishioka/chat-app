@@ -3,9 +3,9 @@ const router = express.Router();
 const Chat = require("../Models/Chat");
 const Message = require("../Models/Message");
 
-router.post("/", (req, res) => {
+router.get("/", (req, res) => {
   Chat.findOne({
-    _id: req.body.chatId,
+    _id: req.query.chatId,
   })
     .then(async (chat) => {
       try {

@@ -15,16 +15,19 @@ function ChatList() {
     curUser
       .getIdToken()
       .then((token) => {
-        return fetch("/chats/previews", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            AuthToken: token,
-          },
-          body: JSON.stringify({
-            firebaseUid: curUser.uid,
-          }),
-        });
+        return fetch(
+          "/chats/previews?" +
+            new URLSearchParams({
+              firebaseUid: curUser.uid,
+            }),
+          {
+            method: "GET",
+            headers: {
+              "Content-Type": "application/json",
+              AuthToken: token,
+            },
+          }
+        );
       })
       .then((res) => {
         if (res.ok) return res.json();

@@ -11,17 +11,20 @@ function UserCard(props) {
     curUser
       .getIdToken()
       .then((token) => {
-        return fetch("/chats", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            AuthToken: token,
-          },
-          body: JSON.stringify({
-            selfFbUid: curUser.uid,
-            otherFbUid: props.userUid,
-          }),
-        });
+        return fetch(
+          "/chats?" +
+            new URLSearchParams({
+              selfFbUid: curUser.uid,
+              otherFbUid: props.userUid,
+            }),
+          {
+            method: "GET",
+            headers: {
+              "Content-Type": "application/json",
+              AuthToken: token,
+            },
+          }
+        );
       })
       .then((res) => {
         if (res.ok) return res.json();

@@ -67,7 +67,7 @@ io.on("connection", (socket) => {
     //create new message
     const messageDoc = await Message.create({
       message: message,
-      chatId: mongoose.Types.ObjectId(chatId),
+      chatId: chatId,
       author: { firebaseUid: firebaseUid, username: participant.username },
     });
 

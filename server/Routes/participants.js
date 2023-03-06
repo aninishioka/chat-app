@@ -2,10 +2,10 @@ const express = require("express");
 const router = new express.Router();
 const Participant = require("../Models/Participant");
 
-router.post("/", (req, res) => {
+router.get("/", (req, res) => {
   const searchOptions = {};
-  if (req.body.searchText !== null && req.body.searchText !== "")
-    searchOptions.username = new RegExp(req.body.searchText, "i");
+  if (req.query.searchText !== null && req.query.searchText !== "")
+    searchOptions.username = new RegExp(req.query.searchText, "i");
   Participant.find(searchOptions)
     .then((participants) => {
       res.json(participants);

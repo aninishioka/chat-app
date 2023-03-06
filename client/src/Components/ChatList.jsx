@@ -6,7 +6,7 @@ import { useContext } from "react";
 import { useAuth } from "../Contexts/UserContext";
 import { SocketContext } from "../Contexts/SocketContext";
 
-function ChatList() {
+function ChatList(props) {
   const [chats, setChats] = useState([]);
   const { curUser } = useAuth();
   const socket = useContext(SocketContext);
@@ -68,16 +68,22 @@ function ChatList() {
             other = chat.participants[user];
         }
         if (other === null) return;
-        filteredList.push(
-          <ChatCard
-            key={chat._id}
-            chatId={chat._id}
-            userId={other.firebaseUid}
-            username={other.username}
-            lastMsg={chat.lastMessage}
-            lastMsgBy={chat.lastMessageAuthor.firebaseUid}
-          ></ChatCard>
-        );
+        if (
+          props.searchText === "" ||
+          other.username.toLowerCase().includes(props.searchText.toLowerCase())
+        ) {
+          filteredList.push(
+            <ChatCard
+              key={chat._id}
+              chatId={chat._id}
+              userId={other.firebaseUid}
+              username={other.username}
+              lastMsg={chat.lastMessage}
+              lastMsgBy={chat.lastMessageAuthor.firebaseUid}
+            ></ChatCard>
+          );
+        }
+
         /* if (chat.name.toLowerCase().includes(props.searchText.toLowerCase())) {
           filteredList.push(
             <Chat key={chat.name} name={chat.name} lastMsg={lastMsg}></Chat>

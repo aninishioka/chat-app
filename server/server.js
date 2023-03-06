@@ -110,6 +110,7 @@ io.on("connection", (socket) => {
                 username: participant.username,
               },
             });
+            socket.to(userSocket).emit("new-message", chat);
           });
         });
     });

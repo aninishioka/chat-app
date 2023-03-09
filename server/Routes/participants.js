@@ -1,23 +1,32 @@
+require("dotenv").config();
 const express = require("express");
+const { MongoClient } = require("mongodb");
 const router = new express.Router();
-const Participant = require("../Models/Participant");
 
 router.get("/", async (req, res) => {
-  const currentUser = await Participant.findOne({ firebaseUid: req.query.uid });
-  const searchOptions = {};
-  if (req.query.searchText !== null && req.query.searchText !== "")
-    searchOptions.username = {
-      $not: new RegExp(currentUser.username),
-      $regex: new RegExp(req.query.searchText, "i"),
-    };
+  const client = new MongoClient(process.env.DATABASE_URL);
+  const searchOptions = {
+    user_id: { $not: new RegExp(req.query.uid) },
+  };
 
-  Participant.find(searchOptions)
-    .then((participants) => {
-      res.json(participants);
-    })
-    .catch((err) => {
-      console.log(err);
-    });
+  if (req.query.searchText) {
+    searchOptions.username = new RegExp(req.query.searchText, "i");
+  }
+
+  try {
+    await client.connect();
+    const db = client.db("chat-app-db");
+
+    //get all participants but current user
+    const participants = db.collection("participants");
+    const filteredParticipants = await participants.find(searchOptions);
+    const filteredArray = await filteredParticipants.toArray();
+    res.json(filteredArray);
+  } catch (err) {
+    console.log(err);
+  } finally {
+    await client.close();
+  }
 });
 
 module.exports = router;

@@ -31,8 +31,7 @@ function SignupPage() {
             },
             body: JSON.stringify({
               username: usernameRef.current.value,
-              email: emailRef.current.value,
-              firebaseUid: userCredential.user.uid,
+              user_id: userCredential.user.uid,
             }),
           });
           setError("");

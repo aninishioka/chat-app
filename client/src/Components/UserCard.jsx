@@ -14,8 +14,8 @@ function UserCard(props) {
         return fetch(
           "/chats?" +
             new URLSearchParams({
-              selfFbUid: curUser.uid,
-              otherFbUid: props.userUid,
+              selfUid: curUser.uid,
+              otherUid: props.participant.user_id,
             }),
           {
             method: "GET",
@@ -31,11 +31,11 @@ function UserCard(props) {
         throw res;
       })
       .then((data) => {
-        if (data.chatId !== null) {
+        if (data.chatId) {
+          props.setChatId(data.chatId);
           navigate("../" + data.chatId);
         } else {
-          props.setChatName(props.username);
-          props.setParticipant(props.userUid);
+          props.setParticipant(props.participant);
         }
       })
       .catch((err) => {
@@ -48,8 +48,8 @@ function UserCard(props) {
       id="card"
       className="border border-0"
       onClick={handleClick}
-      /* to={"../" + props.userUid}
-      state={{ userUid: props.userUid, username: props.username }} */
+      /* to={"../" + props.participant.user_id}
+      state={{ userUid: props.participant.user_id, username: props.participant.username }} */
     >
       <div className="user-card rounded pointer">
         {/* avatar */}
@@ -58,7 +58,7 @@ function UserCard(props) {
         </div>
         {/* username */}
         <div className="username">
-          <span>{props.username}</span>
+          <span>{props.participant.username}</span>
         </div>
       </div>
     </button>

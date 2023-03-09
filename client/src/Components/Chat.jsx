@@ -8,6 +8,7 @@ import ComposeMsg from "./ComposeMsg";
 import NewChatHeader from "./NewChatHeader";
 import TextBubble from "./TextBubble";
 import "./CSS/Chat.css";
+import ChatBody from "./ChatBody";
 
 function Chat() {
   const [chatId, setChatId] = useState(null);
@@ -63,7 +64,7 @@ function Chat() {
           setMessages(data.messages);
           for (let user in data.participants) {
             if (data.participants[user].firebaseUid !== curUser.uid)
-              setChatName(data.participants[user].username);
+              setParticipant(data.participants[user]);
           }
         })
         .catch((err) => {
@@ -85,12 +86,12 @@ function Chat() {
   }
 
   function displayHeader() {
-    if (!isNew) return <ChatHeader chatName={chatName}></ChatHeader>;
+    if (!isNew) return <ChatHeader participant={participant}></ChatHeader>;
     else
       return (
         <NewChatHeader
-          setChatName={setChatName}
           setParticipant={setParticipant}
+          setChatId={setChatId}
         ></NewChatHeader>
       );
   }
@@ -116,7 +117,7 @@ function Chat() {
     ]);
   }
 
-  function sendMessage(message) {
+  /*  function sendMessage(message) {
     if (isNew) {
       curUser
         .getIdToken()
@@ -144,12 +145,15 @@ function Chat() {
     } else {
       socket.emit("send-message", message, chatId, curUser.uid);
     }
-  }
+  } */
 
   return (
     <div className="chat-container">
       <div className="chat-header-container">{displayHeader()}</div>
-      {!isNew && (
+      {participant && (
+        <ChatBody participant={participant} chatId={chatId}></ChatBody>
+      )}
+      {/* {!isNew && (
         <div className="chat-body">
           <div className="messages">
             {displayMessages()}
@@ -166,7 +170,7 @@ function Chat() {
           chatId={chatId}
           sendMessage={sendMessage}
         ></ComposeMsg>
-      )}
+      )} */}
     </div>
   );
 }

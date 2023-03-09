@@ -1,7 +1,6 @@
 if (process.env.NODE_ENV !== "production") {
   require("dotenv").config();
 }
-
 const express = require("express");
 const https = require("https");
 const fs = require("fs");
@@ -13,11 +12,7 @@ const auth = require("./middleware/auth");
 const participants = require("./Routes/participants");
 const socketio = require("socket.io");
 const http = require("http");
-const mongoose = require("mongoose");
-const Message = require("./Models/Message");
-const Chat = require("./Models/Chat");
-const User = require("./Models/User");
-const Participant = require("./Models/Participant");
+const { MongoClient, ObjectId } = require("mongodb");
 const app = express();
 const server = http.createServer(app);
 const port = process.env.port || 8080;
@@ -36,68 +31,87 @@ app.use("/participants", participants);
 app.use("/messages", messages);
 
 io.on("connection", (socket) => {
-  socket.on("logged-in", async (firebaseUid) => {
+  socket.on("logged-in", async (user_id) => {
+    const client = new MongoClient(process.env.DATABASE_URL);
+
     try {
-      await Participant.updateOne(
-        { firebaseUid: firebaseUid },
-        { socketId: socket.id }
+      await client.connect();
+      const db = client.db("chat-app-db");
+      const participants = db.collection("participants");
+      await participants.updateOne(
+        { user_id: user_id },
+        { socket_id: socket.id }
       );
     } catch (err) {
       console.log(err);
+    } finally {
+      await client.close();
     }
   });
 
   socket.on("logged-out", async (firebaseUid) => {
+    const client = new MongoClient(process.env.DATABASE_URL);
+
     try {
-      await Participant.updateOne(
-        { firebaseUid: firebaseUid },
-        { socketId: null }
-      );
+      await client.connect();
+      const db = client.db("chat-app-db");
+      const participants = db.collection("participants");
+      await participants.updateOne({ user_id: user_id }, { socket_id: null });
     } catch (err) {
       console.log(err);
+    } finally {
+      await client.close();
     }
   });
 
-  socket.on("send-message", async (message, chatId, firebaseUid) => {
-    const participant = await Participant.findOne(
-      { firebaseUid: firebaseUid },
-      { username: 1 }
-    );
+  socket.on("send-message", async (message, chatId, uid) => {
+    const client = new MongoClient(process.env.DATABASE_URL);
 
-    //create new message
-    const messageDoc = await Message.create({
-      message: message,
-      chatId: chatId,
-      author: { firebaseUid: firebaseUid, username: participant.username },
-    });
+    try {
+      await client.connect();
+      const db = client.db("chat-app-db");
 
-    //update corresponding chat's most recent message
-    await Chat.updateOne(
-      { _id: mongoose.Types.ObjectId(chatId) },
-      {
-        lastMessage: message,
-        lastMessageTime: messageDoc.createdAt,
-        lastMessageAuthor: {
-          firebaseUid: firebaseUid,
-          username: participant.username,
-        },
-      }
-    );
-    const chat = await Chat.findOne({ _id: mongoose.Types.ObjectId(chatId) });
+      //get author doc
+      const participants = db.collection("participants");
+      const messageAuthor = await participants.findOne({ user_id: uid });
 
-    const sockets = [];
+      //create new message doc and insert into db
+      const messages = db.collection("messages");
+      const messageDoc = {
+        message: message,
+        author: { user_id: uid, username: messageAuthor.username },
+        chat_id: chatId,
+        created_on: Date.now(),
+      };
+      await messages.insertOne(messageDoc);
+
+      //update corresponding chat doc
+      const chats = db.collection("chats");
+      await chats.updateOne(
+        { _id: new ObjectId(chatId) },
+        {
+          $set: {
+            last_message: message,
+            last_message_author: {
+              user_id: messageAuthor.user_id,
+              username: messageAuthor.username,
+            },
+            last_updated: messageDoc.created_on,
+          },
+        }
+      );
+    } catch (err) {
+    } finally {
+      await client.close();
+    }
+
+    /*const sockets = [];
     chat.participants.forEach(async (participant) => {
-      Participant.findOne(
-        { firebaseUid: participant.firebaseUid },
-        { socketId: 1 }
-      )
+      Participant.findOne({ user_id: participant.user_id }, { socketId: 1 })
         .then((participantDoc) => {
           if (!participantDoc) return;
-          if (
-            participant.firebaseUid !== firebaseUid &&
-            participantDoc.socketId
-          ) {
-            sockets.push(participantDoc.socketId);
+          if (participant.userId !== firebaseUid && participantDoc.socket_id) {
+            sockets.push(participantDoc.socket_id);
           }
         })
         .then(() => {
@@ -106,7 +120,7 @@ io.on("connection", (socket) => {
               message: message,
               chatId: chat._id,
               author: {
-                firebaseUid: firebaseUid,
+                user_id: firebaseUid,
                 username: participant.username,
               },
             });
@@ -115,12 +129,9 @@ io.on("connection", (socket) => {
         });
     });
 
-    socket.emit("new-message", chat);
+    socket.emit("new-message", chat); */
   });
 });
-
-mongoose.set("strictQuery", false);
-mongoose.connect(process.env.DATABASE_URL);
 
 server.listen(port, () => {
   console.log(`app listening on port ${port}`);

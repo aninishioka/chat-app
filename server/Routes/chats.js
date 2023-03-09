@@ -1,107 +1,99 @@
+require("dotenv").config();
 const express = require("express");
-const mongoose = require("mongoose");
+const { MongoClient } = require("mongodb");
 const router = express.Router();
-const Chat = require("../Models/Chat");
-const Participant = require("../Models/Participant");
-const User = require("../Models/User");
 
 router.get("/previews", async (req, res) => {
-  Chat.find({
-    participants: { $elemMatch: { firebaseUid: req.query.firebaseUid } },
-    lastMessage: { $exists: true },
-  })
-    .sort({ lastMessageTime: -1 })
-    .then((chats) => {
-      res.json(chats);
-    })
-    .catch((err) => {
-      console.log(err);
-    });
+  const client = new MongoClient(process.env.DATABASE_URL);
+
+  try {
+    await client.connect();
+    const db = client.db("chat-app-db");
+
+    //find all chats current user participanting in and return in order of when last updated
+    const chats = db.collection("chats");
+    const returnedChats = await chats
+      .find({
+        participants: { $elemMatch: { user_id: req.query.uid } },
+        last_message: { $exists: true },
+      })
+      .sort({ last_updated: -1 });
+    const chatsArray = await returnedChats.toArray();
+    res.json(chatsArray);
+  } catch (err) {
+    console.log(err);
+  } finally {
+    await client.close();
+  }
 });
 
-router.get("/", (req, res) => {
-  User.findOne({ firebaseUid: req.query.selfFbUid })
-    .then((user) => {
-      return Chat.findOne(
-        {
-          _id: { $in: user.chatIds },
-          participants: {
-            $elemMatch: { firebaseUid: req.query.otherFbUid },
-          },
+router.get("/", async (req, res) => {
+  const client = new MongoClient(process.env.DATABASE_URL);
+
+  try {
+    await client.connect();
+    const db = client.db("chat-app-db");
+
+    const users = db.collection("users");
+    const currentUser = await users.findOne({ user_id: req.query.selfUid });
+    const chats = db.collection("chats");
+    const chat = await chats.findOne({
+      _id: { $in: currentUser.chat_ids },
+      participants: { $elemMatch: { user_id: req.query.otherUid } },
+    });
+    res.json({ chatId: chat ? chat._id : null });
+  } catch (err) {
+    console.log(err);
+  } finally {
+    await client.close();
+  }
+});
+
+router.post("/new", async (req, res) => {
+  const client = new MongoClient(process.env.DATABASE_URL);
+
+  try {
+    await client.connect();
+    const db = client.db("chat-app-db");
+
+    //get user docs for participants
+    const users = db.collection("users");
+    const participatingUsers = await users.find({
+      user_id: { $in: [req.body.selfUid, req.body.otherUid] },
+    });
+    const usersArray = await participatingUsers.toArray();
+
+    //create new chat doc
+    const chats = db.collection("chats");
+    const chatDoc = {
+      participants: usersArray.map((user) => {
+        return {
+          user_id: user.user_id,
+          username: user.username,
+        };
+      }),
+      last_updated: Date.now(),
+    };
+    const chatInsertDoc = await chats.insertOne(chatDoc);
+
+    //update user docs with new chatId
+    await users.updateMany(
+      {
+        user_id: {
+          $in: usersArray.map((user) => {
+            return user.user_id;
+          }),
         },
-        { _id: 1 }
-      );
-    })
-    .then((chat) => {
-      res.json({ chatId: chat ? chat._id : null });
-    })
-    .catch((err) => {
-      console.log(err);
-    });
-});
+      },
+      { $push: { chat_ids: chatInsertDoc.insertedId } }
+    );
 
-router.post("/new", (req, res) => {
-  const currentParticipant = Participant.findOne({
-    firebaseUid: req.body.selfFbUid,
-  });
-
-  const otherParticipant = Participant.findOne({
-    firebaseUid: req.body.otherFbUid,
-  });
-
-  Promise.all([currentParticipant, otherParticipant])
-    .then(async ([currentParticipant, otherParticipant]) => {
-      let chat = null;
-      try {
-        chat = await Chat.create({
-          participants: [
-            {
-              firebaseUid: otherParticipant.firebaseUid,
-              username: otherParticipant.username,
-            },
-            {
-              firebaseUid: currentParticipant.firebaseUid,
-              username: currentParticipant.username,
-            },
-          ],
-        });
-        await User.updateMany(
-          { firebaseUid: { $in: [req.body.selfFbUid, req.body.otherFbUid] } },
-          { $push: { chatIds: chat._id } }
-        );
-      } catch (err) {
-        throw err;
-      }
-      if (chat) res.json({ chatId: chat._id });
-    })
-    .catch((err) => {
-      console.log(err);
-    });
-
-  /* const currentUser = await User.findOne({ firebaseUid: req.body.selfFbUid });
-  const currentParticipant = await Participant.findOne({
-    userId: currentUser._id,
-  });
-  const otherUser = await User.findOne({
-    participantId: mongoose.Types.ObjectId(req.body.otherId),
-  });
-  const otherParticipant = await Participant.findOne({
-    _id: mongoose.Types.ObjectId(req.body.otherId),
-  });
-
-  const chat = await Chat.create({
-    participants: [
-      { userId: otherParticipant._id, username: otherParticipant.username },
-      { userId: currentParticipant._id, username: currentParticipant.username },
-    ],
-  });
-
-  await User.updateMany(
-    { _id: { $in: [currentUser._id, otherUser._id] } },
-    { $push: { chatIds: chat._id } }
-  );
-
-  res.json({ chatId: chat._id }); */
+    res.json({ chatId: chatInsertDoc.insertedId });
+  } catch (err) {
+    console.log(err);
+  } finally {
+    await client.close();
+  }
 });
 
 module.exports = router;

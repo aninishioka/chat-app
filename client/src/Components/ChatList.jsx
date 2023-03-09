@@ -18,7 +18,7 @@ function ChatList(props) {
         return fetch(
           "/chats/previews?" +
             new URLSearchParams({
-              firebaseUid: curUser.uid,
+              uid: curUser.uid,
             }),
           {
             method: "GET",
@@ -62,24 +62,22 @@ function ChatList(props) {
     const filteredList = [];
     if (typeof chats !== "undefined" && Array.isArray(chats)) {
       chats.forEach((chat) => {
-        let other = null;
+        let participant = null;
         for (let user in chat.participants) {
           if (chat.participants[user].firebaseUid !== curUser.uid)
-            other = chat.participants[user];
+            participant = chat.participants[user];
         }
-        if (other === null) return;
         if (
           props.searchText === "" ||
-          other.username.toLowerCase().includes(props.searchText.toLowerCase())
+          participant.username
+            .toLowerCase()
+            .includes(props.searchText.toLowerCase())
         ) {
           filteredList.push(
             <ChatCard
               key={chat._id}
-              chatId={chat._id}
-              userId={other.firebaseUid}
-              username={other.username}
-              lastMsg={chat.lastMessage}
-              lastMsgBy={chat.lastMessageAuthor.firebaseUid}
+              chat={chat}
+              participant={participant}
             ></ChatCard>
           );
         }

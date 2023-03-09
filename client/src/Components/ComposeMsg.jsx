@@ -23,10 +23,10 @@ function ComposeMsg(props) {
   };
   const displayNewMessage = (message) => {
     document.getElementById("msg").value = "";
-    props.displayNewMessage(message, { firebaseUid: curUser.uid });
+    props.displayNewMessage(message, { user_id: curUser.uid });
   };
   const sendMessage = (message) => {
-    props.sendMessage(message);
+    props.sendMessage(message, curUser.uid);
   };
   return (
     <div id="compose-msg" className="input-group">

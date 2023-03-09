@@ -1,24 +1,22 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import SearchBar from "./SearchBar";
 import SearchDropdown from "./SearchDropdown";
 import "./CSS/NewChatHeader.css";
 
 function NewChatHeader(props) {
   const [searchText, setSearchText] = useState("");
-  const [chatName, setChatName] = useState("");
+  const [participant, setParticipant] = useState("");
+
+  useEffect(() => {
+    props.setParticipant(participant);
+  }, [participant]);
 
   const handleSearchTextChange = (text) => {
     setSearchText(text);
   };
 
-  const setNewChat = (chatName) => {
-    setChatName(chatName);
-    props.setChatName(chatName);
-  };
-
   const handleClickClose = () => {
-    setChatName(null);
-    props.setChatName(null);
+    setParticipant(null);
   };
 
   const handleSearchBarFocus = () => {};
@@ -30,7 +28,7 @@ function NewChatHeader(props) {
           To:
         </span>
       </div>
-      {!chatName && (
+      {!participant && (
         <div className="chat-search-container">
           <SearchBar
             onSearchTextChange={handleSearchTextChange}
@@ -38,15 +36,15 @@ function NewChatHeader(props) {
           ></SearchBar>
           <SearchDropdown
             searchText={searchText}
-            setChatName={setNewChat}
-            setParticipant={props.setParticipant}
+            setParticipant={setParticipant}
+            setChatId={props.setChatId}
           ></SearchDropdown>
         </div>
       )}
-      {chatName && (
+      {participant && (
         <div className="card text-bg-light ml-2">
           <div className="card-body px-2 py-0">
-            <span>{chatName}</span>
+            <span>{participant.username}</span>
             <button
               type="button"
               className="btn close-btn px-1"

@@ -43,7 +43,6 @@ function SearchDropdown(props) {
 
   const createUserCards = () => {
     if (
-      typeof contacts !== "undefined" &&
       Array.isArray(contacts) &&
       props.searchText !== null &&
       props.searchText !== ""
@@ -52,10 +51,11 @@ function SearchDropdown(props) {
         return (
           <UserCard
             key={contact._id}
-            username={contact.username}
-            userUid={contact.firebaseUid}
-            setChatName={props.setChatName}
+            participant={contact}
+            /* username={contact.username}
+            userUid={contact.firebaseUid} */
             setParticipant={props.setParticipant}
+            setChatId={props.setChatId}
           ></UserCard>
         );
       });

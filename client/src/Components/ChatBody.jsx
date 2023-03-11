@@ -5,6 +5,7 @@ import { v4 as uuidv4 } from "uuid";
 import { useAuth } from "../Contexts/UserContext";
 import { SocketContext } from "../Contexts/SocketContext";
 import { useNavigate } from "react-router-dom";
+import "./CSS/ChatBody.css";
 
 function ChatBody(props) {
   const [messages, setMessages] = useState([]);
@@ -42,7 +43,22 @@ function ChatBody(props) {
       .catch((err) => {
         console.log(err);
       });
-  }, []);
+
+    socket.on("receive-message", (message, chatId, author) => {
+      if (chatId === props.chatId) {
+        displayNewMessage(message, author);
+      }
+    });
+
+    return () => {
+      socket.off("user-joined");
+      socket.off("receive-message");
+    };
+  }, [props.chatId]);
+
+  useEffect(() => {
+    scrollToBottom();
+  }, [messages]);
 
   function displayMessages() {
     if (Array.isArray(messages)) {
@@ -95,10 +111,15 @@ function ChatBody(props) {
     }
   }
 
+  function scrollToBottom() {
+    if (!messagesEndRef.current) return;
+    messagesEndRef.current.scrollIntoView(false);
+  }
+
   return (
     <>
       <div className="chat-body">
-        <div className="messages">
+        <div id="messages">
           {displayMessages()}
           <div
             style={{ float: "left", clear: "both" }}

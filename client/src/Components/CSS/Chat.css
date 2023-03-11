@@ -19,19 +19,3 @@
   background: white;
   align-items: center;
 }
-
-.chat-body {
-  width: 100%;
-  height: calc(100vh - 110px);
-  margin: 55px 0 60px 0;
-  padding: 10px 5px 0 5px;
-  overflow: auto;
-}
-
-.messages {
-  display: flex;
-  flex-direction: column;
-  width: 100%;
-  min-height: 100%;
-  justify-content: flex-end;
-}

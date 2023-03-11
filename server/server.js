@@ -30,38 +30,23 @@ app.use("/users", users);
 app.use("/participants", participants);
 app.use("/messages", messages);
 
+let user_id;
+
 io.on("connection", (socket) => {
   socket.on("logged-in", async (user_id) => {
-    const client = new MongoClient(process.env.DATABASE_URL);
+    console.log("joining room " + user_id);
+    socket.join(user_id);
+  });
 
-    try {
-      await client.connect();
-      const db = client.db("chat-app-db");
-      const participants = db.collection("participants");
-      await participants.updateOne(
-        { user_id: user_id },
-        { socket_id: socket.id }
-      );
-    } catch (err) {
-      console.log(err);
-    } finally {
-      await client.close();
+  socket.on("disconnect", async (user_id) => {
+    if (user_id) {
+      socket.leave(user_id);
     }
   });
 
-  socket.on("logged-out", async (firebaseUid) => {
-    const client = new MongoClient(process.env.DATABASE_URL);
-
-    try {
-      await client.connect();
-      const db = client.db("chat-app-db");
-      const participants = db.collection("participants");
-      await participants.updateOne({ user_id: user_id }, { socket_id: null });
-    } catch (err) {
-      console.log(err);
-    } finally {
-      await client.close();
-    }
+  socket.on("logged-out", async () => {
+    socket.leave(user_id);
+    user_id = null;
   });
 
   socket.on("send-message", async (message, chatId, uid) => {
@@ -100,36 +85,22 @@ io.on("connection", (socket) => {
           },
         }
       );
+      const chat = await chats.findOne({ _id: new ObjectId(chatId) });
+      socket.emit("new-message", chat);
+      chat.participants.forEach((participant) => {
+        if (participant.user_id !== uid) {
+          socket
+            .to(participant.user_id)
+            .emit("receive-message", message, chatId, {
+              user_id: uid,
+              username: participant.username,
+            });
+        }
+      });
     } catch (err) {
     } finally {
       await client.close();
     }
-
-    /*const sockets = [];
-    chat.participants.forEach(async (participant) => {
-      Participant.findOne({ user_id: participant.user_id }, { socketId: 1 })
-        .then((participantDoc) => {
-          if (!participantDoc) return;
-          if (participant.userId !== firebaseUid && participantDoc.socket_id) {
-            sockets.push(participantDoc.socket_id);
-          }
-        })
-        .then(() => {
-          sockets.forEach((userSocket) => {
-            socket.to(userSocket).emit("receive-message", {
-              message: message,
-              chatId: chat._id,
-              author: {
-                user_id: firebaseUid,
-                username: participant.username,
-              },
-            });
-            socket.to(userSocket).emit("new-message", chat);
-          });
-        });
-    });
-
-    socket.emit("new-message", chat); */
   });
 });
 

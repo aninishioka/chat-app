@@ -3,6 +3,7 @@ const express = require("express");
 const { MongoClient, ObjectId } = require("mongodb");
 const router = express.Router();
 
+//get messages and participants of given chat
 router.get("/", async (req, res) => {
   const client = new MongoClient(process.env.DATABASE_URL);
 
@@ -20,6 +21,7 @@ router.get("/", async (req, res) => {
     if (chat) {
       participants = chat.participants;
 
+      //get up to 100 most recent messages sorted by when created
       const messages = db.collection("messages");
       const messageDocs = await messages
         .find({ chat_id: req.query.chatId })

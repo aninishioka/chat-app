@@ -34,7 +34,6 @@ let user_id;
 
 io.on("connection", (socket) => {
   socket.on("logged-in", async (user_id) => {
-    console.log("joining room " + user_id);
     socket.join(user_id);
   });
 
@@ -49,6 +48,7 @@ io.on("connection", (socket) => {
     user_id = null;
   });
 
+  //insert new message into db and emit to appropriate participants
   socket.on("send-message", async (message, chatId, uid) => {
     const client = new MongoClient(process.env.DATABASE_URL);
 
@@ -85,9 +85,11 @@ io.on("connection", (socket) => {
           },
         }
       );
+
+      //send new chat/message information to clients
       const chat = await chats.findOne({ _id: new ObjectId(chatId) });
-      socket.emit("new-message", chat);
       chat.participants.forEach((participant) => {
+        socket.to(participant.user_id).emit("new-message", chat);
         if (participant.user_id !== uid) {
           socket
             .to(participant.user_id)

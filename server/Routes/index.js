@@ -4,6 +4,7 @@ const { MongoClient } = require("mongodb");
 const router = express.Router();
 const User = require("../Models/User");
 
+//create new user
 router.post("/new", async (req, res) => {
   const client = new MongoClient(process.env.DATABASE_URL);
 
@@ -11,6 +12,7 @@ router.post("/new", async (req, res) => {
     await client.connect();
     const db = client.db("chat-app-db");
 
+    //create and insert new user doc into db
     const users = db.collection("users");
     const userDoc = {
       user_id: req.body.user_id,
@@ -19,6 +21,9 @@ router.post("/new", async (req, res) => {
     };
     await users.insertOne(userDoc);
 
+    //create and insert new participant doc into db.
+    //each user has a corresponding participant doc that mirrors given user's public information
+    //to limit information other users' can have access to
     const participants = db.collection("participants");
     const participantDoc = {
       user_id: req.body.user_id,
@@ -33,17 +38,6 @@ router.post("/new", async (req, res) => {
   } finally {
     await client.close();
   }
-  /*  User.create({
-    username: req.body.username,
-    email: req.body.email,
-    user_id: req.body.firebaseUid,
-  })
-    .then(() => {
-      res.sendStatus(200);
-    })
-    .catch((err) => {
-      console.log(err);
-    }); */
 });
 
 module.exports = router;

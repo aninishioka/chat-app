@@ -91,7 +91,7 @@ function ChatList(props) {
     }
     return filteredList;
   };
-  return <div className="chat-list">{filterChatList()}</div>;
+  return <div className="chat-list pt-2">{filterChatList()}</div>;
 }
 
 export default ChatList;

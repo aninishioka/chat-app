@@ -3,6 +3,7 @@ const express = require("express");
 const { MongoClient } = require("mongodb");
 const router = new express.Router();
 
+//get participants
 router.get("/", async (req, res) => {
   const client = new MongoClient(process.env.DATABASE_URL);
   const searchOptions = {

@@ -1,17 +1,26 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import "./CSS/ChatCard.css";
-import { Link } from "react-router-dom";
+import { Link, matchPath, useLocation } from "react-router-dom";
 import { useAuth } from "../Contexts/UserContext";
 
 function ChatCard(props) {
   const { curUser } = useAuth();
+  const [isActive, setIsActive] = useState(false);
+  const { pathname } = useLocation();
+
+  useEffect(() => {
+    const { params } = matchPath({ path: "/chats/:id" }, pathname);
+    setIsActive(params.id === props.chat._id);
+  }, [pathname]);
 
   return (
     <Link
       to={"/chats/" + props.chat._id}
       state={{ userId: props.participant.user_id }}
     >
-      <div className="chat-card rounded pointer">
+      <div
+        className={`chat-card rounded pointer ${isActive ? "isActive" : ""}`}
+      >
         <span className="link"></span>
         {/* avatar */}
         <div className="avatar-container">

@@ -1,6 +1,5 @@
 const express = require("express");
 const router = new express.Router();
-const User = require("../Models/User");
 
 router.post("/", async (req, res) => {
   const client = new MongoClient(process.env.DATABASE_URL);

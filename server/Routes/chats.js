@@ -3,14 +3,13 @@ const express = require("express");
 const { MongoClient } = require("mongodb");
 const router = express.Router();
 
+//find all chats current user participanting in and return in order of when last updated
 router.get("/previews", async (req, res) => {
   const client = new MongoClient(process.env.DATABASE_URL);
 
   try {
     await client.connect();
     const db = client.db("chat-app-db");
-
-    //find all chats current user participanting in and return in order of when last updated
     const chats = db.collection("chats");
     const returnedChats = await chats
       .find({
@@ -27,6 +26,7 @@ router.get("/previews", async (req, res) => {
   }
 });
 
+//get id of chat bw current user and participant
 router.get("/", async (req, res) => {
   const client = new MongoClient(process.env.DATABASE_URL);
 
@@ -34,6 +34,7 @@ router.get("/", async (req, res) => {
     await client.connect();
     const db = client.db("chat-app-db");
 
+    //if exists, return id of chat between currentUser and participant
     const users = db.collection("users");
     const currentUser = await users.findOne({ user_id: req.query.selfUid });
     const chats = db.collection("chats");
@@ -49,6 +50,7 @@ router.get("/", async (req, res) => {
   }
 });
 
+//create new chat
 router.post("/new", async (req, res) => {
   const client = new MongoClient(process.env.DATABASE_URL);
 

@@ -1,22 +1,17 @@
-import React, { useContext, useEffect, useRef, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
-import { SocketContext } from "../Contexts/SocketContext";
+import React, { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
 import { useAuth } from "../Contexts/UserContext";
-import { v4 as uuidv4 } from "uuid";
 import ChatHeader from "./ChatHeader";
 import NewChatHeader from "./NewChatHeader";
-import TextBubble from "./TextBubble";
 import "./CSS/Chat.css";
 import ChatBody from "./ChatBody";
 
 function Chat() {
   const [chatId, setChatId] = useState(null);
   const [isNew, setIsNew] = useState(true);
-  const [messages, setMessages] = useState([]);
   const [participant, setParticipant] = useState();
   const { id } = useParams();
   const { curUser } = useAuth();
-  const messagesEndRef = useRef();
 
   useEffect(() => {
     setChatId(id);
@@ -45,7 +40,6 @@ function Chat() {
           else throw res;
         })
         .then((data) => {
-          setMessages(data.messages);
           for (let user in data.participants) {
             if (data.participants[user].firebaseUid !== curUser.uid)
               setParticipant(data.participants[user]);

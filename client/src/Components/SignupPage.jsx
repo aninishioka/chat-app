@@ -10,7 +10,7 @@ function SignupPage() {
   const confirmPasswordRef = useRef();
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
-  const { signup, curUser } = useAuth();
+  const { signup } = useAuth();
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {

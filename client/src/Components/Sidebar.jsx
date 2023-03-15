@@ -5,6 +5,7 @@ import SearchBar from "./SearchBar";
 import { Link } from "react-router-dom";
 import { useState } from "react";
 import Signout from "./Signout";
+import Settings from "./Settings";
 
 function Sidebar() {
   const [searchText, setSearchText] = useState("");
@@ -31,6 +32,7 @@ function Sidebar() {
       ></SearchBar>
       {/* convo list */}
       <ChatList searchText={searchText}></ChatList>
+      {/* <Settings></Settings> */}
       <Signout></Signout>
     </div>
   );

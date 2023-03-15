@@ -52,8 +52,6 @@ function SearchDropdown(props) {
           <UserCard
             key={contact._id}
             participant={contact}
-            /* username={contact.username}
-            userUid={contact.firebaseUid} */
             setParticipant={props.setParticipant}
             setChatId={props.setChatId}
           ></UserCard>

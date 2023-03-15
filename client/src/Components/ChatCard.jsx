@@ -9,15 +9,12 @@ function ChatCard(props) {
   const { pathname } = useLocation();
 
   useEffect(() => {
-    const { params } = matchPath({ path: "/chats/:id" }, pathname);
-    setIsActive(params.id === props.chat._id);
+    const match = matchPath({ path: "/chats/:id" }, pathname);
+    if (match) setIsActive(match.params.id === props.chat._id);
   }, [pathname]);
 
   return (
-    <Link
-      to={"/chats/" + props.chat._id}
-      state={{ userId: props.participant.user_id }}
-    >
+    <Link to={"/chats/" + props.chat._id}>
       <div
         className={`chat-card rounded pointer ${isActive ? "isActive" : ""}`}
       >

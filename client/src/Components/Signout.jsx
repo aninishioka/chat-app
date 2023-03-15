@@ -21,6 +21,7 @@ function Signout() {
         socket.emit("logged-out", curUser.uid);
       })
       .catch((err) => {
+        console.log(err);
         setError("Could not log out.");
       });
     setLoading(false);

@@ -1,4 +1,4 @@
-.chat-body {
+#chat-body {
   width: 100%;
   height: calc(100vh - 110px);
   margin: 55px 0 60px 0;

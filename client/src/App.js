@@ -5,16 +5,18 @@ import HomePage from "./Components/HomePage";
 import LoginPage from "./Components/LoginPage";
 import SignupPage from "./Components/SignupPage";
 import { Route, Routes } from "react-router-dom";
+import Onboarding from "./Components/Onboarding";
 
 function App() {
   return (
     <div className="app">
       <Routes>
         <Route element={<PrivateRoute></PrivateRoute>}>
-          <Route path="/*" element={<HomePage></HomePage>}></Route>
+          <Route path="/*" element={<HomePage></HomePage>} />
         </Route>
-        <Route path="/login" element={<LoginPage></LoginPage>}></Route>
-        <Route path="/signup" element={<SignupPage></SignupPage>}></Route>
+        <Route path="/login" element={<LoginPage></LoginPage>} />
+        <Route path="/signup" element={<SignupPage></SignupPage>} />
+        <Route path="/onboarding" element={<Onboarding></Onboarding>} />
       </Routes>
     </div>
   );

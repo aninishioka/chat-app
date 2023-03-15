@@ -1,11 +1,12 @@
-import React from "react";
+import React, { useRef } from "react";
 import "./CSS/ComposeMsg.css";
 import { useAuth } from "../Contexts/UserContext";
 
 function ComposeMsg(props) {
   const { curUser } = useAuth();
+  const fileUploader = useRef();
 
-  const handleClick = () => {
+  const handleSubmit = () => {
     const message = document.getElementById("msg").value.trimEnd();
     displayNewMessage(message);
     sendMessage(message);
@@ -21,6 +22,9 @@ function ComposeMsg(props) {
       }
     }
   };
+  const handleFileUpload = () => {
+    fileUploader.current.click();
+  };
   const displayNewMessage = (message) => {
     document.getElementById("msg").value = "";
     props.displayNewMessage(message, { user_id: curUser.uid });
@@ -30,7 +34,15 @@ function ComposeMsg(props) {
   };
   return (
     <div id="compose-msg" className="input-group">
-      <div className="compose-msg-input-container">
+      <div id="compose-msg-container">
+        {/* <button className="btn" onClick={handleFileUpload}>
+          <span class="material-symbols-outlined">image</span>
+        </button>
+        <input
+          type="file"
+          ref={fileUploader}
+          style={{ display: "none" }}
+        ></input> */}
         <textarea
           className="composeMsg-input form-control rounded-pill"
           aria-label="text input"
@@ -39,11 +51,7 @@ function ComposeMsg(props) {
           id="msg"
           onKeyDown={handleKeyPress}
         ></textarea>
-        <button
-          className="compose-msg-send-button btn"
-          type="submit"
-          onClick={handleClick}
-        >
+        <button className="btn" type="submit" onClick={handleSubmit}>
           <span className="material-symbols-outlined">arrow_circle_up</span>
         </button>
       </div>

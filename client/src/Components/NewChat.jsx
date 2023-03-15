@@ -88,7 +88,7 @@ function NewChat() {
             <span>{participant.username}</span>
             <button
               type="button"
-              className="close btn"
+              className="btn"
               aria-label="Close"
               onClick={handleClickClose}
             >

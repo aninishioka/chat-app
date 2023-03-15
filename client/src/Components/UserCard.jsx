@@ -45,11 +45,9 @@ function UserCard(props) {
 
   return (
     <button
-      id="card"
+      id="user-card-container"
       className="border border-0"
       onClick={handleClick}
-      /* to={"../" + props.participant.user_id}
-      state={{ userUid: props.participant.user_id, username: props.participant.username }} */
     >
       <div className="user-card rounded pointer">
         {/* avatar */}

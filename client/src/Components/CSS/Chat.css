@@ -1,4 +1,4 @@
-.chat-container {
+#chat-container {
   display: flex;
   flex-direction: column;
   flex-grow: 1;
@@ -7,7 +7,7 @@
   transform: translateZ(0);
 }
 
-.chat-header-container {
+#chat-header-container {
   position: fixed;
   display: flex;
   top: 0;

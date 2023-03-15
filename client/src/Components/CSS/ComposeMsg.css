@@ -8,7 +8,7 @@
   background-color: white;
 }
 
-.compose-msg-input-container {
+#compose-msg-container {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -17,12 +17,4 @@
 
 .composeMsg-input {
   resize: none;
-}
-
-.compose-msg-send-button {
-  width: 35px;
-  height: 35px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
 }

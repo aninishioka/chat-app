@@ -118,7 +118,7 @@ function ChatBody(props) {
 
   return (
     <>
-      <div className="chat-body">
+      <div id="chat-body">
         <div id="messages">
           {displayMessages()}
           <div

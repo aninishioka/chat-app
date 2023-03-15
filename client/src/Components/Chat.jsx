@@ -41,7 +41,7 @@ function Chat() {
         })
         .then((data) => {
           for (let user in data.participants) {
-            if (data.participants[user].firebaseUid !== curUser.uid)
+            if (data.participants[user].user_id !== curUser.uid)
               setParticipant(data.participants[user]);
           }
         })
@@ -65,8 +65,8 @@ function Chat() {
   }
 
   return (
-    <div className="chat-container">
-      <div className="chat-header-container">{displayHeader()}</div>
+    <div id="chat-container">
+      <div id="chat-header-container">{displayHeader()}</div>
       {participant && (
         <ChatBody participant={participant} chatId={chatId}></ChatBody>
       )}

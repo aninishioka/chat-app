@@ -64,7 +64,7 @@ function ChatList(props) {
       chats.forEach((chat) => {
         let participant = null;
         for (let user in chat.participants) {
-          if (chat.participants[user].firebaseUid !== curUser.uid)
+          if (chat.participants[user].user_id !== curUser.uid)
             participant = chat.participants[user];
         }
         if (
@@ -81,17 +81,15 @@ function ChatList(props) {
             ></ChatCard>
           );
         }
-
-        /* if (chat.name.toLowerCase().includes(props.searchText.toLowerCase())) {
-          filteredList.push(
-            <Chat key={chat.name} name={chat.name} lastMsg={lastMsg}></Chat>
-          );
-        } */
       });
     }
     return filteredList;
   };
-  return <div className="chat-list pt-2">{filterChatList()}</div>;
+  return (
+    <div id="chat-list" className="pt-2">
+      {filterChatList()}
+    </div>
+  );
 }
 
 export default ChatList;

@@ -11,9 +11,9 @@
 .sidebar-header {
   display: flex;
   justify-content: space-between;
-  align-items: center;
+  align-items: flex-start;
   height: 55px;
   width: 100%;
-  padding: 10px 15px 0 25px;
+  padding: 5px 15px 5px 25px;
   cursor: default;
 }

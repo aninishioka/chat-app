@@ -22,6 +22,12 @@ function ChatCard(props) {
         {/* avatar */}
         <div className="avatar-container">
           <div className="avatar rounded-circle"></div>
+          {/* <img
+            src={URL.createObjectURL(
+              Buffer.from(props.participant.avatar, "base64")
+            )}
+            style={{ width: 48, height: 48 }}
+          ></img> */}
         </div>
         <div>
           {/* username */}

@@ -24,7 +24,7 @@ router.get("/", async (req, res) => {
       //get up to 100 most recent messages sorted by when created
       const messages = db.collection("messages");
       const messageDocs = await messages
-        .find({ chat_id: req.query.chatId })
+        .find({ chat_id: req.query.chatId }) //change to ObjectId(req.query.chatId)
         .limit(100)
         .sort({ created_on: 1 });
       messageArray = await messageDocs.toArray();

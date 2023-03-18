@@ -1,18 +1,22 @@
 import React, { useEffect, useRef, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { useAuth } from "../Contexts/UserContext";
 import "./CSS/AvatarEditor.css";
 
 function AvatarEditor(props) {
+  const { curUser } = useAuth();
+  const navigate = useNavigate();
   const [zoom, setZoom] = useState(1);
   const [isDragging, setIsDragging] = useState(false);
   const [initDragPos, setInitPos] = useState({});
   const [imagePos, setImagePos] = useState({ x: 0, y: 0 });
-  const canvasSize = 500;
+  const canvasSize = 250;
 
   const resizeRef = useRef();
   const previewRef = useRef();
 
   useEffect(() => {
-    handleResize();
+    renderImage();
   }, []);
 
   function handleResize() {
@@ -50,7 +54,7 @@ function AvatarEditor(props) {
 
       context.drawImage(tempImage, imagePos.x, imagePos.y, width, height);
 
-      const dataURL = canvas.toDataURL("image/png");
+      const dataURL = canvas.toDataURL("image/jpeg", 0.7);
       previewRef.current.src = dataURL;
     };
 
@@ -68,8 +72,8 @@ function AvatarEditor(props) {
 
   function handleMouseMove(e) {
     if (isDragging) {
-      const xOffset = (e.clientX - initDragPos.x) * 0.5;
-      const yOffset = (e.clientY - initDragPos.y) * 0.5;
+      const xOffset = (e.clientX - initDragPos.x) * 0.8;
+      const yOffset = (e.clientY - initDragPos.y) * 0.8;
       const imageWidth = (props.image.width * resizeRef.current.value) / 100;
       const imageHeight = (props.image.height * resizeRef.current.value) / 100;
 
@@ -88,6 +92,31 @@ function AvatarEditor(props) {
       });
       renderImage();
     }
+  }
+
+  function saveImage() {
+    curUser
+      .getIdToken()
+      .then((token) => {
+        return fetch("/users/avatar", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            AuthToken: token,
+          },
+          body: JSON.stringify({
+            uid: curUser.uid,
+            image: previewRef.current.src,
+          }),
+        });
+      })
+      .then((res) => {
+        if (res.ok) navigate("../");
+        else throw res;
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   }
 
   return (
@@ -122,13 +151,22 @@ function AvatarEditor(props) {
           />
         </div>
       </div>
-      <button
-        className="btn btn-primary mt-1"
-        style={{ width: 600 }}
-        onClick={unsetImage}
-      >
-        Choose another photo
-      </button>
+      <div className="mt-1">
+        <button
+          className="btn btn-outline-primary"
+          style={{ width: 290 }}
+          onClick={unsetImage}
+        >
+          Choose another photo
+        </button>
+        <button
+          className="btn btn-primary"
+          style={{ width: 290 }}
+          onClick={saveImage}
+        >
+          Confirm
+        </button>
+      </div>
     </div>
   );
 }

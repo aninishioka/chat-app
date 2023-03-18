@@ -16,17 +16,16 @@ function Onboarding() {
     }
 
     const urlObject = URL.createObjectURL(imagePath);
-    setImage(urlObject);
 
     const tempImage = new Image();
     tempImage.onload = () => {
       const ratio = tempImage.height / tempImage.width;
       if (tempImage.width < tempImage.height) {
-        tempImage.width = 500;
-        tempImage.height = ratio * 500;
+        tempImage.width = 250;
+        tempImage.height = ratio * 250;
       } else {
-        tempImage.height = 500;
-        tempImage.width = 500 / ratio;
+        tempImage.height = 250;
+        tempImage.width = 250 / ratio;
       }
       setImage({
         urlObject: urlObject,

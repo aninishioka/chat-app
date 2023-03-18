@@ -28,7 +28,6 @@ router.post("/new", async (req, res) => {
     const participantDoc = {
       user_id: req.body.user_id,
       username: req.body.username,
-      chat_ids: new Array(),
     };
     await participants.insertOne(participantDoc);
 

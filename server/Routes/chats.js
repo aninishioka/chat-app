@@ -11,14 +11,74 @@ router.get("/previews", async (req, res) => {
     await client.connect();
     const db = client.db("chat-app-db");
     const chats = db.collection("chats");
+
     const returnedChats = await chats
+      .aggregate([
+        //1. match by user_id in participants
+        {
+          $match: {
+            participants: {
+              $elemMatch: { user_id: req.query.uid },
+            },
+          },
+        },
+        //2. unwind participants
+        { $unwind: { path: "$participants" } },
+
+        //3. get avatars from participants collection
+        {
+          $lookup: {
+            from: "participants",
+            localField: "participants.user_id",
+            foreignField: "user_id",
+            as: "participant_info",
+          },
+        },
+
+        //4. reverse unwind
+        {
+          $group: {
+            _id: {
+              _id: "$_id",
+              last_message: "$last_message",
+              last_message_author: "$last_message_author",
+              last_updated: "$last_updated",
+            },
+            participants: { $push: { $arrayElemAt: ["$participant_info", 0] } },
+          },
+        },
+
+        //5. clean up doc structure
+        {
+          $project: {
+            _id: "$_id._id",
+            last_message: "$_id.last_message",
+            last_message_author: "$_id.last_message_author",
+            last_updated: "$_id.last_updated",
+            participants: "$participants",
+          },
+        },
+
+        //6. sort by last_updated
+        {
+          $sort: {
+            last_updated: -1,
+          },
+        },
+      ])
+      .toArray();
+    console.log(returnedChats);
+
+    res.json(returnedChats);
+
+    /*  const returnedChats = await chats
       .find({
         participants: { $elemMatch: { user_id: req.query.uid } },
         last_message: { $exists: true },
       })
       .sort({ last_updated: -1 });
     const chatsArray = await returnedChats.toArray();
-    res.json(chatsArray);
+    res.json(chatsArray);*/
   } catch (err) {
     console.log(err);
   } finally {

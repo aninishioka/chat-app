@@ -24,9 +24,11 @@ function LoginPage() {
     e.preventDefault();
     setLoading(true);
     login(emailRef.current.value, passwordRef.current.value)
-      .then(() => {
-        setError("");
-        navigate("../");
+      .then((res) => {
+        if (res.ok) {
+          setError("");
+          navigate("../");
+        } else throw res;
       })
       .catch((err) => {
         setError("Could not log in");

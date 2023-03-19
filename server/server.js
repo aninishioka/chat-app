@@ -65,7 +65,7 @@ io.on("connection", (socket) => {
       const messageDoc = {
         message: message,
         author: { user_id: uid, username: messageAuthor.username },
-        chat_id: chatId,
+        chat_id: new ObjectId(chatId),
         created_on: Date.now(),
       };
       await messages.insertOne(messageDoc);

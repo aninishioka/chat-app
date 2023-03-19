@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { useAuth } from "../Contexts/UserContext";
 import ChatHeader from "./ChatHeader";
 import NewChatHeader from "./NewChatHeader";
@@ -12,6 +12,7 @@ function Chat() {
   const [participant, setParticipant] = useState();
   const { id } = useParams();
   const { curUser } = useAuth();
+  const navigate = useNavigate();
 
   useEffect(() => {
     setChatId(id);
@@ -40,6 +41,11 @@ function Chat() {
           else throw res;
         })
         .then((data) => {
+          if (
+            typeof data.participants === undefined ||
+            data.participants.length === 0
+          )
+            navigate("../");
           for (let user in data.participants) {
             if (data.participants[user].user_id !== curUser.uid)
               setParticipant(data.participants[user]);

@@ -32,6 +32,7 @@ function LoginPage() {
       })
       .catch((err) => {
         setError("Could not log in");
+        console.log(err);
       });
     setLoading(false);
   };

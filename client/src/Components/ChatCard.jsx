@@ -2,11 +2,19 @@ import React, { useEffect, useState } from "react";
 import "./CSS/ChatCard.css";
 import { Link, matchPath, useLocation } from "react-router-dom";
 import { useAuth } from "../Contexts/UserContext";
+import placeholderAvatar from "../Assets/placeholder-avatar.svg";
 
 function ChatCard(props) {
   const { curUser } = useAuth();
   const [isActive, setIsActive] = useState(false);
+  const [avatar, setAvatar] = useState(placeholderAvatar);
   const { pathname } = useLocation();
+
+  useEffect(() => {
+    if (props.participant.avatar) {
+      setAvatar(props.participant.avatar);
+    }
+  }, []);
 
   useEffect(() => {
     const match = matchPath({ path: "/chats/:id" }, pathname);
@@ -21,13 +29,11 @@ function ChatCard(props) {
         <span className="link"></span>
         {/* avatar */}
         <div className="avatar-container">
-          <div className="avatar rounded-circle"></div>
-          {/* <img
-            src={URL.createObjectURL(
-              Buffer.from(props.participant.avatar, "base64")
-            )}
+          <img
+            src={avatar}
+            className="rounded-circle"
             style={{ width: 48, height: 48 }}
-          ></img> */}
+          ></img>
         </div>
         <div>
           {/* username */}

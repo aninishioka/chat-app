@@ -67,8 +67,6 @@ router.get("/previews", async (req, res) => {
         },
       ])
       .toArray();
-    console.log(returnedChats);
-
     res.json(returnedChats);
 
     /*  const returnedChats = await chats

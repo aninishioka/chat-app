@@ -1,11 +1,19 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import "./CSS/UserCard.css";
 import { useAuth } from "../Contexts/UserContext";
 import { useNavigate } from "react-router-dom";
+import placeholderAvatar from "../Assets/placeholder-avatar.svg";
 
 function UserCard(props) {
+  const [avatar, setAvatar] = useState(placeholderAvatar);
   const { curUser } = useAuth();
   const navigate = useNavigate();
+
+  useEffect(() => {
+    if (props.participant.avatar) {
+      setAvatar(props.participant.avatar);
+    }
+  }, []);
 
   const handleClick = async () => {
     curUser
@@ -52,7 +60,11 @@ function UserCard(props) {
       <div className="user-card rounded pointer">
         {/* avatar */}
         <div className="avatar-container">
-          <div className="avatar rounded-circle"></div>
+          <img
+            src={avatar}
+            className="rounded-circle"
+            style={{ width: 48, height: 48 }}
+          ></img>
         </div>
         {/* username */}
         <div className="username">

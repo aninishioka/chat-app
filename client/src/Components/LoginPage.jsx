@@ -25,10 +25,8 @@ function LoginPage() {
     setLoading(true);
     login(emailRef.current.value, passwordRef.current.value)
       .then((res) => {
-        if (res.ok) {
-          setError("");
-          navigate("../");
-        } else throw res;
+        setError("");
+        navigate("../");
       })
       .catch((err) => {
         setError("Could not log in");

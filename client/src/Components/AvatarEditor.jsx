@@ -132,7 +132,7 @@ function AvatarEditor(props) {
         <div id="image-container" className="">
           <img
             id="avatar-preview"
-            className="mx-auto d-block"
+            className="mx-auto d-block rounded-circle"
             src=""
             ref={previewRef}
             onMouseDown={startDrag}

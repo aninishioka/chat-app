@@ -35,10 +35,11 @@ function SignupPage() {
             }),
           });
           setError("");
-          navigate("../");
+          navigate("../onboarding");
         })
         .catch((err) => {
           setError("Could not create account.");
+          console.log(err);
         });
     }
     setLoading(false);

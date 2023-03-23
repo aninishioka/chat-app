@@ -7,9 +7,17 @@
   align-items: center;
 }
 
+#canvas:hover {
+  cursor: move;
+}
+
 #avatar-preview {
   max-height: 300px;
   max-width: 600px;
   height: auto;
   width: auto;
+}
+
+.zoom-indicator {
+  font-size: 24px;
 }

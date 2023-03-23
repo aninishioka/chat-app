@@ -2,6 +2,8 @@ import React, { useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import AvatarEditor from "./AvatarEditor";
 import "./CSS/Onboarding.css";
+import addPhotoIcon from "../Assets/add-photo.svg";
+import avatarPlaceholder from "../Assets/placeholder-avatar.svg";
 
 function Onboarding() {
   const imageUploader = useRef();
@@ -57,6 +59,11 @@ function Onboarding() {
               <h3 className="card-title text-center mb-4">
                 Add a profile photo
               </h3>
+              <img
+                src={avatarPlaceholder}
+                className="d-block mx-auto mb-4"
+                style={{ height: 96, width: "auto" }}
+              ></img>
               <button className="btn btn-primary w-100" onClick={selectImage}>
                 Choose a photo
               </button>

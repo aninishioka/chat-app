@@ -67,7 +67,7 @@ function ChatBody(props) {
           <TextBubble
             key={message._id}
             message={message.message}
-            senderIsSelf={message.author.user_id === curUser.uid}
+            senderIsSelf={message.author === curUser.uid}
           ></TextBubble>
         );
       });

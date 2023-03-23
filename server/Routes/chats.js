@@ -17,9 +17,7 @@ router.get("/previews", async (req, res) => {
         //1. match by user_id in participants
         {
           $match: {
-            participants: {
-              $elemMatch: { user_id: req.query.uid },
-            },
+            participants: req.query.uid,
           },
         },
         //2. unwind participants
@@ -29,7 +27,7 @@ router.get("/previews", async (req, res) => {
         {
           $lookup: {
             from: "participants",
-            localField: "participants.user_id",
+            localField: "participants",
             foreignField: "user_id",
             as: "participant_info",
           },
@@ -68,15 +66,6 @@ router.get("/previews", async (req, res) => {
       ])
       .toArray();
     res.json(returnedChats);
-
-    /*  const returnedChats = await chats
-      .find({
-        participants: { $elemMatch: { user_id: req.query.uid } },
-        last_message: { $exists: true },
-      })
-      .sort({ last_updated: -1 });
-    const chatsArray = await returnedChats.toArray();
-    res.json(chatsArray);*/
   } catch (err) {
     console.log(err);
   } finally {
@@ -127,10 +116,7 @@ router.post("/new", async (req, res) => {
     const chats = db.collection("chats");
     const chatDoc = {
       participants: usersArray.map((user) => {
-        return {
-          user_id: user.user_id,
-          username: user.username,
-        };
+        return user.user_id;
       }),
       last_updated: Date.now(),
     };

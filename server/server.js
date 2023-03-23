@@ -62,7 +62,7 @@ io.on("connection", (socket) => {
       const messages = db.collection("messages");
       const messageDoc = {
         message: message,
-        author: { user_id: uid, username: messageAuthor.username },
+        author: uid,
         chat_id: new ObjectId(chatId),
         created_on: Date.now(),
       };

@@ -6,17 +6,23 @@ import "./CSS/AvatarEditor.css";
 function AvatarEditor(props) {
   const { curUser } = useAuth();
   const navigate = useNavigate();
-  const [zoom, setZoom] = useState(1);
-  const [isDragging, setIsDragging] = useState(false);
-  const [initDragPos, setInitPos] = useState({});
-  const [imagePos, setImagePos] = useState({ x: 0, y: 0 });
+  const [zoom, setZoom] = useState(100);
+  const isDragging = useRef(false);
+  const initDragPos = useRef({});
+  const imagePos = useRef({ x: 0, y: 0 });
   const canvasSize = 250;
-
+  const tempImage = useRef(new Image());
   const resizeRef = useRef();
   const previewRef = useRef();
+  const canvasRef = useRef();
+  const contextRef = useRef();
 
   useEffect(() => {
-    renderImage();
+    contextRef.current = canvasRef.current.getContext("2d");
+    tempImage.current.onload = () => {
+      renderImage();
+    };
+    tempImage.current.src = props.image.urlObject;
   }, []);
 
   function handleResize() {
@@ -29,67 +35,65 @@ function AvatarEditor(props) {
   }
 
   function renderImage() {
-    const tempImage = new Image();
+    const height = (props.image.height * resizeRef.current.value) / 100;
+    const width = (props.image.width * resizeRef.current.value) / 100;
 
-    tempImage.onload = () => {
-      const canvas = document.createElement("canvas");
-      canvas.height = canvasSize;
-      canvas.width = canvasSize;
-      const context = canvas.getContext("2d");
-      const height = (props.image.height * resizeRef.current.value) / 100;
-      const width = (props.image.width * resizeRef.current.value) / 100;
+    contextRef.current.save();
 
-      context.save();
+    contextRef.current.beginPath();
+    contextRef.current.arc(
+      canvasSize * 0.5,
+      canvasSize * 0.5,
+      canvasSize * 0.5,
+      0,
+      2 * Math.PI
+    );
+    contextRef.current.closePath();
+    contextRef.current.clip();
 
-      context.beginPath();
-      context.arc(
-        canvasSize * 0.5,
-        canvasSize * 0.5,
-        canvasSize * 0.5,
-        0,
-        2 * Math.PI
-      );
-      context.closePath();
-      context.clip();
+    contextRef.current.beginPath();
+    contextRef.current.clearRect(0, 0, canvasSize, canvasSize);
+    contextRef.current.drawImage(
+      tempImage.current,
+      imagePos.current.x,
+      imagePos.current.y,
+      width,
+      height
+    );
 
-      context.drawImage(tempImage, imagePos.x, imagePos.y, width, height);
-
-      const dataURL = canvas.toDataURL("image/jpeg", 0.7);
-      previewRef.current.src = dataURL;
-    };
-
-    tempImage.src = props.image.urlObject;
+    //const dataURL = canvasRef.current.toDataURL("image/jpeg", 0.7);
+    //previewRef.current.src = dataURL;
   }
 
   function startDrag(e) {
-    setIsDragging(true);
-    setInitPos({ x: e.clientX, y: e.clientY });
+    e.preventDefault();
+    isDragging.current = true;
+    initDragPos.current = { x: e.clientX, y: e.clientY };
   }
 
   function stopDrag() {
-    setIsDragging(false);
+    isDragging.current = false;
   }
 
   function handleMouseMove(e) {
-    if (isDragging) {
-      const xOffset = (e.clientX - initDragPos.x) * 0.8;
-      const yOffset = (e.clientY - initDragPos.y) * 0.8;
+    if (isDragging.current) {
+      const xOffset = e.clientX - initDragPos.current.x;
+      const yOffset = e.clientY - initDragPos.current.y;
       const imageWidth = (props.image.width * resizeRef.current.value) / 100;
       const imageHeight = (props.image.height * resizeRef.current.value) / 100;
 
       const newX = Math.max(
         canvasSize - imageWidth,
-        Math.min(0, imagePos.x + xOffset)
+        Math.min(0, imagePos.current.x + xOffset)
       );
       const newY = Math.max(
         canvasSize - imageHeight,
-        Math.min(0, imagePos.y + yOffset)
+        Math.min(0, imagePos.current.y + yOffset)
       );
 
-      setImagePos({
-        x: newX,
-        y: newY,
-      });
+      imagePos.current.x = newX;
+      imagePos.current.y = newY;
+
       renderImage();
     }
   }
@@ -106,7 +110,7 @@ function AvatarEditor(props) {
           },
           body: JSON.stringify({
             uid: curUser.uid,
-            image: previewRef.current.src,
+            image: canvasRef.current.toDataURL("image/jpeg", 0.7),
           }),
         });
       })
@@ -125,11 +129,19 @@ function AvatarEditor(props) {
       onMouseMove={handleMouseMove}
       onMouseUp={stopDrag}
     >
-      <div className="card" style={{ width: 600, height: 400 }}>
+      <div className="card" style={{ width: 600 }}>
         <div className="cardBody">
           <h3 className="card-title text-center p-1">Edit Thumbnail</h3>
         </div>
-        <div id="image-container" className="">
+        <canvas
+          id="canvas"
+          className="mx-auto"
+          ref={canvasRef}
+          height={250}
+          width={250}
+          onMouseDown={startDrag}
+        ></canvas>
+        {/*  <div id="image-container" className="">
           <img
             id="avatar-preview"
             className="mx-auto d-block rounded-circle"
@@ -138,30 +150,36 @@ function AvatarEditor(props) {
             onMouseDown={startDrag}
             draggable={false}
           ></img>
-        </div>
-        <div className="toolbar">
+        </div> */}
+        <div className="toolbar d-flex justify-content-center py-2">
+          <span className="zoom-indicator">-</span>
           <input
             type="range"
             id="zoom"
             min="100"
             max="200"
+            className="mx-2"
             value={zoom}
             ref={resizeRef}
             onChange={handleResize}
           />
+          <span className="zoom-indicator">+</span>
         </div>
       </div>
-      <div className="mt-1">
+      <div
+        className="d-flex justify-content-between mt-2"
+        style={{ width: 580 }}
+      >
         <button
           className="btn btn-outline-primary"
-          style={{ width: 290 }}
+          style={{ width: 280 }}
           onClick={unsetImage}
         >
-          Choose another photo
+          Cancel
         </button>
         <button
           className="btn btn-primary"
-          style={{ width: 290 }}
+          style={{ width: 280 }}
           onClick={saveImage}
         >
           Confirm

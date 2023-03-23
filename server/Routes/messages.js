@@ -10,9 +10,46 @@ router.get("/", async (req, res) => {
   try {
     await client.connect();
     const db = client.db("chat-app-db");
-
     const chats = db.collection("chats");
-    const chat = await chats.findOne({
+
+    const participantsDoc = await chats
+      .aggregate([
+        {
+          $match: {
+            _id: new ObjectId(req.query.chatId),
+          },
+        },
+        {
+          $unwind: { path: "$participants" },
+        },
+        {
+          $lookup: {
+            from: "participants",
+            localField: "participants",
+            foreignField: "user_id",
+            as: "participant_info",
+          },
+        },
+        {
+          $group: {
+            _id: "$_id",
+            participants: { $push: { $arrayElemAt: ["$participant_info", 0] } },
+          },
+        },
+      ])
+      .toArray();
+    const messages = db.collection("messages");
+    const messageDocs = await messages
+      .find({ chat_id: new ObjectId(req.query.chatId) }) //change to ObjectId(req.query.chatId)
+      .limit(100)
+      .sort({ created_on: 1 });
+    messageArray = await messageDocs.toArray();
+
+    res.json({
+      participants: participantsDoc[0].participants,
+      messages: messageArray,
+    });
+    /*  const chat = await chats.findOne({
       _id: new ObjectId(req.query.chatId),
     });
 
@@ -29,7 +66,7 @@ router.get("/", async (req, res) => {
         .sort({ created_on: 1 });
       messageArray = await messageDocs.toArray();
     }
-    res.json({ participants: participants, messages: messageArray });
+    res.json({ participants: participants, messages: messageArray }); */
   } catch (err) {
     console.log(err);
   } finally {

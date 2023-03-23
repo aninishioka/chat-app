@@ -27,7 +27,7 @@ function ComposeMsg(props) {
   };
   const displayNewMessage = (message) => {
     document.getElementById("msg").value = "";
-    props.displayNewMessage(message, { user_id: curUser.uid });
+    props.displayNewMessage(message, curUser.uid);
   };
   const sendMessage = (message) => {
     props.sendMessage(message, curUser.uid);

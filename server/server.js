@@ -86,15 +86,15 @@ io.on("connection", (socket) => {
 
       //send new chat/message information to clients
       const chat = await chats.findOne({ _id: new ObjectId(chatId) });
+      socket.emit("new-message", chat);
       chat.participants.forEach((participant) => {
-        socket.to(participant.user_id).emit("new-message", chat);
-        if (participant.user_id !== uid) {
-          socket
-            .to(participant.user_id)
-            .emit("receive-message", message, chatId, {
-              user_id: uid,
-              username: participant.username,
-            });
+        socket.to(participant).emit("new-message", chat);
+        if (participant !== uid) {
+          socket.to(participant).emit("receive-message", message, chatId, {
+            user_id: uid,
+            username: messageAuthor.username,
+            avatar: messageAuthor.avatar,
+          });
         }
       });
     } catch (err) {

@@ -20,7 +20,7 @@ server/.env.development.local
 server/.env.test.local
 server/.env.production.local
 server/.npmrc
-server/serviceAccountKey.json
+server/serviceAccount.json
 client/.env
 
 npm-debug.log*

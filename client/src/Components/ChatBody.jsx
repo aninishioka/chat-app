@@ -14,6 +14,7 @@ function ChatBody(props) {
   const navigate = useNavigate();
   const messagesEndRef = useRef();
 
+  //retrieve and set messages for current chat.
   useEffect(() => {
     if (!props.chatId) return;
     curUser
@@ -44,6 +45,7 @@ function ChatBody(props) {
         console.log(err);
       });
 
+    //listener for new incoming messages
     socket.on("receive-message", (message, chatId, author) => {
       if (chatId === props.chatId) {
         displayNewMessage(message, author);
@@ -56,6 +58,7 @@ function ChatBody(props) {
     };
   }, [props.chatId]);
 
+  //when component first renders, should show bottom of chat.
   useEffect(() => {
     scrollToBottom();
   }, [messages]);

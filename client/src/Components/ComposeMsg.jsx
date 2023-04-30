@@ -4,13 +4,15 @@ import { useAuth } from "../Contexts/UserContext";
 
 function ComposeMsg(props) {
   const { curUser } = useAuth();
-  const fileUploader = useRef();
 
   const handleSubmit = () => {
+    //remove extra white space at end
     const message = document.getElementById("msg").value.trimEnd();
     displayNewMessage(message);
     sendMessage(message);
   };
+
+  //allow user to send message by pressing enter key
   const handleKeyPress = (e) => {
     if (e.shiftKey && e.keyCode === 13) return;
     if (e.keyCode === 13) {
@@ -22,27 +24,20 @@ function ComposeMsg(props) {
       }
     }
   };
-  const handleFileUpload = () => {
-    fileUploader.current.click();
-  };
+
+  //pass up new message to chatBody component.
   const displayNewMessage = (message) => {
     document.getElementById("msg").value = "";
     props.displayNewMessage(message, curUser.uid);
   };
+
+  //emit new message
   const sendMessage = (message) => {
     props.sendMessage(message, curUser.uid);
   };
   return (
     <div id="compose-msg" className="input-group">
       <div id="compose-msg-container">
-        {/* <button className="btn" onClick={handleFileUpload}>
-          <span class="material-symbols-outlined">image</span>
-        </button>
-        <input
-          type="file"
-          ref={fileUploader}
-          style={{ display: "none" }}
-        ></input> */}
         <textarea
           className="composeMsg-input form-control rounded-pill"
           aria-label="text input"

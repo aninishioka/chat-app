@@ -2,12 +2,10 @@ import React, { useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import AvatarEditor from "./AvatarEditor";
 import "./CSS/Onboarding.css";
-import addPhotoIcon from "../Assets/add-photo.svg";
 import avatarPlaceholder from "../Assets/placeholder-avatar.svg";
 
 function Onboarding() {
   const imageUploader = useRef();
-  const imagePreview = useRef();
   const [imagePath, setImagePath] = useState("");
   const [image, setImage] = useState({});
 
@@ -19,6 +17,7 @@ function Onboarding() {
 
     const urlObject = URL.createObjectURL(imagePath);
 
+    //create urlObject with placeholder image to render to avatar editor
     const tempImage = new Image();
     tempImage.onload = () => {
       const ratio = tempImage.height / tempImage.width;

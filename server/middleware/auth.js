@@ -4,6 +4,7 @@ admin.initializeApp({
   credential: admin.credential.cert(serviceAccount),
 });
 
+//verify user
 module.exports = function (req, res, next) {
   admin
     .auth()

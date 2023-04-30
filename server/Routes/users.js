@@ -20,6 +20,7 @@ router.post("/", async (req, res) => {
   }
 });
 
+//uplaod user avatar to mongodb
 router.post("/avatar", async (req, res) => {
   const client = new MongoClient(process.env.DATABASE_URL);
 

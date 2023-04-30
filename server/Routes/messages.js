@@ -12,6 +12,7 @@ router.get("/", async (req, res) => {
     const db = client.db("chat-app-db");
     const chats = db.collection("chats");
 
+    //retrieve info (username, avatar, etc) for all participants for chat.
     const participantsDoc = await chats
       .aggregate([
         {
@@ -38,9 +39,11 @@ router.get("/", async (req, res) => {
         },
       ])
       .toArray();
+
+    //retrieve message docs corresponding to chat
     const messages = db.collection("messages");
     const messageDocs = await messages
-      .find({ chat_id: new ObjectId(req.query.chatId) }) //change to ObjectId(req.query.chatId)
+      .find({ chat_id: new ObjectId(req.query.chatId) })
       .limit(100)
       .sort({ created_on: 1 });
     messageArray = await messageDocs.toArray();
@@ -49,24 +52,6 @@ router.get("/", async (req, res) => {
       participants: participantsDoc[0].participants,
       messages: messageArray,
     });
-    /*  const chat = await chats.findOne({
-      _id: new ObjectId(req.query.chatId),
-    });
-
-    let participants = [];
-    let messageArray = [];
-    if (chat) {
-      participants = chat.participants;
-
-      //get up to 100 most recent messages sorted by when created
-      const messages = db.collection("messages");
-      const messageDocs = await messages
-        .find({ chat_id: new ObjectId(req.query.chatId) }) //change to ObjectId(req.query.chatId)
-        .limit(100)
-        .sort({ created_on: 1 });
-      messageArray = await messageDocs.toArray();
-    }
-    res.json({ participants: participants, messages: messageArray }); */
   } catch (err) {
     console.log(err);
   } finally {

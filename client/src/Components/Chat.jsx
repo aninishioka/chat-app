@@ -14,6 +14,7 @@ function Chat() {
   const { curUser } = useAuth();
   const navigate = useNavigate();
 
+  //retrieve id and participants for chat + set isNew to false if exists. otherwise, set isNew to true.
   useEffect(() => {
     setChatId(id);
     if (id) {
@@ -59,6 +60,7 @@ function Chat() {
     }
   }, [id]);
 
+  //existing chat and new chats should display differently formatted headers.
   function displayHeader() {
     if (!isNew) return <ChatHeader participant={participant}></ChatHeader>;
     else

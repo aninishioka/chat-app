@@ -11,6 +11,7 @@ function ChatList(props) {
   const { curUser } = useAuth();
   const socket = useContext(SocketContext);
 
+  //retrieve all chats user is participating in
   useEffect(() => {
     curUser
       .getIdToken()
@@ -40,6 +41,7 @@ function ChatList(props) {
         console.log(err);
       });
 
+    //set event listener for new incoming messages.
     socket.on("new-message", (chat) => {
       handleNewMessage(chat);
     });
@@ -49,6 +51,7 @@ function ChatList(props) {
     };
   }, []);
 
+  //on new message, should update chat list so chat with most recent activity should move to top of chat list.
   const handleNewMessage = (newChat) => {
     setChats((chats) => {
       const updatedChats = chats.filter((chat) => {
@@ -58,6 +61,7 @@ function ChatList(props) {
     });
   };
 
+  //filter chat list when user enters search input into searchbar
   const filterChatList = () => {
     const filteredList = [];
     if (typeof chats !== "undefined" && Array.isArray(chats)) {

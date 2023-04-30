@@ -13,10 +13,10 @@ function AvatarEditor(props) {
   const canvasSize = 250;
   const tempImage = useRef(new Image());
   const resizeRef = useRef();
-  const previewRef = useRef();
   const canvasRef = useRef();
   const contextRef = useRef();
 
+  //when component first renders, get canvas context and render chose avatar image to editor
   useEffect(() => {
     contextRef.current = canvasRef.current.getContext("2d");
     tempImage.current.onload = () => {
@@ -40,6 +40,7 @@ function AvatarEditor(props) {
 
     contextRef.current.save();
 
+    //draw circle to use as clipping mask for avatar image.
     contextRef.current.beginPath();
     contextRef.current.arc(
       canvasSize * 0.5,
@@ -51,6 +52,7 @@ function AvatarEditor(props) {
     contextRef.current.closePath();
     contextRef.current.clip();
 
+    //clear canvas and draw image with updated sizing and placement parameters
     contextRef.current.beginPath();
     contextRef.current.clearRect(0, 0, canvasSize, canvasSize);
     contextRef.current.drawImage(
@@ -60,9 +62,6 @@ function AvatarEditor(props) {
       width,
       height
     );
-
-    //const dataURL = canvasRef.current.toDataURL("image/jpeg", 0.7);
-    //previewRef.current.src = dataURL;
   }
 
   function startDrag(e) {
@@ -82,6 +81,7 @@ function AvatarEditor(props) {
       const imageWidth = (props.image.width * resizeRef.current.value) / 100;
       const imageHeight = (props.image.height * resizeRef.current.value) / 100;
 
+      //restrict image movement so image always fills editor.
       const newX = Math.max(
         canvasSize - imageWidth,
         Math.min(0, imagePos.current.x + xOffset)
@@ -98,6 +98,7 @@ function AvatarEditor(props) {
     }
   }
 
+  //upload avatar image to database
   function saveImage() {
     curUser
       .getIdToken()
@@ -141,16 +142,6 @@ function AvatarEditor(props) {
           width={250}
           onMouseDown={startDrag}
         ></canvas>
-        {/*  <div id="image-container" className="">
-          <img
-            id="avatar-preview"
-            className="mx-auto d-block rounded-circle"
-            src=""
-            ref={previewRef}
-            onMouseDown={startDrag}
-            draggable={false}
-          ></img>
-        </div> */}
         <div className="toolbar d-flex justify-content-center py-2">
           <span className="zoom-indicator">-</span>
           <input

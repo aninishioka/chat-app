@@ -16,6 +16,7 @@ function ChatCard(props) {
     }
   }, []);
 
+  //if chat is currently open, highlight chat card.
   useEffect(() => {
     const match = matchPath({ path: "/chats/:id" }, pathname);
     if (match) setIsActive(match.params.id === props.chat._id);

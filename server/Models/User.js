@@ -6,11 +6,9 @@ const userSchema = new mongoose.Schema({
   username: { type: String, required: true },
   chat_ids: [], //should this be bound?
   participantId: mongoose.Schema.Types.ObjectId,
-  //avatar
-  //preferences
-  //friends ??
 });
 
+//create participant object whenever creating user object
 userSchema.pre("save", async function (next) {
   await Participant.create({
     username: this.username,

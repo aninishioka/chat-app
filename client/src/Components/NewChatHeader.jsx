@@ -11,10 +11,12 @@ function NewChatHeader(props) {
     props.setParticipant(participant);
   }, [participant]);
 
+  //search for other users on user search input
   const handleSearchTextChange = (text) => {
     setSearchText(text);
   };
 
+  //deselect user
   const handleClickClose = () => {
     setParticipant(null);
   };
